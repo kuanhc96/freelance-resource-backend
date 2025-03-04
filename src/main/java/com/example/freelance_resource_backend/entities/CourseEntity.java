@@ -18,7 +18,7 @@ public class CourseEntity {
 	private Long courseId;
 	private String courseGUID;
 	private String studentGUID;
-	private String instructor;
+	private String instructorGUID;
 	private LocalDateTime startDate;
 	private String location;
 	private String topic;

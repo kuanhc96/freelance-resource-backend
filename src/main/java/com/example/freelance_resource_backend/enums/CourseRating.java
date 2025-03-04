@@ -4,7 +4,8 @@ public enum CourseRating {
 	POOR(1),
 	FAIR(2),
 	GOOD(3),
-	EXCELLENT(4);
+	EXCELLENT(4),
+	UNRATED(0);
 
 	private final int value;
 

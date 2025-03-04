@@ -21,5 +21,6 @@ public class TransactionEntity {
 	private LocalDateTime creationDate;
 	private LocalDateTime confirmedDate;
 	private LocalDateTime canceledDate;
+	private String comments;
 
 }
