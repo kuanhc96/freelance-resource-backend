@@ -26,5 +26,6 @@ public class CourseEntity {
 	private CourseCategory courseCategory;
 	private CourseStatus courseStatus;
 	private CourseRating courseRating;
+	private Integer price;
 
 }
