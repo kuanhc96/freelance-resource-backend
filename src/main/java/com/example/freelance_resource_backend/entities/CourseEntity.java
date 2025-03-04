@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 import com.example.freelance_resource_backend.enums.CourseCategory;
+import com.example.freelance_resource_backend.enums.CourseRating;
 import com.example.freelance_resource_backend.enums.CourseStatus;
 
 @Data
@@ -24,5 +25,6 @@ public class CourseEntity {
 	private String comments;
 	private CourseCategory courseCategory;
 	private CourseStatus courseStatus;
+	private CourseRating courseRating;
 
 }
