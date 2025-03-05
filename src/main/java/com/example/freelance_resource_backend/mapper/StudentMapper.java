@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.example.freelance_resource_backend.entities.StudentEntity;
+import com.example.freelance_resource_backend.enums.UserStatus;
+
 
 @Component
 public class StudentMapper implements RowMapper<StudentEntity> {
