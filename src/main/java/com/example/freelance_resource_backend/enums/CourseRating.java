@@ -1,5 +1,8 @@
 package com.example.freelance_resource_backend.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum CourseRating {
 	POOR(1),
 	FAIR(2),
@@ -23,7 +26,4 @@ public enum CourseRating {
 		throw new IllegalArgumentException("Unknown enum value: %s. Valid values are [1, 2, 3, 4, 5]".formatted(value));
 	}
 
-	public int getValue() {
-		return value;
-	}
 }

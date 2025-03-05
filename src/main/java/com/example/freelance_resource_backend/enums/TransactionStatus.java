@@ -1,5 +1,8 @@
 package com.example.freelance_resource_backend.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TransactionStatus {
 	CREATED("created"),
 	CONFIRMED("confirmed"),
@@ -22,7 +25,4 @@ public enum TransactionStatus {
 				String.join(", ", TransactionStatus.values().toString())));
 	}
 
-	public String getValue() {
-		return value;
-	}
 }
