@@ -22,7 +22,8 @@ public class CourseEntity {
 	private LocalDateTime startDate;
 	private String location;
 	private String topic;
-	private String comments;
+	private String instructorComments;
+	private String studentFeedback;
 	private CourseCategory courseCategory;
 	private CourseStatus courseStatus;
 	private CourseRating courseRating;
