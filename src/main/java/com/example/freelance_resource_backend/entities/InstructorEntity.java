@@ -3,12 +3,14 @@ package com.example.freelance_resource_backend.entities;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Data;
 
 import com.example.freelance_resource_backend.enums.UserStatus;
 
 
 @Data
+@Builder
 public class InstructorEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

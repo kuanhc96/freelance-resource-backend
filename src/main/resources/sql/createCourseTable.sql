@@ -2,7 +2,7 @@ create TABLE courses(
    course_id INT NOT NULL AUTO_INCREMENT,
    course_guid VARCHAR(100),
    course_category VARCHAR(50) NOT NULL DEFAULT 'golf',
-   start_date DATETIME,
+   start_date DuseruserusercoursesATETIME,
 	location VARCHAR(100),
 	topic VARCHAR(100),
 	instructor_comments VARCHAR(500),
