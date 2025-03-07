@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Data;
 
 import com.example.freelance_resource_backend.enums.CourseCategory;
@@ -12,6 +13,7 @@ import com.example.freelance_resource_backend.enums.CourseRating;
 import com.example.freelance_resource_backend.enums.CourseStatus;
 
 @Data
+@Builder
 public class CourseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
