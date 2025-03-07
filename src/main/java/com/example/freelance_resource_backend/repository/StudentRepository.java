@@ -1,5 +1,6 @@
 package com.example.freelance_resource_backend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.StudentEntity;
+import com.example.freelance_resource_backend.mapper.InstructorMapper;
 import com.example.freelance_resource_backend.mapper.StudentMapper;
 
 @Repository
@@ -24,6 +26,9 @@ public class StudentRepository {
 
 	private String insertStudent = "INSERT INTO students (student_guid, student_name, email, birth_year, birth_month, birth_day, status) " +
 			"VALUES (:student_guid, :student_name, :email, :birth_year, :birth_month, :birth_day, :status)";
+
+	private String getDistinctStudentsByInstructorGUID = "SELECT DISTINCT student_guid FROM students " +
+			"WHERE instructor_guid = :instructor_guid";
 
 	public Optional<StudentEntity> getStudentByStudentGUID(String studentGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -55,6 +60,16 @@ public class StudentRepository {
 		params.addValue(StudentMapper.BIRTH_DAY, student.getBirthDay());
 		params.addValue(StudentMapper.STATUS, student.getStatus().name());
 		jdbcTemplate.update(insertStudent, params);
+	}
+
+	public Optional<List<String>> getDistinctStudentsByInstructorGUID(String instructorGUID) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue(InstructorMapper.INSTRUCTOR_GUID, instructorGUID);
+		try {
+			return Optional.of(jdbcTemplate.queryForList(getDistinctStudentsByInstructorGUID, params, String.class));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
 	}
 
 }
