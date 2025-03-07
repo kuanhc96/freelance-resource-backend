@@ -1,5 +1,6 @@
 package com.example.freelance_resource_backend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,6 +27,9 @@ public class InstructorRepository {
 	private String insertInstructor = "INSERT INTO instructors " +
 			"(student_guid, student_name, email, birth_year, birth_month, birth_day, status) " +
 			"VALUES (:student_guid, :student_name, :email, :birth_year, :birth_month, :birth_day, :status)";
+
+	private String getDistinctInstructorsByStudentGUID = "SELECT DISTINCT instructor_guid FROM instructors " +
+			"WHERE student_guid = :student_guid";
 
 	public Optional<InstructorEntity> getInstructorByInstructorGUID(String instructorGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -58,5 +62,15 @@ public class InstructorRepository {
 		params.addValue(InstructorMapper.BIRTH_DAY, instructor.getBirthDay());
 		params.addValue(InstructorMapper.USER_STATUS, instructor.getStatus().name());
 		jdbcTemplate.update(insertInstructor, params);
+	}
+
+	public Optional<List<String>> getDistinctInstructorsByStudentGUID(String studentGUID) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue(StudentMapper.STUDENT_GUID, studentGUID);
+		try {
+			return Optional.of(jdbcTemplate.queryForList(getDistinctInstructorsByStudentGUID, params, String.class));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
 	}
 }
