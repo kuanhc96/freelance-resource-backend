@@ -1,5 +1,7 @@
 package com.example.freelance_resource_backend.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -8,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import com.example.freelance_resource_backend.dto.request.CreateStudentRequest;
 import com.example.freelance_resource_backend.entities.StudentEntity;
 import com.example.freelance_resource_backend.enums.UserStatus;
+import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.StudentRepository;
 import com.example.freelance_resource_backend.translator.StudentTranslator;
 
@@ -23,6 +26,21 @@ public class StudentService {
 		studentEntity.setStatus(UserStatus.CREATED);
 		studentRepository.insertStudent(studentEntity);
 		return studentEntity;
+	}
 
+	public StudentEntity getStudentByStudentGUID(String studentGUID) throws ResourceNotFoundException {
+		Optional<StudentEntity> optionalStudent = studentRepository.getStudentByStudentGUID(studentGUID);
+		if (optionalStudent.isPresent()) {
+			return optionalStudent.get();
+		}
+		throw new ResourceNotFoundException("Student with studentGUID: " + studentGUID + " not found");
+	}
+
+	public StudentEntity getStudentByEmail(String email) throws ResourceNotFoundException {
+		Optional<StudentEntity> optionalStudent = studentRepository.getStudentByEmail(email);
+		if (optionalStudent.isPresent()) {
+			return optionalStudent.get();
+		}
+		throw new ResourceNotFoundException("Student with email: " + email + " not found");
 	}
 }
