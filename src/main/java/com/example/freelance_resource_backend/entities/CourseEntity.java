@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 
-import com.example.freelance_resource_backend.enums.CourseCategory;
 import com.example.freelance_resource_backend.enums.CourseRating;
 import com.example.freelance_resource_backend.enums.CourseStatus;
 
@@ -26,9 +25,8 @@ public class CourseEntity {
 	private String topic;
 	private String instructorComments;
 	private String studentFeedback;
-	private CourseCategory courseCategory;
 	private CourseStatus courseStatus;
 	private CourseRating courseRating;
-	private Integer price;
+	private Integer discount;
 
 }

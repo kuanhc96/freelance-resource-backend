@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.CourseEntity;
 import com.example.freelance_resource_backend.mapper.CourseMapper;
+import com.example.freelance_resource_backend.mapper.StudentMapper;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,60 +34,58 @@ public class CourseRepository {
 
 	public CourseEntity getCourseByCourseGUID(String courseGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("courseGUID", courseGUID);
+		params.addValue(CourseMapper.COURSE_GUID, courseGUID);
 		return jdbcTemplate.queryForObject(getCourseByCourseGUID, params, courseMapper);
 	}
 
 	public List<CourseEntity> getCoursesByStudentGUID(String studentGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("studentGUID", studentGUID);
+		params.addValue(CourseMapper.STUDENT_GUID, studentGUID);
 		return jdbcTemplate.query(getCoursesByStudentGUID, params, courseMapper);
 	}
 
 	public List<CourseEntity> getCoursesByInstructorGUID(String instructorGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("instructorGUID", instructorGUID);
+		params.addValue(CourseMapper.INSTRUCTOR_GUID, instructorGUID);
 		return jdbcTemplate.query(getCoursesByInstructorGUID, params, courseMapper);
 	}
 
 	public List<CourseEntity> getCoursesByStudentGUIDAndInstructorGUID(String studentGUID, String instructorGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("studentGUID", studentGUID);
-		params.addValue("instructorGUID", instructorGUID);
+		params.addValue(CourseMapper.STUDENT_GUID, studentGUID);
+		params.addValue(CourseMapper.INSTRUCTOR_GUID, instructorGUID);
 		return jdbcTemplate.query(getCoursesByStudentGUIDAndInstructorGUID, params, courseMapper);
 	}
 
 	public void insertCourse(CourseEntity course) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("courseGUID", course.getCourseGUID());
-		params.addValue("studentGUID", course.getStudentGUID());
-		params.addValue("instructorGUID", course.getInstructorGUID());
-		params.addValue("startDate", course.getStartDate());
-		params.addValue("location", course.getLocation());
-		params.addValue("topic", course.getTopic());
-		params.addValue("instructorComments", course.getInstructorComments());
-		params.addValue("studentFeedback", course.getStudentFeedback());
-		params.addValue("courseCategory", course.getCourseCategory().name());
-		params.addValue("courseStatus", course.getCourseStatus().name());
-		params.addValue("courseRating", course.getCourseRating().name());
-		params.addValue("price", course.getPrice());
+		params.addValue(CourseMapper.COURSE_GUID, course.getCourseGUID());
+		params.addValue(CourseMapper.STUDENT_GUID, course.getStudentGUID());
+		params.addValue(CourseMapper.INSTRUCTOR_GUID, course.getInstructorGUID());
+		params.addValue(CourseMapper.START_DATE, course.getStartDate());
+		params.addValue(CourseMapper.LOCATION, course.getLocation());
+		params.addValue(CourseMapper.TOPIC, course.getTopic());
+		params.addValue(CourseMapper.INSTRUCTOR_COMMENTS, course.getInstructorComments());
+		params.addValue(CourseMapper.STUDENT_FEEDBACK, course.getStudentFeedback());
+		params.addValue(CourseMapper.COURSE_STATUS, course.getCourseStatus().name());
+		params.addValue(CourseMapper.COURSE_RATING, course.getCourseRating().name());
+		params.addValue(CourseMapper.DISCOUNT, course.getDiscount());
 		jdbcTemplate.update(insertCourse, params);
 	}
 
 	public void updateCourseByCourseGUID(CourseEntity course) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("courseGUID", course.getCourseGUID());
-		params.addValue("studentGUID", course.getStudentGUID());
-		params.addValue("instructorGUID", course.getInstructorGUID());
-		params.addValue("startDate", course.getStartDate());
-		params.addValue("location", course.getLocation());
-		params.addValue("topic", course.getTopic());
-		params.addValue("instructorComments", course.getInstructorComments());
-		params.addValue("studentFeedback", course.getStudentFeedback());
-		params.addValue("courseCategory", course.getCourseCategory().name());
-		params.addValue("courseStatus", course.getCourseStatus().name());
-		params.addValue("courseRating", course.getCourseRating().name());
-		params.addValue("price", course.getPrice());
+		params.addValue(CourseMapper.COURSE_GUID, course.getCourseGUID());
+		params.addValue(CourseMapper.STUDENT_GUID, course.getStudentGUID());
+		params.addValue(CourseMapper.INSTRUCTOR_GUID, course.getInstructorGUID());
+		params.addValue(CourseMapper.START_DATE, course.getStartDate());
+		params.addValue(CourseMapper.LOCATION, course.getLocation());
+		params.addValue(CourseMapper.TOPIC, course.getTopic());
+		params.addValue(CourseMapper.INSTRUCTOR_COMMENTS, course.getInstructorComments());
+		params.addValue(CourseMapper.STUDENT_FEEDBACK, course.getStudentFeedback());
+		params.addValue(CourseMapper.COURSE_STATUS, course.getCourseStatus().name());
+		params.addValue(CourseMapper.COURSE_RATING, course.getCourseRating().name());
+		params.addValue(CourseMapper.DISCOUNT, course.getDiscount());
 		jdbcTemplate.update(updateCourseByCourseGUID, params);
 	}
 

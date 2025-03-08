@@ -1,0 +1,3 @@
+ALTER TABLE courses
+ADD COLUMN student_guid VARCHAR(100) NOT NULL,
+ADD COLUMN instructor_guid VARCHAR(100) NOT NULL;
