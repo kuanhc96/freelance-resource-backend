@@ -1,6 +1,7 @@
 package com.example.freelance_resource_backend.service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -8,25 +9,35 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.CourseEntity;
+import com.example.freelance_resource_backend.entities.SubjectEntity;
+import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.CourseRepository;
+import com.example.freelance_resource_backend.repository.SubjectRepository;
 
 @Service
 @RequiredArgsConstructor
 public class CourseService {
 	private final CourseRepository courseRepository;
+	private final SubjectRepository subjectRepository;
 
 	public void createCourse(String studentGUID, String instructorGUID, LocalDateTime startDate, String location,
-							 String topic, Integer price) {
-		CourseEntity newCourseEntity = CourseEntity.builder()
-				.courseGUID(UUID.randomUUID().toString())
-				.studentGUID(studentGUID)
-				.instructorGUID(instructorGUID)
-				.startDate(startDate)
-				.location(location)
-				.topic(topic)
-				.price(price)
-				.build();
-		courseRepository.insertCourse(newCourseEntity);
+							 String topic, String subject, Integer discount) throws ResourceNotFoundException {
+		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectNameAndInstructorGUID(subject, instructorGUID);
+		if (optionalSubject.isPresent()) {
+			CourseEntity newCourseEntity = CourseEntity.builder()
+					.courseGUID(UUID.randomUUID().toString())
+					.studentGUID(studentGUID)
+					.instructorGUID(instructorGUID)
+					.startDate(startDate)
+					.location(location)
+					.topic(topic)
+					.subject(subject)
+					.discount(discount)
+					.build();
+			courseRepository.insertCourse(newCourseEntity);
+		} else {
+			throw new ResourceNotFoundException("Subject with name: " + subject + " not found for instructorGUID: " + instructorGUID);
+		}
 	}
 
 	public void updateCourseStudent(String courseGUID, String studentGUID) {
