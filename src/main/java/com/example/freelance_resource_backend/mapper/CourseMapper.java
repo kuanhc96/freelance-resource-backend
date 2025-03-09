@@ -24,6 +24,7 @@ public class CourseMapper implements RowMapper<CourseEntity> {
 	public static final String COURSE_STATUS = "course_status";
 	public static final String COURSE_RATING = "course_rating";
 	public static final String DISCOUNT = "discount";
+	public static final String SUBJECT = "subject";
 
 
 	@Override
@@ -41,6 +42,7 @@ public class CourseMapper implements RowMapper<CourseEntity> {
 				.courseStatus(CourseStatus.getValue(rs.getString(COURSE_STATUS)))
 				.courseRating(CourseRating.getValue(rs.getInt(COURSE_RATING)))
 				.discount(rs.getInt(DISCOUNT))
+				.subject(rs.getString(SUBJECT))
 				.build();
 		return course;
 	}

@@ -23,13 +23,13 @@ public class CourseRepository {
 	private String getCoursesByInstructorGUID = "SELECT * FROM course WHERE instructor_guid = :instructorGUID";
 	private String getCoursesByStudentGUIDAndInstructorGUID = "SELECT * FROM course WHERE student_guid = :studentGUID AND instructor_guid = :instructorGUID";
 
-	private String insertCourse = "INSERT INTO course (course_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, course_category, course_status, course_rating, price) " +
-			"VALUES (:courseGUID, :studentGUID, :instructorGUID, :startDate, :location, :topic, :instructorComments, :studentFeedback, :courseCategory, :courseStatus, :courseRating, :price)";
+	private String insertCourse = "INSERT INTO course (course_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject, course_status, course_rating, discount) " +
+			"VALUES (:courseGUID, :studentGUID, :instructorGUID, :startDate, :location, :topic, :instructorComments, :studentFeedback, :subject, :courseStatus, :courseRating, :discount)";
 
 	private String updateCourseByCourseGUID = "UPDATE course " +
 			"SET student_guid = :studentGUID, instructor_guid = :instructorGUID, start_date = :startDate, location = :location, " +
-				"topic = :topic, instructor_comments = :instructorComments, student_feedback = :studentFeedback, course_category = :courseCategory, " +
-				"course_status = :courseStatus, course_rating = :courseRating, price = :price " +
+				"topic = :topic, instructor_comments = :instructorComments, student_feedback = :studentFeedback, subject = :subject, " +
+				"course_status = :courseStatus, course_rating = :courseRating, discount = :discount " +
 			"WHERE course_guid = :courseGUID";
 
 	public CourseEntity getCourseByCourseGUID(String courseGUID) {
@@ -70,6 +70,7 @@ public class CourseRepository {
 		params.addValue(CourseMapper.COURSE_STATUS, course.getCourseStatus().name());
 		params.addValue(CourseMapper.COURSE_RATING, course.getCourseRating().name());
 		params.addValue(CourseMapper.DISCOUNT, course.getDiscount());
+		params.addValue(CourseMapper.SUBJECT, course.getSubject());
 		jdbcTemplate.update(insertCourse, params);
 	}
 
@@ -86,6 +87,7 @@ public class CourseRepository {
 		params.addValue(CourseMapper.COURSE_STATUS, course.getCourseStatus().name());
 		params.addValue(CourseMapper.COURSE_RATING, course.getCourseRating().name());
 		params.addValue(CourseMapper.DISCOUNT, course.getDiscount());
+		params.addValue(CourseMapper.SUBJECT, course.getSubject());
 		jdbcTemplate.update(updateCourseByCourseGUID, params);
 	}
 

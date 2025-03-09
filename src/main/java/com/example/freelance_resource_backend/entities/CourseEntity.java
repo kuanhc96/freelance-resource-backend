@@ -24,6 +24,7 @@ public class CourseEntity {
 	private String location;
 	private String topic;
 	private String instructorComments;
+	private String subject;
 	private String studentFeedback;
 	private CourseStatus courseStatus;
 	private CourseRating courseRating;
