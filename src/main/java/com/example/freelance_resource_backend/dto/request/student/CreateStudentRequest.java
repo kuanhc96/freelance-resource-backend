@@ -1,4 +1,4 @@
-package com.example.freelance_resource_backend.dto.request;
+package com.example.freelance_resource_backend.dto.request.student;
 
 import lombok.Builder;
 import lombok.Data;

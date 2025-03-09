@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.freelance_resource_backend.dto.request.CreateStudentRequest;
-import com.example.freelance_resource_backend.dto.response.CreateStudentResponse;
+import com.example.freelance_resource_backend.dto.request.student.CreateStudentRequest;
+import com.example.freelance_resource_backend.dto.response.student.CreateStudentResponse;
 import com.example.freelance_resource_backend.entities.StudentEntity;
 import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.enums.UserRole;

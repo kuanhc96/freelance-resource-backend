@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-import com.example.freelance_resource_backend.dto.request.CreateStudentRequest;
+import com.example.freelance_resource_backend.dto.request.student.CreateStudentRequest;
 import com.example.freelance_resource_backend.entities.StudentEntity;
 import com.example.freelance_resource_backend.enums.UserStatus;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;

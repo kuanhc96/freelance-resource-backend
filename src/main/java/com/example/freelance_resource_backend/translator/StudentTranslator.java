@@ -1,6 +1,6 @@
 package com.example.freelance_resource_backend.translator;
 
-import com.example.freelance_resource_backend.dto.request.CreateStudentRequest;
+import com.example.freelance_resource_backend.dto.request.student.CreateStudentRequest;
 import com.example.freelance_resource_backend.entities.StudentEntity;
 
 public class StudentTranslator {
