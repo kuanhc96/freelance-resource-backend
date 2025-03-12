@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum UserRole {
 	STUDENT("student"),
-	FREELANCER("freelancer");
+	INSTRUCTOR("instructor");
 
 	private final String value;
 
