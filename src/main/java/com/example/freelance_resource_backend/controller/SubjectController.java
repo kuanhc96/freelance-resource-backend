@@ -2,6 +2,7 @@ package com.example.freelance_resource_backend.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class SubjectController {
 	private final SubjectService subjectService;
 
 	@PostMapping("/createSubject")
-	public CreateSubjectResponse createSubject(CreateSubjectRequest request) {
+	public CreateSubjectResponse createSubject(@RequestBody CreateSubjectRequest request) {
 		subjectService.createSubject(request.getSubjectName(), request.getInstructorGUID(), request.getPrice());
 		return CreateSubjectResponse.builder()
 				.subjectName(request.getSubjectName())
@@ -33,7 +34,7 @@ public class SubjectController {
 	}
 
 	@PutMapping("/updateSubjectName")
-	public UpdateSubjectNameResponse updateSubjectName(UpdateSubjectNameRequest updateSubjectRequest) throws ResourceNotFoundException {
+	public UpdateSubjectNameResponse updateSubjectName(@RequestBody UpdateSubjectNameRequest updateSubjectRequest) throws ResourceNotFoundException {
 		subjectService.updateSubjectName(updateSubjectRequest.getSubjectName(), updateSubjectRequest.getInstructorGUID(), updateSubjectRequest.getNewSubjectName());
 		return UpdateSubjectNameResponse.builder()
 				.newSubjectName(updateSubjectRequest.getNewSubjectName())
@@ -42,7 +43,7 @@ public class SubjectController {
 	}
 
 	@PutMapping("/updateSubjectPrice")
-	public UpdateSubjectPriceResponse updateSubjectPrice(UpdateSubjectPriceRequest updateSubjectRequest) throws ResourceNotFoundException {
+	public UpdateSubjectPriceResponse updateSubjectPrice(@RequestBody UpdateSubjectPriceRequest updateSubjectRequest) throws ResourceNotFoundException {
 		subjectService.updateSubjectPrice(updateSubjectRequest.getSubjectName(), updateSubjectRequest.getInstructorGUID(), updateSubjectRequest.getPrice());
 		return UpdateSubjectPriceResponse.builder()
 				.subjectName(updateSubjectRequest.getSubjectName())

@@ -2,6 +2,7 @@ package com.example.freelance_resource_backend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ public class InstructorController {
 	private final InstructorService instructorService;
 
 	@PostMapping("/createInstructor")
-	public ResponseEntity<CreateInstructorResponse> createInstructor(CreateInstructorRequest request) {
+	public ResponseEntity<CreateInstructorResponse> createInstructor(@RequestBody CreateInstructorRequest request) {
 		String email = request.getEmail();
 		String password = request.getPassword();
 		UserEntity userEntity = userDetailsService.createUser(email, password, UserRole.INSTRUCTOR);

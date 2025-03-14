@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.CourseEntity;
 import com.example.freelance_resource_backend.entities.SubjectEntity;
+import com.example.freelance_resource_backend.enums.CourseStatus;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.CourseRepository;
 import com.example.freelance_resource_backend.repository.SubjectRepository;
@@ -20,7 +21,7 @@ public class CourseService {
 	private final CourseRepository courseRepository;
 	private final SubjectRepository subjectRepository;
 
-	public void createCourse(String studentGUID, String instructorGUID, LocalDateTime startDate, String location,
+	public CourseEntity createCourse(String studentGUID, String instructorGUID, LocalDateTime startDate, String location,
 							 String topic, String subject, Integer discount) throws ResourceNotFoundException {
 		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectNameAndInstructorGUID(subject, instructorGUID);
 		if (optionalSubject.isPresent()) {
@@ -31,10 +32,12 @@ public class CourseService {
 					.startDate(startDate)
 					.location(location)
 					.topic(topic)
+					.courseStatus(CourseStatus.CREATED)
 					.subject(subject)
 					.discount(discount)
 					.build();
 			courseRepository.insertCourse(newCourseEntity);
+			return newCourseEntity;
 		} else {
 			throw new ResourceNotFoundException("Subject with name: " + subject + " not found for instructorGUID: " + instructorGUID);
 		}
