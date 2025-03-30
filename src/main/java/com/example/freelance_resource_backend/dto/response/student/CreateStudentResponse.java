@@ -3,6 +3,7 @@ package com.example.freelance_resource_backend.dto.response.student;
 import lombok.Builder;
 import lombok.Data;
 
+import com.example.freelance_resource_backend.enums.Gender;
 import com.example.freelance_resource_backend.enums.UserStatus;
 
 @Data
@@ -15,4 +16,6 @@ public class CreateStudentResponse {
 	private Integer birthMonth;
 	private Integer birthDay;
 	private UserStatus status;
+	private Gender gender;
+	private String description;
 }

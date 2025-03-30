@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 
+import com.example.freelance_resource_backend.enums.Gender;
 import com.example.freelance_resource_backend.enums.UserStatus;
 
 
@@ -25,5 +26,7 @@ public class StudentEntity {
 	private Integer birthDay;
 	private UserStatus status;
 	private Integer deposit;
+	private Gender gender;
+	private String description;
 
 }

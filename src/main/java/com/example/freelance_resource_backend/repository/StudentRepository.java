@@ -24,8 +24,8 @@ public class StudentRepository {
 
 	private String getStudentByEmail = "SELECT * FROM students WHERE email = :email";
 
-	private String insertStudent = "INSERT INTO students (student_guid, student_name, email, birth_year, birth_month, birth_day, status) " +
-			"VALUES (:student_guid, :student_name, :email, :birth_year, :birth_month, :birth_day, :status)";
+	private String insertStudent = "INSERT INTO students (student_guid, student_name, email, birth_year, birth_month, birth_day, status, gender, description) " +
+			"VALUES (:student_guid, :student_name, :email, :birth_year, :birth_month, :birth_day, :status, :gender, :description)";
 
 	private String getDistinctStudentsByInstructorGUID = "SELECT DISTINCT student_guid FROM students " +
 			"WHERE instructor_guid = :instructor_guid";
@@ -59,6 +59,8 @@ public class StudentRepository {
 		params.addValue(StudentMapper.BIRTH_MONTH, student.getBirthMonth());
 		params.addValue(StudentMapper.BIRTH_DAY, student.getBirthDay());
 		params.addValue(StudentMapper.STATUS, student.getStatus().name());
+		params.addValue(StudentMapper.GENDER, student.getGender().name());
+		params.addValue(StudentMapper.DESCRIPTION, student.getDescription());
 		jdbcTemplate.update(insertStudent, params);
 	}
 

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.example.freelance_resource_backend.entities.StudentEntity;
+import com.example.freelance_resource_backend.enums.Gender;
 import com.example.freelance_resource_backend.enums.UserStatus;
 
 
@@ -20,6 +21,8 @@ public class StudentMapper implements RowMapper<StudentEntity> {
 	public static final String BIRTH_MONTH = "birth_month";
 	public static final String BIRTH_DAY = "birth_day";
 	public static final String STATUS = "status";
+	public static final String GENDER = "gender";
+	public static final String DESCRIPTION = "description";
 
 	@Override
 	public StudentEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -32,6 +35,8 @@ public class StudentMapper implements RowMapper<StudentEntity> {
 				.birthMonth(rs.getInt(BIRTH_MONTH))
 				.birthDay(rs.getInt(BIRTH_DAY))
 				.status(UserStatus.getValue(rs.getString(STATUS)))
+				.gender(Gender.getValue(rs.getString(GENDER)))
+				.description(rs.getString(DESCRIPTION))
 				.build();
 	}
 }

@@ -24,6 +24,8 @@ public class StudentService {
 		StudentEntity studentEntity = StudentTranslator.toEntity(request);
 		studentEntity.setStudentGUID(studentGUID);
 		studentEntity.setStatus(UserStatus.CREATED);
+		studentEntity.setGender(request.getGender());
+		studentEntity.setDescription(request.getDescription());
 		studentRepository.insertStudent(studentEntity);
 		return studentEntity;
 	}
