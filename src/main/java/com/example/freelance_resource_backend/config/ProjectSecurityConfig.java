@@ -19,7 +19,7 @@ public class ProjectSecurityConfig {
 		http .csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/test").authenticated()
-				.requestMatchers("/login", "/student/createStudent", "/forgetPassword").permitAll()
+				.requestMatchers("/login", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
 				.anyRequest().authenticated()
 		);
 		http.formLogin(Customizer.withDefaults());
