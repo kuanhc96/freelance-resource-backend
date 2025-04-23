@@ -15,7 +15,6 @@ import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.enums.UserRole;
 import com.example.freelance_resource_backend.service.FreelanceUserDetailsService;
 import com.example.freelance_resource_backend.service.InstructorService;
-import com.example.freelance_resource_backend.service.StudentService;
 
 @RestController
 @RequestMapping("/instructor")
