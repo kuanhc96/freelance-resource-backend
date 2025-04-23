@@ -1,5 +1,7 @@
 package com.example.freelance_resource_backend.entities;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,9 +20,9 @@ public class InstructorEntity {
 	private String instructorGUID;
 	private String instructorName;
 	private String email;
-	private Integer birthYear;
-	private Integer birthMonth;
-	private Integer birthDay;
+	private LocalDate birthday;
+	private String gender;
+	private String description;
 	private UserStatus status;
 	private Integer revenue;
 	// TODO: add fields for fetching google calendar events

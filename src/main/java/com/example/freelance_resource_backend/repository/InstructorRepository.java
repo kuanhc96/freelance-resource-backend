@@ -25,8 +25,8 @@ public class InstructorRepository {
 	private String getInstructorByEmail = "SELECT * FROM instructors WHERE email = :email";
 
 	private String insertInstructor = "INSERT INTO instructors " +
-			"(student_guid, student_name, email, birth_year, birth_month, birth_day, status) " +
-			"VALUES (:student_guid, :student_name, :email, :birth_year, :birth_month, :birth_day, :status)";
+			"(instructor_guid, instructor_name, email, birthday, gender, description, user_status) " +
+			"VALUES (:instructor_guid, :instructor_name, :email, :birthday, :gender, :description, :user_status)";
 
 	private String getDistinctInstructorsByStudentGUID = "SELECT DISTINCT instructor_guid FROM instructors " +
 			"WHERE student_guid = :student_guid";
@@ -53,14 +53,14 @@ public class InstructorRepository {
 
 	public void insertInstructor(InstructorEntity instructor) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue(InstructorMapper.INSTRUCTOR_GUID, instructor.getInstructorId());
+		params.addValue(InstructorMapper.INSTRUCTOR_GUID, instructor.getInstructorGUID());
 		params.addValue(InstructorMapper.INSTRUCTOR_NAME, instructor.getInstructorName());
 		params.addValue(InstructorMapper.EMAIL, instructor.getEmail());
 		params.addValue(InstructorMapper.REVENUE, instructor.getEmail());
-		params.addValue(InstructorMapper.BIRTH_YEAR, instructor.getBirthYear());
-		params.addValue(InstructorMapper.BIRTH_MONTH, instructor.getBirthMonth());
-		params.addValue(InstructorMapper.BIRTH_DAY, instructor.getBirthDay());
+		params.addValue(InstructorMapper.BIRTHDAY, instructor.getBirthday());
 		params.addValue(InstructorMapper.USER_STATUS, instructor.getStatus().name());
+		params.addValue(InstructorMapper.GENDER, instructor.getStatus().name());
+		params.addValue(InstructorMapper.DESCRIPTION, instructor.getDescription());
 		jdbcTemplate.update(insertInstructor, params);
 	}
 

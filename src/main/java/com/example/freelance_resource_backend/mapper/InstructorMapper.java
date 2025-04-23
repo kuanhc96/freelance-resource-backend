@@ -17,10 +17,10 @@ public class InstructorMapper implements RowMapper<InstructorEntity> {
 	public static final String INSTRUCTOR_NAME = "instructor_name";
 	public static final String EMAIL = "email";
 	public static final String REVENUE = "revenue";
-	public static final String BIRTH_YEAR = "birth_year";
-	public static final String BIRTH_MONTH = "birth_month";
-	public static final String BIRTH_DAY = "birth_day";
+	public static final String BIRTHDAY = "birthday";
 	public static final String USER_STATUS = "user_status";
+	public static final String GENDER = "gender";
+	public static final String DESCRIPTION = "description";
 
 	@Override
 	public InstructorEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -30,9 +30,7 @@ public class InstructorMapper implements RowMapper<InstructorEntity> {
 			.instructorName(rs.getString(INSTRUCTOR_NAME))
 			.email(rs.getString(EMAIL))
 			.revenue(rs.getInt(REVENUE))
-			.birthYear(rs.getInt(BIRTH_YEAR))
-			.birthMonth(rs.getInt(BIRTH_MONTH))
-			.birthDay(rs.getInt(BIRTH_DAY))
+			.birthday(rs.getDate(BIRTHDAY).toLocalDate())
 			.status(UserStatus.getValue(rs.getString(USER_STATUS)))
 			.build();
 

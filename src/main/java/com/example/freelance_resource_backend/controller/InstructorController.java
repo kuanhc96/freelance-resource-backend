@@ -34,10 +34,10 @@ public class InstructorController {
 		InstructorEntity instructorEntity = instructorService.createInstructor(instructorGUID, request);
 		return ResponseEntity.ok(CreateInstructorResponse.builder()
 				.email(request.getEmail())
-				.instructorName(request.getInstructorName())
-				.birthYear(request.getBirthYear())
-				.birthMonth(request.getBirthMonth())
-				.birthDay(request.getBirthDay())
+				.instructorName(request.getName())
+				.gender(request.getGender())
+				.description(request.getDescription())
+				.birthday(request.getBirthday())
 				.status(instructorEntity.getStatus())
 				.build());
 	}

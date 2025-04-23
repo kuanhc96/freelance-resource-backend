@@ -6,11 +6,11 @@ import com.example.freelance_resource_backend.entities.InstructorEntity;
 public class InstructorTranslator {
 	public static InstructorEntity toEntity(CreateInstructorRequest request) {
 		return InstructorEntity.builder()
-				.instructorName(request.getInstructorName())
+				.instructorName(request.getName())
 				.email(request.getEmail())
-				.birthYear(request.getBirthYear())
-				.birthMonth(request.getBirthMonth())
-				.birthDay(request.getBirthDay())
+				.birthday(request.getBirthday())
+				.gender(request.getGender().getValue())
+				.description(request.getDescription())
 				.build();
 	}
 }

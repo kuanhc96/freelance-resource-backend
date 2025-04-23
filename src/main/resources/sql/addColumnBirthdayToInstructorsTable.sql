@@ -1,0 +1,2 @@
+ALTER TABLE instructors
+ADD COLUMN birthday DATE NOT NULL;
