@@ -17,9 +17,7 @@ public class StudentMapper implements RowMapper<StudentEntity> {
 	public static final String STUDENT_GUID = "student_guid";
 	public static final String STUDENT_NAME = "student_name";
 	public static final String EMAIL = "email";
-	public static final String BIRTH_YEAR = "birth_year";
-	public static final String BIRTH_MONTH = "birth_month";
-	public static final String BIRTH_DAY = "birth_day";
+	public static final String BIRTHDAY = "birthday";
 	public static final String STATUS = "status";
 	public static final String GENDER = "gender";
 	public static final String DESCRIPTION = "description";
@@ -31,9 +29,7 @@ public class StudentMapper implements RowMapper<StudentEntity> {
 				.studentGUID(rs.getString(STUDENT_GUID))
 				.studentName(rs.getString(STUDENT_NAME))
 				.email(rs.getString(EMAIL))
-				.birthYear(rs.getInt(BIRTH_YEAR))
-				.birthMonth(rs.getInt(BIRTH_MONTH))
-				.birthDay(rs.getInt(BIRTH_DAY))
+				.birthday(rs.getDate(BIRTHDAY).toLocalDate())
 				.status(UserStatus.getValue(rs.getString(STATUS)))
 				.gender(Gender.getValue(rs.getString(GENDER)))
 				.description(rs.getString(DESCRIPTION))

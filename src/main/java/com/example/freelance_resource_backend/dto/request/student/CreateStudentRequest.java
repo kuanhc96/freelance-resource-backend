@@ -1,5 +1,7 @@
 package com.example.freelance_resource_backend.dto.request.student;
 
+import java.time.LocalDate;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,10 +12,8 @@ import com.example.freelance_resource_backend.enums.Gender;
 public class CreateStudentRequest {
 	private String email;
 	private String password;
-	private String studentName;
-	private Integer birthYear;
-	private Integer birthMonth;
-	private Integer birthDay;
+	private String name;
+	private LocalDate birthday;
 	private Gender gender;
 	private String description;
 }

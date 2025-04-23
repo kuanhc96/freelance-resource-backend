@@ -1,5 +1,7 @@
 package com.example.freelance_resource_backend.dto.response.student;
 
+import java.time.LocalDate;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,9 +14,7 @@ public class CreateStudentResponse {
 	private String studentGUID;
 	private String studentName;
 	private String email;
-	private Integer birthYear;
-	private Integer birthMonth;
-	private Integer birthDay;
+	private LocalDate birthday;
 	private UserStatus status;
 	private Gender gender;
 	private String description;

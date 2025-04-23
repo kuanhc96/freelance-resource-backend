@@ -7,21 +7,11 @@ public class StudentTranslator {
 
 	public static StudentEntity toEntity(CreateStudentRequest request) {
 		return StudentEntity.builder()
-				.studentName(request.getStudentName())
+				.studentName(request.getName())
 				.email(request.getEmail())
-				.birthYear(request.getBirthYear())
-				.birthMonth(request.getBirthMonth())
-				.birthDay(request.getBirthDay())
-				.build();
-	}
-
-	public static CreateStudentRequest toDTO(StudentEntity entity) {
-		return CreateStudentRequest.builder()
-				.email(entity.getEmail())
-				.studentName(entity.getStudentName())
-				.birthYear(entity.getBirthYear())
-				.birthMonth(entity.getBirthMonth())
-				.birthDay(entity.getBirthDay())
+				.birthday(request.getBirthday())
+				.gender(request.getGender())
+				.description(request.getDescription())
 				.build();
 	}
 }

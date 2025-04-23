@@ -1,5 +1,7 @@
 package com.example.freelance_resource_backend.entities;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,9 +23,7 @@ public class StudentEntity {
 	private String studentGUID;
 	private String studentName;
 	private String email;
-	private Integer birthYear;
-	private Integer birthMonth;
-	private Integer birthDay;
+	private LocalDate birthday;
 	private UserStatus status;
 	private Integer deposit;
 	private Gender gender;

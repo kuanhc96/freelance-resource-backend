@@ -37,9 +37,7 @@ public class StudentController {
 				.studentGUID(studentEntity.getStudentGUID())
 				.studentName(studentEntity.getStudentName())
 				.email(studentEntity.getEmail())
-				.birthYear(studentEntity.getBirthYear())
-				.birthMonth(studentEntity.getBirthMonth())
-				.birthDay(studentEntity.getBirthDay())
+				.birthday(studentEntity.getBirthday())
 				.status(studentEntity.getStatus())
 				.build());
 	}
