@@ -7,11 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -19,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import com.example.freelance_resource_backend.entryPoint.CustomBasicAuthenticationEntryPoint;
+import com.example.freelance_resource_backend.filter.CsrfCookieFilter;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationFailureHandler;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationSuccessHandler;
 
@@ -32,7 +37,9 @@ public class ProjectSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-		http
+		CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
+		http.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
+				.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 				.cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
 					@Override
 					public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -45,7 +52,11 @@ public class ProjectSecurityConfig {
 						return config;
 					}
 				}))
-				.csrf(csrf -> csrf.disable())
+				.csrf(csrfConfig -> csrfConfig
+						.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
+						.ignoringRequestMatchers("/login", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword")
+						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				)
 				.authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/getSubscribedInstructors").authenticated()
 				.requestMatchers("/login", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
@@ -62,6 +73,7 @@ public class ProjectSecurityConfig {
 				.deleteCookies("JSESSIONID")
 		);
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+		http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
 		return http.build();
 	}
 
