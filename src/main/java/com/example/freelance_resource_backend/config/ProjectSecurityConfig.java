@@ -54,12 +54,12 @@ public class ProjectSecurityConfig {
 				}))
 				.csrf(csrfConfig -> csrfConfig
 						.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-						.ignoringRequestMatchers("/testLogin", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword")
+						.ignoringRequestMatchers("/instructor/createInstructor", "/student/createStudent", "/forgetPassword")
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				)
 				.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/getSubscribedInstructors").authenticated()
-				.requestMatchers("/testLogin", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
+				.requestMatchers("/testLogin", "/getSubscribedInstructors").authenticated()
+				.requestMatchers("/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
 				.anyRequest().authenticated()
 		);
 		http.formLogin(flc -> flc
@@ -67,7 +67,6 @@ public class ProjectSecurityConfig {
 				.failureHandler(customAuthenticationFailureHandler)
 		);
 		http.logout(loc -> loc
-				.logoutSuccessUrl("http://localhost:8080/login?logout=true")
 				.invalidateHttpSession(true)
 				.clearAuthentication(true)
 				.deleteCookies("JSESSIONID")
