@@ -2,6 +2,7 @@ package com.example.freelance_resource_backend.config;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -17,8 +18,18 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import jakarta.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
+import com.example.freelance_resource_backend.entryPoint.CustomBasicAuthenticationEntryPoint;
+import com.example.freelance_resource_backend.handler.CustomAuthenticationFailureHandler;
+import com.example.freelance_resource_backend.handler.CustomAuthenticationSuccessHandler;
+
 @Configuration
 public class ProjectSecurityConfig {
+	@Autowired
+	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+	@Autowired
+	private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -36,11 +47,15 @@ public class ProjectSecurityConfig {
 				}))
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/test").authenticated()
+				.requestMatchers("/getSubscribedInstructors").authenticated()
 				.requestMatchers("/login", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
 				.anyRequest().authenticated()
 		);
-		http.formLogin(Customizer.withDefaults());
+		http.formLogin(flc -> flc
+				.successHandler(customAuthenticationSuccessHandler)
+				.failureHandler(customAuthenticationFailureHandler)
+		);
+		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
 		return http.build();
 	}
 
