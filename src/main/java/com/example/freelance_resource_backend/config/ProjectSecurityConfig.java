@@ -55,6 +55,12 @@ public class ProjectSecurityConfig {
 				.successHandler(customAuthenticationSuccessHandler)
 				.failureHandler(customAuthenticationFailureHandler)
 		);
+		http.logout(loc -> loc
+				.logoutSuccessUrl("http://localhost:8080/login?logout=true")
+				.invalidateHttpSession(true)
+				.clearAuthentication(true)
+				.deleteCookies("JSESSIONID")
+		);
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
 		return http.build();
 	}
