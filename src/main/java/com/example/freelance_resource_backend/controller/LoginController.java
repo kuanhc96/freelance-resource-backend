@@ -24,7 +24,6 @@ public class LoginController {
 		System.out.println(authentication.getName());
 		boolean success = false;
 		String studentGUID = null;
-		List<String> subscribedIds = new LinkedList<>();
 		String role = null;
 		try {
 			StudentEntity studentEntity = studentService.getStudentByEmail(authentication.getName());

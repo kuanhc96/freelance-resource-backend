@@ -10,6 +10,5 @@ import lombok.Data;
 public class LoginResponse {
 	private Boolean success;
 	private String userId;
-	private List<String> subscribedIds;
 	private String role;
 }
