@@ -17,8 +17,8 @@ import com.example.freelance_resource_backend.service.FreelanceUserDetailsServic
 @AllArgsConstructor
 public class EmailAndPasswordAuthenticationProvider implements AuthenticationProvider {
 
-	private final PasswordEncoder passwordEncoder;
 	private FreelanceUserDetailsService userDetailsService;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {

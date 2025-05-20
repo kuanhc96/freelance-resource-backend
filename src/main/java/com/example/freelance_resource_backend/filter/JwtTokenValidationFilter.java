@@ -60,8 +60,7 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 		// Define the conditions under which this filter should not be applied
 		// For example, you can skip certain paths or methods
 		String path = request.getRequestURI();
-		// Skip filtering for public API endpoints
-		return !path.equals("/login") && !path.equals("/instructor/createInstructor")
+		return !path.equals("/apiLogin") && !path.equals("/instructor/createInstructor")
 				&& !path.equals("/student/createStudent") && !path.equals("/forgetPassword");
 	}
 }

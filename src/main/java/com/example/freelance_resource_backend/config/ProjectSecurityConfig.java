@@ -5,6 +5,8 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,6 +29,8 @@ import com.example.freelance_resource_backend.filter.CsrfCookieFilter;
 import com.example.freelance_resource_backend.filter.JwtTokenGenerationFilter;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationFailureHandler;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationSuccessHandler;
+import com.example.freelance_resource_backend.provider.EmailAndPasswordAuthenticationProvider;
+import com.example.freelance_resource_backend.service.FreelanceUserDetailsService;
 
 @Configuration
 public class ProjectSecurityConfig {
@@ -54,12 +58,12 @@ public class ProjectSecurityConfig {
 				}))
 				.csrf(csrfConfig -> csrfConfig
 						.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-						.ignoringRequestMatchers("/instructor/createInstructor", "/student/createStudent", "/forgetPassword")
+						.ignoringRequestMatchers("/apiLogin", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword")
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				)
 				.authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/testLogin", "/getSubscribedInstructors").authenticated()
-				.requestMatchers("/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
+				.requestMatchers("/apiLogin", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
 				.anyRequest().authenticated()
 		);
 		http.formLogin(flc -> flc
@@ -72,8 +76,8 @@ public class ProjectSecurityConfig {
 				.deleteCookies("JSESSIONID")
 		);
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
-		http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-				.addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class);
+		http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
+//				.addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class);
 		return http.build();
 	}
 
@@ -85,5 +89,13 @@ public class ProjectSecurityConfig {
 	@Bean
 	public UserDetailsService userDetailsService(DataSource dataSource) {
 		return new JdbcUserDetailsManager(dataSource);
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(FreelanceUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+		EmailAndPasswordAuthenticationProvider provider = new EmailAndPasswordAuthenticationProvider(userDetailsService, passwordEncoder);
+		ProviderManager providerManager = new ProviderManager(provider);
+		providerManager.setEraseCredentialsAfterAuthentication(false);
+		return providerManager;
 	}
 }
