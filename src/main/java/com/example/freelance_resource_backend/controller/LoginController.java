@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 
@@ -38,12 +40,20 @@ public class LoginController {
 	private final Environment env;
 
 	@PostMapping("/apiLogin")
-	public ResponseEntity<LoginResponse> apiLogin(@RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<LoginResponse> apiLogin(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 		String jwt = "";
 		boolean success = false;
 		String studentGUID = null;
 		String role = null;
 		Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getEmail(), loginRequest.getPassword());
+		try {
+			StudentEntity studentEntity = studentService.getStudentByEmail(authentication.getName());
+			success = true;
+			studentGUID = studentEntity.getStudentGUID();
+		} catch(ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().success(success).build());
+		}
+
 		Authentication authenticationResponse = authenticationManager.authenticate(authentication);
 		if (null != authenticationResponse && authenticationResponse.isAuthenticated()) {
 			if (null != env) {
@@ -59,15 +69,11 @@ public class LoginController {
 						.setExpiration(new Date(new Date().getTime() + 30000000))
 						.signWith(secretKey)
 						.compact();
-			}
-
-			try {
-				StudentEntity studentEntity = studentService.getStudentByEmail(authentication.getName());
-				success = true;
-				studentGUID = studentEntity.getStudentGUID();
-			} catch(ResourceNotFoundException e) {
-				return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().success(success).build());
-
+				Cookie cookie = new Cookie("loginToken", jwt);
+				cookie.setHttpOnly(true);
+				cookie.setSecure(true);
+				cookie.setPath("/");
+				response.addCookie(cookie);
 			}
 		}
 		return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER, jwt)
