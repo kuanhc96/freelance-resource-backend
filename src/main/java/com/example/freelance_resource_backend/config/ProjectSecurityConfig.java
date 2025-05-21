@@ -58,12 +58,12 @@ public class ProjectSecurityConfig {
 				}))
 				.csrf(csrfConfig -> csrfConfig
 						.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-						.ignoringRequestMatchers("/checkLogin", "/apiLogin", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword")
+						.ignoringRequestMatchers("/checkLogin", "/apiLogin", "/apiLogout", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword")
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				)
 				.authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/testLogin", "/getSubscribedInstructors").authenticated()
-				.requestMatchers("/checkLogin", "/apiLogin", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
+				.requestMatchers("/checkLogin", "/apiLogin", "/apiLogout", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
 				.anyRequest().authenticated()
 		);
 		http.formLogin(flc -> flc

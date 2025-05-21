@@ -146,4 +146,21 @@ public class LoginController {
 
 		}
 	}
+
+	@PostMapping("/apiLogout")
+	public ResponseEntity<Void> logout(HttpServletResponse response) {
+		// Clear the JWT cookie
+		clearCookie("loginToken", response, true);
+		clearCookie("XSRF-TOKEN", response, false);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
+	private void clearCookie(String name, HttpServletResponse response, boolean httpOnly) {
+		Cookie cookie = new Cookie(name, "");
+		cookie.setPath("/");
+		cookie.setHttpOnly(httpOnly);
+		cookie.setSecure(true); // Only if you're using HTTPS
+		cookie.setMaxAge(0);    // Clear the cookie
+		response.addCookie(cookie);
+	}
 }
