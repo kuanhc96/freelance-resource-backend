@@ -11,5 +11,4 @@ public class LoginResponse {
 	private Boolean success;
 	private String userId;
 	private String role;
-	private String jwt;
 }
