@@ -2,6 +2,7 @@ package com.example.freelance_resource_backend.filter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import javax.crypto.SecretKey;
@@ -28,7 +30,11 @@ import com.example.freelance_resource_backend.constants.ApplicationConstants;
 public class JwtTokenValidationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-		String jwt = request.getHeader(ApplicationConstants.JWT_HEADER);
+		String jwt = Arrays.stream(request.getCookies())
+				.filter(cookie -> "loginToken".equals(cookie.getName()))
+				.map(Cookie::getValue)
+				.findFirst()
+				.orElse(null);
 		if (null != jwt) {
 			// validate token
 			try {
@@ -39,9 +45,9 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 					if (null != secretKey) {
 						// validate token
 						Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody();
-						String username = String.valueOf(claims.get("username", String.class));
+						String email = String.valueOf(claims.get("email", String.class));
 						String authorities = String.valueOf(claims.get("authorities", String.class));
-						Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
+						Authentication authentication = new UsernamePasswordAuthenticationToken(email, null,
 								AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
 						SecurityContextHolder.getContext().setAuthentication(authentication);
 					}
@@ -60,7 +66,7 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 		// Define the conditions under which this filter should not be applied
 		// For example, you can skip certain paths or methods
 		String path = request.getRequestURI();
-		return !path.equals("/apiLogin") && !path.equals("/instructor/createInstructor")
-				&& !path.equals("/student/createStudent") && !path.equals("/forgetPassword");
+		return path.equals("/apiLogin") || path.equals("/instructor/createInstructor")
+				|| path.equals("/student/createStudent") || path.equals("/forgetPassword");
 	}
 }

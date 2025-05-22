@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 import com.example.freelance_resource_backend.entryPoint.CustomBasicAuthenticationEntryPoint;
 import com.example.freelance_resource_backend.filter.CsrfCookieFilter;
 import com.example.freelance_resource_backend.filter.JwtTokenGenerationFilter;
+import com.example.freelance_resource_backend.filter.JwtTokenValidationFilter;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationFailureHandler;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationSuccessHandler;
 import com.example.freelance_resource_backend.provider.EmailAndPasswordAuthenticationProvider;
@@ -62,7 +63,7 @@ public class ProjectSecurityConfig {
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				)
 				.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/testLogin", "/getSubscribedInstructors").authenticated()
+				.requestMatchers("/testLogin", "/instructor/getSubscribedInstructors/*").authenticated()
 				.requestMatchers("/checkLogin", "/apiLogin", "/apiLogout", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
 				.anyRequest().authenticated()
 		);
@@ -73,11 +74,11 @@ public class ProjectSecurityConfig {
 		http.logout(loc -> loc
 				.invalidateHttpSession(true)
 				.clearAuthentication(true)
-				.deleteCookies("JSESSIONID")
+				.deleteCookies("loginToken")
 		);
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
-		http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
-//				.addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class);
+		http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+				.addFilterBefore(new JwtTokenValidationFilter(), BasicAuthenticationFilter.class);
 		return http.build();
 	}
 
