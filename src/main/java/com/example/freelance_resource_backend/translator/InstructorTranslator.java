@@ -1,6 +1,7 @@
 package com.example.freelance_resource_backend.translator;
 
 import com.example.freelance_resource_backend.dto.request.instructor.CreateInstructorRequest;
+import com.example.freelance_resource_backend.dto.response.instructor.GetInstructorResponse;
 import com.example.freelance_resource_backend.entities.InstructorEntity;
 
 public class InstructorTranslator {
@@ -11,6 +12,14 @@ public class InstructorTranslator {
 				.birthday(request.getBirthday())
 				.gender(request.getGender().getValue())
 				.description(request.getDescription())
+				.build();
+	}
+
+	public static GetInstructorResponse toDto(InstructorEntity entity) {
+		return GetInstructorResponse.builder()
+				.instructorGUID(entity.getInstructorGUID())
+				.email(entity.getEmail())
+				.instructorName(entity.getInstructorName())
 				.build();
 	}
 }

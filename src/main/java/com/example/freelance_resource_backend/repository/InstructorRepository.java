@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.dto.response.instructor.GetInstructorResponse;
 import com.example.freelance_resource_backend.entities.InstructorEntity;
 import com.example.freelance_resource_backend.mapper.InstructorMapper;
 import com.example.freelance_resource_backend.mapper.StudentMapper;
@@ -30,6 +31,16 @@ public class InstructorRepository {
 
 	private String getDistinctInstructorsByStudentGUID = "SELECT DISTINCT instructor_guid FROM instructors " +
 			"WHERE student_guid = :student_guid";
+
+	private String getAllInstructors = "SELECT * FROM instructors";
+
+	public List<InstructorEntity> getAllInstructors() {
+		try {
+			return jdbcTemplate.query(getAllInstructors, instructorMapper);
+		} catch (EmptyResultDataAccessException e) {
+			return List.of();
+		}
+	}
 
 	public Optional<InstructorEntity> getInstructorByInstructorGUID(String instructorGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
