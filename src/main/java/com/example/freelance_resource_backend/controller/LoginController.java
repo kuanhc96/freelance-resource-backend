@@ -102,12 +102,13 @@ public class LoginController {
 			if (null != env) {
 				String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY, ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
 				SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+				role = authenticationResponse.getAuthorities().stream().map(
+						GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 				jwt = Jwts.builder()
 						.setIssuer("FreelanceApp")
 						.setSubject("JWT Token")
-						.claim("email", authentication.getName())
-						.claim("authorities", authentication.getAuthorities().stream().map(
-								GrantedAuthority::getAuthority).collect(Collectors.joining(",")))
+						.claim("email", authenticationResponse.getName())
+						.claim("authorities", role)
 						.setIssuedAt(new Date())
 						.setExpiration(new Date(new Date().getTime() + 30000000))
 						.signWith(secretKey)
@@ -123,7 +124,7 @@ public class LoginController {
 				.body(LoginResponse.builder()
 						.success(true)
 						.userId(studentGUID)
-						.role(null)
+						.role(role)
 						.build()
 				);
 	}
