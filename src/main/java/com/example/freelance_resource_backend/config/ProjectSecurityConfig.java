@@ -63,7 +63,12 @@ public class ProjectSecurityConfig {
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				)
 				.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/testLogin", "/instructor/getSubscribedInstructors/*", "/instructor/getAllInstructors").authenticated()
+				.requestMatchers(
+						"/testLogin",
+						"/instructor/getSubscribedInstructors/*",
+						"/instructor/getAllInstructors",
+						"/subscription"
+				).authenticated()
 				.requestMatchers("/checkLogin", "/apiLogin", "/apiLogout", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
 				.anyRequest().authenticated()
 		);

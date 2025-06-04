@@ -21,7 +21,7 @@ public class SubscriptionRepository {
 
 	private String getInstructorsSubscribedToByStudentGUID = "SELECT * FROM subscriptions WHERE student_guid = :student_guid";
 	private String getStudentsByInstructorGUID = "SELECT * FROM subscriptions WHERE instructor_guid = :instructor_guid";
-	private String insertSubscription = "INSERT INTO subscriptions (student_guid, instructor_guid, subscription_status) VALUES (:student_guid, :instructor_guid, REQUESTED)";
+	private String insertSubscription = "INSERT INTO subscriptions (student_guid, instructor_guid, subscription_status) VALUES (:student_guid, :instructor_guid, 'REQUESTED')";
 	private String deleteSubscription = "DELETE FROM subscriptions WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 	private String updateSubscriptionStatus = "UPDATE subscriptions SET subscription_status = :subscription_status WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 

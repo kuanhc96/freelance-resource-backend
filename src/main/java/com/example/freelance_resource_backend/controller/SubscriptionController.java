@@ -1,5 +1,6 @@
 package com.example.freelance_resource_backend.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,20 +21,23 @@ public class SubscriptionController {
 	private final SubscriptionService subscriptionService;
 
 	@PostMapping
-	public boolean subscribe(@RequestBody SubscribeRequest subscribeRequest) {
+	public ResponseEntity<Boolean> subscribe(@RequestBody SubscribeRequest subscribeRequest) {
 		// Logic for subscription
-		return subscriptionService.subscribe(subscribeRequest.getStudentGUID(), subscribeRequest.getInstructorGUID());
+		boolean result = subscriptionService.subscribe(subscribeRequest.getStudentGUID(), subscribeRequest.getInstructorGUID());
+		return ResponseEntity.ok(result);
 	}
 
 	@DeleteMapping
-	public boolean unsubscribe(@RequestBody SubscribeRequest unsubscribeRequest) {
+	public ResponseEntity<Boolean> unsubscribe(@RequestBody SubscribeRequest unsubscribeRequest) {
 		// Logic for subscription
-		return subscriptionService.unsubscribe(unsubscribeRequest.getStudentGUID(), unsubscribeRequest.getInstructorGUID());
+		boolean result = subscriptionService.unsubscribe(unsubscribeRequest.getStudentGUID(), unsubscribeRequest.getInstructorGUID());
+		return ResponseEntity.ok(result);
 	}
 
 	@PutMapping
-	public boolean confirmSubscription(@RequestBody SubscribeRequest confirmRequest) {
+	public ResponseEntity<Boolean> confirmSubscription(@RequestBody SubscribeRequest confirmRequest) {
 		// Logic for updating subscription
-		return subscriptionService.confirmSubscription(confirmRequest.getStudentGUID(), confirmRequest.getInstructorGUID());
+		boolean result = subscriptionService.confirmSubscription(confirmRequest.getStudentGUID(), confirmRequest.getInstructorGUID());
+		return ResponseEntity.ok(result);
 	}
 }

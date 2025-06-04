@@ -58,7 +58,6 @@ public class InstructorController {
 	@GetMapping("/getSubscribedInstructors/{studentGUID}")
 	@PreAuthorize(ApplicationConstants.ROLE_INSTRUCTOR)
 	public ResponseEntity<List<String>> getSubscribedInstructors(@PathVariable String studentGUID) {
-//		List<String> instructorGUIDs = instructorService.getSubscribedInstructors(studentGUID);
 		List<String> instructorGUIDs = List.of("test");
 		return ResponseEntity.ok(instructorGUIDs);
 	}
