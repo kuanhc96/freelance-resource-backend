@@ -2,6 +2,7 @@ package com.example.freelance_resource_backend.controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,5 +29,11 @@ public class SubscriptionController {
 	public boolean unsubscribe(@RequestBody SubscribeRequest unsubscribeRequest) {
 		// Logic for subscription
 		return subscriptionService.unsubscribe(unsubscribeRequest.getStudentGUID(), unsubscribeRequest.getInstructorGUID());
+	}
+
+	@PutMapping
+	public boolean confirmSubscription(@RequestBody SubscribeRequest confirmRequest) {
+		// Logic for updating subscription
+		return subscriptionService.confirmSubscription(confirmRequest.getStudentGUID(), confirmRequest.getInstructorGUID());
 	}
 }

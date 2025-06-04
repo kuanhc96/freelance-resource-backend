@@ -1,0 +1,2 @@
+ALTER TABLE subscriptions
+ADD COLUMN subscription_status VARCHAR(16) NOT NULL DEFAULT 'REQUESTED';

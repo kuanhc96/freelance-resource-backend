@@ -16,4 +16,6 @@ public class SubscriptionEntity {
 	private String instructorGUID;
 
 	private String studentGUID;
+
+	private String subscriptionStatus;
 }

@@ -8,6 +8,7 @@ import org.springframework.util.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.SubscriptionEntity;
+import com.example.freelance_resource_backend.enums.SubscriptionStatus;
 import com.example.freelance_resource_backend.repository.SubscriptionRepository;
 
 @Service
@@ -36,6 +37,14 @@ public class SubscriptionService {
 		}
 		subscriptionRepository.deleteSubscription(studentGUID, instructorGUID);
 		return true; // Successfully unsubscribed
+	}
+
+	public boolean confirmSubscription(String studentGUID, String instructorGUID) {
+		if (!isSubscribed(studentGUID, instructorGUID)) {
+			return false; // Not subscribed
+		}
+		subscriptionRepository.updateSubscriptionStatus(studentGUID, instructorGUID, SubscriptionStatus.CONFIRMED);
+		return true; // Successfully confirmed
 	}
 
 	public List<SubscriptionEntity> getAllInstructorSubscriptions(String studentGUID) {
