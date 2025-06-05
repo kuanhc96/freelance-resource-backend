@@ -9,32 +9,57 @@ import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.entities.InstructorEntity;
+import com.example.freelance_resource_backend.entities.StudentEntity;
 import com.example.freelance_resource_backend.entities.SubscriptionEntity;
 import com.example.freelance_resource_backend.enums.SubscriptionStatus;
+import com.example.freelance_resource_backend.mapper.InstructorMapper;
+import com.example.freelance_resource_backend.mapper.StudentMapper;
 import com.example.freelance_resource_backend.mapper.SubscriptionMapper;
 
 @Repository
 @RequiredArgsConstructor
 public class SubscriptionRepository {
 	private final SubscriptionMapper subscriptionMapper;
+	private final InstructorMapper instructorMapper;
+	private final StudentMapper studentMapper;
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
-	private String getInstructorsSubscribedToByStudentGUID = "SELECT * FROM subscriptions WHERE student_guid = :student_guid";
-	private String getStudentsByInstructorGUID = "SELECT * FROM subscriptions WHERE instructor_guid = :instructor_guid";
+	private String getInstructorsSubscribedToByStudentGUID =
+			"SELECT instructors.* " +
+					"FROM instructors instructors " +
+					"JOIN subscriptions subscriptions " +
+					"ON subscriptions.instructor_guid = instructors.instructor_guid " +
+					"WHERE subscriptions.student_guid = :student_guid";
+	private String getStudentsByInstructorGUID =
+			"SELECT students.* " +
+					"FROM students students " +
+					"JOIN subscriptions subscriptions " +
+					"ON subscriptions.student_guid = students.student_guid " +
+					"WHERE subscriptions.instructor_guid = :instructor_guid";
+	private String getSubscriptionByStudentAndInstructorGUID = "SELECT * FROM subscriptions WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 	private String insertSubscription = "INSERT INTO subscriptions (student_guid, instructor_guid, subscription_status) VALUES (:student_guid, :instructor_guid, 'REQUESTED')";
 	private String deleteSubscription = "DELETE FROM subscriptions WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 	private String updateSubscriptionStatus = "UPDATE subscriptions SET subscription_status = :subscription_status WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 
-	public List<SubscriptionEntity> getInstructorsSubscribedToByStudentGUID(String studentGUID) {
+	public List<InstructorEntity> getInstructorsSubscribedToByStudentGUID(String studentGUID) {
 		return jdbcTemplate.query(getInstructorsSubscribedToByStudentGUID,
 				new MapSqlParameterSource(SubscriptionMapper.STUDENT_GUID, studentGUID),
-				subscriptionMapper);
+				instructorMapper);
 	}
 
-	public List<SubscriptionEntity> getStudentsByInstructorGUID(String instructorGUID) {
+	public List<StudentEntity> getStudentsByInstructorGUID(String instructorGUID) {
 		return jdbcTemplate.query(getStudentsByInstructorGUID,
 				new MapSqlParameterSource(SubscriptionMapper.INSTRUCTOR_GUID, instructorGUID),
-				subscriptionMapper);
+				studentMapper);
+	}
+
+	public SubscriptionEntity getSubscriptionByStudentAndInstructorGUID(String studentGUID, String instructorGUID) {
+		Map<String, String> params = Map.of(
+				SubscriptionMapper.STUDENT_GUID, studentGUID,
+				SubscriptionMapper.INSTRUCTOR_GUID, instructorGUID
+		);
+		return jdbcTemplate.queryForObject(getSubscriptionByStudentAndInstructorGUID, params, subscriptionMapper);
 	}
 
 	public void insertSubscription(String studentGUID, String instructorGUID) {

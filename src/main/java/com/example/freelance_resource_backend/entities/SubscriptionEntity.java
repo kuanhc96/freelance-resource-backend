@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class SubscriptionEntity {
+	// Subscription details
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long subscriptionId;

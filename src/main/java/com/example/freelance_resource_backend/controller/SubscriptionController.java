@@ -1,7 +1,12 @@
 package com.example.freelance_resource_backend.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.constants.ApplicationConstants;
 import com.example.freelance_resource_backend.dto.request.subscription.SubscribeRequest;
+import com.example.freelance_resource_backend.dto.response.instructor.GetInstructorResponse;
 import com.example.freelance_resource_backend.service.SubscriptionService;
 
 @RestController
@@ -39,5 +46,12 @@ public class SubscriptionController {
 		// Logic for updating subscription
 		boolean result = subscriptionService.confirmSubscription(confirmRequest.getStudentGUID(), confirmRequest.getInstructorGUID());
 		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/{studentGUID}")
+//	@PreAuthorize(ApplicationConstants.ROLE_INSTRUCTOR)
+	public ResponseEntity<List<GetInstructorResponse>> getInstructorsSubscribedTo(@PathVariable String studentGUID) {
+		List<GetInstructorResponse> instructorsSubscribedTo = subscriptionService.getInstructorsSubscribedTo(studentGUID);
+		return ResponseEntity.ok(instructorsSubscribedTo);
 	}
 }

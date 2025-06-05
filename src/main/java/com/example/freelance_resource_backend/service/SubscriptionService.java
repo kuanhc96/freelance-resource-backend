@@ -7,9 +7,12 @@ import org.springframework.util.ObjectUtils;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.dto.response.instructor.GetInstructorResponse;
+import com.example.freelance_resource_backend.entities.InstructorEntity;
 import com.example.freelance_resource_backend.entities.SubscriptionEntity;
 import com.example.freelance_resource_backend.enums.SubscriptionStatus;
 import com.example.freelance_resource_backend.repository.SubscriptionRepository;
+import com.example.freelance_resource_backend.translator.InstructorTranslator;
 
 @Service
 @RequiredArgsConstructor
@@ -17,9 +20,8 @@ public class SubscriptionService {
 	private final SubscriptionRepository subscriptionRepository;
 
 	public boolean isSubscribed(String studentGUID, String instructorGUID) {
-		List<SubscriptionEntity> subscriptionList = subscriptionRepository.getInstructorsSubscribedToByStudentGUID(studentGUID);
-		return subscriptionList.stream()
-				.anyMatch(subscription -> subscription.getInstructorGUID().equals(instructorGUID));
+		SubscriptionEntity subscriptionEntity = subscriptionRepository.getSubscriptionByStudentAndInstructorGUID(studentGUID, instructorGUID);
+		return subscriptionEntity != null;
 	}
 
 	public boolean subscribe(String studentGUID, String instructorGUID) {
@@ -47,20 +49,23 @@ public class SubscriptionService {
 		return true; // Successfully confirmed
 	}
 
-	public List<SubscriptionEntity> getAllInstructorSubscriptions(String studentGUID) {
-		List<SubscriptionEntity> subscriptions = subscriptionRepository.getInstructorsSubscribedToByStudentGUID(studentGUID);
+	public List<GetInstructorResponse> getInstructorsSubscribedTo(String studentGUID) {
+		List<InstructorEntity> subscriptions = subscriptionRepository.getInstructorsSubscribedToByStudentGUID(studentGUID);
 		if (ObjectUtils.isEmpty(subscriptions)) {
 			return List.of();
 		}
-		return subscriptions;
+		return subscriptions.stream()
+				.map(InstructorTranslator::toDto)
+				.toList();
 	}
 
-	public List<SubscriptionEntity> getAllStudentFollowers(String instructorGUID) {
-		List<SubscriptionEntity> subscriptions = subscriptionRepository.getStudentsByInstructorGUID(instructorGUID);
-		if (ObjectUtils.isEmpty(subscriptions)) {
-			return List.of();
-		}
-		return subscriptions;
-	}
+	// TODO: implement subscribed students in the future
+//	public List<SubscriptionEntity> getAllStudentFollowers(String instructorGUID) {
+//		List<SubscriptionEntity> subscriptions = subscriptionRepository.getStudentsByInstructorGUID(instructorGUID);
+//		if (ObjectUtils.isEmpty(subscriptions)) {
+//			return List.of();
+//		}
+//		return subscriptions;
+//	}
 
 }

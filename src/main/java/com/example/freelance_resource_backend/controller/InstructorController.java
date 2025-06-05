@@ -55,10 +55,4 @@ public class InstructorController {
 		return ResponseEntity.ok(instructorList);
 	}
 
-	@GetMapping("/getSubscribedInstructors/{studentGUID}")
-	@PreAuthorize(ApplicationConstants.ROLE_INSTRUCTOR)
-	public ResponseEntity<List<String>> getSubscribedInstructors(@PathVariable String studentGUID) {
-		List<String> instructorGUIDs = List.of("test");
-		return ResponseEntity.ok(instructorGUIDs);
-	}
 }

@@ -67,7 +67,8 @@ public class ProjectSecurityConfig {
 						"/testLogin",
 						"/instructor/getSubscribedInstructors/*",
 						"/instructor/getAllInstructors",
-						"/subscription"
+						"/subscription",
+						"/subscription/*"
 				).authenticated()
 				.requestMatchers("/checkLogin", "/apiLogin", "/apiLogout", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
 				.anyRequest().authenticated()
