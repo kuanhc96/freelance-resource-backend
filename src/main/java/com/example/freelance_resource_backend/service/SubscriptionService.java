@@ -1,6 +1,7 @@
 package com.example.freelance_resource_backend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -11,6 +12,7 @@ import com.example.freelance_resource_backend.dto.response.instructor.GetInstruc
 import com.example.freelance_resource_backend.entities.InstructorEntity;
 import com.example.freelance_resource_backend.entities.SubscriptionEntity;
 import com.example.freelance_resource_backend.enums.SubscriptionStatus;
+import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.SubscriptionRepository;
 import com.example.freelance_resource_backend.translator.InstructorTranslator;
 
@@ -20,8 +22,8 @@ public class SubscriptionService {
 	private final SubscriptionRepository subscriptionRepository;
 
 	public boolean isSubscribed(String studentGUID, String instructorGUID) {
-		SubscriptionEntity subscriptionEntity = subscriptionRepository.getSubscriptionByStudentAndInstructorGUID(studentGUID, instructorGUID);
-		return subscriptionEntity != null;
+		Optional<SubscriptionEntity> optionalSubscription = subscriptionRepository.getSubscriptionByStudentAndInstructorGUID(studentGUID, instructorGUID);
+		return optionalSubscription.isPresent();
 	}
 
 	public boolean subscribe(String studentGUID, String instructorGUID) {

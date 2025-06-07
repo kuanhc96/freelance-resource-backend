@@ -2,7 +2,9 @@ package com.example.freelance_resource_backend.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -54,12 +56,16 @@ public class SubscriptionRepository {
 				studentMapper);
 	}
 
-	public SubscriptionEntity getSubscriptionByStudentAndInstructorGUID(String studentGUID, String instructorGUID) {
+	public Optional<SubscriptionEntity> getSubscriptionByStudentAndInstructorGUID(String studentGUID, String instructorGUID) {
 		Map<String, String> params = Map.of(
 				SubscriptionMapper.STUDENT_GUID, studentGUID,
 				SubscriptionMapper.INSTRUCTOR_GUID, instructorGUID
 		);
-		return jdbcTemplate.queryForObject(getSubscriptionByStudentAndInstructorGUID, params, subscriptionMapper);
+		try {
+			return Optional.ofNullable(jdbcTemplate.queryForObject(getSubscriptionByStudentAndInstructorGUID, params, subscriptionMapper));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
 	}
 
 	public void insertSubscription(String studentGUID, String instructorGUID) {
