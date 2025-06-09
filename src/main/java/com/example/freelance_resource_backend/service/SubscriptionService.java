@@ -61,6 +61,16 @@ public class SubscriptionService {
 				.toList();
 	}
 
+	public List<GetInstructorResponse> getInstructorsNotSubscribedTo(String studentGUID) {
+		List<InstructorEntity> subscriptions = subscriptionRepository.getInstructorsNotSubscribedToByStudentGUID(studentGUID);
+		if (ObjectUtils.isEmpty(subscriptions)) {
+			return List.of();
+		}
+		return subscriptions.stream()
+				.map(InstructorTranslator::toDto)
+				.toList();
+	}
+
 	// TODO: implement subscribed students in the future
 //	public List<SubscriptionEntity> getAllStudentFollowers(String instructorGUID) {
 //		List<SubscriptionEntity> subscriptions = subscriptionRepository.getStudentsByInstructorGUID(instructorGUID);

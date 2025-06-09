@@ -54,4 +54,10 @@ public class SubscriptionController {
 		List<GetInstructorResponse> instructorsSubscribedTo = subscriptionService.getInstructorsSubscribedTo(studentGUID);
 		return ResponseEntity.ok(instructorsSubscribedTo);
 	}
+
+	@GetMapping("/unsubscribed/{studentGUID}")
+	public ResponseEntity<List<GetInstructorResponse>> getInstructorsNotSubscribedTo(@PathVariable String studentGUID) {
+		List<GetInstructorResponse> instructorsNotSubscribedTo = subscriptionService.getInstructorsNotSubscribedTo(studentGUID);
+		return ResponseEntity.ok(instructorsNotSubscribedTo);
+	}
 }

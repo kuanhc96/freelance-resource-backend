@@ -33,6 +33,12 @@ public class SubscriptionRepository {
 					"JOIN subscriptions subscriptions " +
 					"ON subscriptions.instructor_guid = instructors.instructor_guid " +
 					"WHERE subscriptions.student_guid = :student_guid";
+	private String getInstructorsNotSubscribedToByStudentGUID =
+			"SELECT instructors.* " +
+					"FROM instructors instructors " +
+					"LEFT  JOIN subscriptions subscriptions " +
+					"ON subscriptions.instructor_guid = instructors.instructor_guid " +
+					"AND (subscriptions.student_guid is null or subscriptions.student_guid <> :student_guid)";
 	private String getStudentsByInstructorGUID =
 			"SELECT students.* " +
 					"FROM students students " +
@@ -46,6 +52,12 @@ public class SubscriptionRepository {
 
 	public List<InstructorEntity> getInstructorsSubscribedToByStudentGUID(String studentGUID) {
 		return jdbcTemplate.query(getInstructorsSubscribedToByStudentGUID,
+				new MapSqlParameterSource(SubscriptionMapper.STUDENT_GUID, studentGUID),
+				instructorMapper);
+	}
+
+	public List<InstructorEntity> getInstructorsNotSubscribedToByStudentGUID(String studentGUID) {
+		return jdbcTemplate.query(getInstructorsNotSubscribedToByStudentGUID,
 				new MapSqlParameterSource(SubscriptionMapper.STUDENT_GUID, studentGUID),
 				instructorMapper);
 	}
