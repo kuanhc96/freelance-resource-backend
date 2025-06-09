@@ -44,7 +44,9 @@ public class ProjectSecurityConfig {
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
-		http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+		http
+				.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
+				.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 				.cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
 					@Override
 					public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -59,7 +61,15 @@ public class ProjectSecurityConfig {
 				}))
 				.csrf(csrfConfig -> csrfConfig
 						.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-						.ignoringRequestMatchers("/checkLogin", "/apiLogin", "/apiLogout", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword")
+						.ignoringRequestMatchers(
+								"/checkLogin",
+								"/apiLogin",
+								"/apiLogout",
+								"/instructor/createInstructor",
+								"/student/createStudent",
+								"/forgetPassword",
+								"/error"
+						)
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				)
 				.authorizeHttpRequests((requests) -> requests
@@ -68,9 +78,18 @@ public class ProjectSecurityConfig {
 						"/instructor/getSubscribedInstructors/*",
 						"/instructor/getAllInstructors",
 						"/subscription",
-						"/subscription/*"
+						"/subscription/*",
+						"/subscription/unsubscribed/*"
 				).authenticated()
-				.requestMatchers("/checkLogin", "/apiLogin", "/apiLogout", "/instructor/createInstructor", "/student/createStudent", "/forgetPassword").permitAll()
+				.requestMatchers(
+						"/checkLogin",
+						"/apiLogin",
+						"/apiLogout",
+						"/instructor/createInstructor",
+						"/student/createStudent",
+						"/forgetPassword",
+						"/error"
+				).permitAll()
 				.anyRequest().authenticated()
 		);
 		http.formLogin(flc -> flc
@@ -81,6 +100,7 @@ public class ProjectSecurityConfig {
 				.invalidateHttpSession(true)
 				.clearAuthentication(true)
 				.deleteCookies("loginToken")
+				.deleteCookies("JSESSIONID")
 		);
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
 		http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
