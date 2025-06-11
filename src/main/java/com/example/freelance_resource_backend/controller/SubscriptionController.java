@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.freelance_resource_backend.constants.ApplicationConstants;
 import com.example.freelance_resource_backend.dto.request.subscription.SubscribeRequest;
-import com.example.freelance_resource_backend.dto.response.instructor.GetInstructorResponse;
+import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.service.SubscriptionService;
 
 @RestController
@@ -50,14 +49,14 @@ public class SubscriptionController {
 
 	@GetMapping("/{studentGUID}")
 //	@PreAuthorize(ApplicationConstants.ROLE_INSTRUCTOR)
-	public ResponseEntity<List<GetInstructorResponse>> getInstructorsSubscribedTo(@PathVariable String studentGUID) {
-		List<GetInstructorResponse> instructorsSubscribedTo = subscriptionService.getInstructorsSubscribedTo(studentGUID);
+	public ResponseEntity<List<GetUserResponse>> getInstructorsSubscribedTo(@PathVariable String studentGUID) {
+		List<GetUserResponse> instructorsSubscribedTo = subscriptionService.getInstructorsSubscribedTo(studentGUID);
 		return ResponseEntity.ok(instructorsSubscribedTo);
 	}
 
 	@GetMapping("/unsubscribed/{studentGUID}")
-	public ResponseEntity<List<GetInstructorResponse>> getInstructorsNotSubscribedTo(@PathVariable String studentGUID) {
-		List<GetInstructorResponse> instructorsNotSubscribedTo = subscriptionService.getInstructorsNotSubscribedTo(studentGUID);
+	public ResponseEntity<List<GetUserResponse>> getInstructorsNotSubscribedTo(@PathVariable String studentGUID) {
+		List<GetUserResponse> instructorsNotSubscribedTo = subscriptionService.getInstructorsNotSubscribedTo(studentGUID);
 		return ResponseEntity.ok(instructorsNotSubscribedTo);
 	}
 }

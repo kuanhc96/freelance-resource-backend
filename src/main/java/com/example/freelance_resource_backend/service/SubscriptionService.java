@@ -8,13 +8,11 @@ import org.springframework.util.ObjectUtils;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.freelance_resource_backend.dto.response.instructor.GetInstructorResponse;
-import com.example.freelance_resource_backend.entities.InstructorEntity;
+import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.entities.SubscriptionEntity;
+import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.enums.SubscriptionStatus;
-import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.SubscriptionRepository;
-import com.example.freelance_resource_backend.translator.InstructorTranslator;
 
 @Service
 @RequiredArgsConstructor
@@ -51,23 +49,35 @@ public class SubscriptionService {
 		return true; // Successfully confirmed
 	}
 
-	public List<GetInstructorResponse> getInstructorsSubscribedTo(String studentGUID) {
-		List<InstructorEntity> subscriptions = subscriptionRepository.getInstructorsSubscribedToByStudentGUID(studentGUID);
+	public List<GetUserResponse> getInstructorsSubscribedTo(String studentGUID) {
+		List<UserEntity> subscriptions = subscriptionRepository.getInstructorsSubscribedToByStudentGUID(studentGUID);
 		if (ObjectUtils.isEmpty(subscriptions)) {
 			return List.of();
 		}
 		return subscriptions.stream()
-				.map(InstructorTranslator::toDto)
+				.map(user -> GetUserResponse.builder()
+						.userGUID(user.getUserGUID())
+						.name(user.getName())
+						.email(user.getEmail())
+						.role(user.getRole())
+						.build()
+				)
 				.toList();
 	}
 
-	public List<GetInstructorResponse> getInstructorsNotSubscribedTo(String studentGUID) {
-		List<InstructorEntity> subscriptions = subscriptionRepository.getInstructorsNotSubscribedToByStudentGUID(studentGUID);
+	public List<GetUserResponse> getInstructorsNotSubscribedTo(String studentGUID) {
+		List<UserEntity> subscriptions = subscriptionRepository.getInstructorsNotSubscribedToByStudentGUID(studentGUID);
 		if (ObjectUtils.isEmpty(subscriptions)) {
 			return List.of();
 		}
 		return subscriptions.stream()
-				.map(InstructorTranslator::toDto)
+				.map(user -> GetUserResponse.builder()
+						.userGUID(user.getUserGUID())
+						.name(user.getName())
+						.email(user.getEmail())
+						.role(user.getRole())
+						.build()
+				)
 				.toList();
 	}
 

@@ -3,22 +3,17 @@ package com.example.freelance_resource_backend.controller;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.coyote.Response;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,14 +31,11 @@ import com.example.freelance_resource_backend.authentication.EmailPasswordRoleAu
 import com.example.freelance_resource_backend.constants.ApplicationConstants;
 import com.example.freelance_resource_backend.dto.request.login.LoginRequest;
 import com.example.freelance_resource_backend.dto.response.login.LoginResponse;
-import com.example.freelance_resource_backend.entities.StudentEntity;
-import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
-import com.example.freelance_resource_backend.service.StudentService;
+import com.example.freelance_resource_backend.enums.UserRole;
 
 @RestController
 @RequiredArgsConstructor
 public class LoginController {
-	private final StudentService studentService;
 	private final AuthenticationManager authenticationManager;
 	private final Environment env;
 
@@ -60,17 +52,19 @@ public class LoginController {
 				SecretKey secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 				if (null != secretKey) {
 					Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody();
+					String userGUID = String.valueOf(claims.get("userGUID", String.class));
 					String email = String.valueOf(claims.get("email", String.class));
+					UserRole role = UserRole.valueOf(String.valueOf(claims.get("role", String.class)));
 					String authorities = String.valueOf(claims.get("authorities", String.class));
-					Authentication authentication = new UsernamePasswordAuthenticationToken(email, null,
-							AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
+					Authentication authentication = new EmailPasswordRoleAuthenticationToken(userGUID, email, role,
+							null, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
 					SecurityContextHolder.getContext().setAuthentication(authentication);
-					String studentGUID = studentService.getStudentByEmail(email).getStudentGUID();
 					return ResponseEntity.status(HttpStatus.OK)
 							.body(LoginResponse.builder()
 									.success(true)
-									.userId(studentGUID)
-									.role(null)
+									.userId(userGUID)
+									.role(role)
+									.email(email)
 									.build()
 							);
 				}
@@ -132,25 +126,6 @@ public class LoginController {
 							.email(loginRequest.getEmail())
 							.build()
 					);
-		}
-	}
-
-	@GetMapping("/testLogin")
-	public LoginResponse testLogin(Authentication authentication) {
-		boolean success = false;
-		String studentGUID = null;
-		String role = null;
-		try {
-			StudentEntity studentEntity = studentService.getStudentByEmail(authentication.getName());
-			success = true;
-			studentGUID = studentEntity.getStudentGUID();
-			return LoginResponse.builder()
-					.success(success)
-					.userId(studentGUID)
-					.build();
-		} catch(ResourceNotFoundException e) {
-			return LoginResponse.builder().success(success).build();
-
 		}
 	}
 

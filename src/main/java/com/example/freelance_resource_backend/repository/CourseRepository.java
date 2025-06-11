@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.CourseEntity;
 import com.example.freelance_resource_backend.mapper.CourseMapper;
-import com.example.freelance_resource_backend.mapper.StudentMapper;
 
 @Repository
 @RequiredArgsConstructor

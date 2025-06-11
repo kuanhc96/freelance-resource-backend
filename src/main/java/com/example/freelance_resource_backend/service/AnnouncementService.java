@@ -10,20 +10,20 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.AnnouncementEntity;
-import com.example.freelance_resource_backend.entities.InstructorEntity;
+import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.enums.AnnouncementStatus;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.AnnouncementRepository;
-import com.example.freelance_resource_backend.repository.InstructorRepository;
+import com.example.freelance_resource_backend.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class AnnouncementService {
 	private final AnnouncementRepository announcementRepository;
-	private final InstructorRepository instructorRepository;
+	private final UserRepository userRepository;
 
 	public AnnouncementEntity createAnnouncement(String instructorGUID, String title, String announcement) throws ResourceNotFoundException {
-		Optional<InstructorEntity> optionalInstructor = instructorRepository.getInstructorByInstructorGUID(instructorGUID);
+		Optional<UserEntity> optionalInstructor = userRepository.getUserByUserGUID(instructorGUID);
 		if (optionalInstructor.isPresent()) {
 			AnnouncementEntity announcementEntity = AnnouncementEntity.builder()
 					.announcementGUID(UUID.randomUUID().toString())
