@@ -25,7 +25,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import javax.crypto.SecretKey;
 
+import com.example.freelance_resource_backend.authentication.EmailPasswordRoleAuthenticationToken;
 import com.example.freelance_resource_backend.constants.ApplicationConstants;
+import com.example.freelance_resource_backend.enums.UserRole;
 
 public class JwtTokenValidationFilter extends OncePerRequestFilter {
 	@Override
@@ -46,9 +48,11 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 						// validate token
 						Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody();
 						String email = String.valueOf(claims.get("email", String.class));
+						String userGUID = String.valueOf(claims.get("userGUID", String.class));
+						UserRole role = UserRole.valueOf(String.valueOf(claims.get("role", String.class)));
 						String authorities = String.valueOf(claims.get("authorities", String.class));
-						Authentication authentication = new UsernamePasswordAuthenticationToken(email, null,
-								AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
+						Authentication authentication = new EmailPasswordRoleAuthenticationToken(userGUID, email, role,
+								null, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
 						SecurityContextHolder.getContext().setAuthentication(authentication);
 					}
 				}
@@ -66,7 +70,6 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 		// Define the conditions under which this filter should not be applied
 		// For example, you can skip certain paths or methods
 		String path = request.getRequestURI();
-		return path.equals("/apiLogin") || path.equals("/instructor/createInstructor")
-				|| path.equals("/student/createStudent") || path.equals("/forgetPassword");
+		return path.equals("/apiLogin") || path.equals("/createUser") || path.equals("/forgetPassword");
 	}
 }

@@ -11,11 +11,14 @@ import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 
+import com.example.freelance_resource_backend.authentication.EmailPasswordRoleAuthenticationToken;
+import com.example.freelance_resource_backend.dto.FreelanceAppUserDetails;
+import com.example.freelance_resource_backend.enums.UserRole;
 import com.example.freelance_resource_backend.service.FreelanceUserDetailsService;
 
 @Component
 @AllArgsConstructor
-public class EmailAndPasswordAuthenticationProvider implements AuthenticationProvider {
+public class EmailPasswordRoleAuthenticationProvider implements AuthenticationProvider {
 
 	private FreelanceUserDetailsService userDetailsService;
 	private final PasswordEncoder passwordEncoder;
@@ -24,9 +27,12 @@ public class EmailAndPasswordAuthenticationProvider implements AuthenticationPro
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String email = authentication.getName();
 		String password = authentication.getCredentials().toString();
-		UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+		UserRole role = ((EmailPasswordRoleAuthenticationToken) authentication).getRole();
+		FreelanceAppUserDetails userDetails = (FreelanceAppUserDetails) userDetailsService.loadUserByEmailAndRole(email, role);
 		if (passwordEncoder.matches(password, userDetails.getPassword())) {
-			return new UsernamePasswordAuthenticationToken(email, password, userDetails.getAuthorities());
+			return new EmailPasswordRoleAuthenticationToken(
+					userDetails.getUserGUID(), email, userDetails.getRole(), password, userDetails.getAuthorities()
+			);
 		} else {
 			throw new BadCredentialsException("Invalid password!");
 		}
@@ -34,6 +40,6 @@ public class EmailAndPasswordAuthenticationProvider implements AuthenticationPro
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+		return (EmailPasswordRoleAuthenticationToken.class.isAssignableFrom(authentication));
 	}
 }

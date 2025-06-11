@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,11 +25,10 @@ import javax.sql.DataSource;
 
 import com.example.freelance_resource_backend.entryPoint.CustomBasicAuthenticationEntryPoint;
 import com.example.freelance_resource_backend.filter.CsrfCookieFilter;
-import com.example.freelance_resource_backend.filter.JwtTokenGenerationFilter;
 import com.example.freelance_resource_backend.filter.JwtTokenValidationFilter;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationFailureHandler;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationSuccessHandler;
-import com.example.freelance_resource_backend.provider.EmailAndPasswordAuthenticationProvider;
+import com.example.freelance_resource_backend.provider.EmailPasswordRoleAuthenticationProvider;
 import com.example.freelance_resource_backend.service.FreelanceUserDetailsService;
 
 @Configuration
@@ -65,8 +63,7 @@ public class ProjectSecurityConfig {
 								"/checkLogin",
 								"/apiLogin",
 								"/apiLogout",
-								"/instructor/createInstructor",
-								"/student/createStudent",
+								"/user",
 								"/forgetPassword",
 								"/error"
 						)
@@ -75,8 +72,6 @@ public class ProjectSecurityConfig {
 				.authorizeHttpRequests((requests) -> requests
 				.requestMatchers(
 						"/testLogin",
-						"/instructor/getSubscribedInstructors/*",
-						"/instructor/getAllInstructors",
 						"/subscription",
 						"/subscription/*",
 						"/subscription/unsubscribed/*"
@@ -85,8 +80,7 @@ public class ProjectSecurityConfig {
 						"/checkLogin",
 						"/apiLogin",
 						"/apiLogout",
-						"/instructor/createInstructor",
-						"/student/createStudent",
+						"/user",
 						"/forgetPassword",
 						"/error"
 				).permitAll()
@@ -120,7 +114,7 @@ public class ProjectSecurityConfig {
 
 	@Bean
 	public AuthenticationManager authenticationManager(FreelanceUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-		EmailAndPasswordAuthenticationProvider provider = new EmailAndPasswordAuthenticationProvider(userDetailsService, passwordEncoder);
+		EmailPasswordRoleAuthenticationProvider provider = new EmailPasswordRoleAuthenticationProvider(userDetailsService, passwordEncoder);
 		ProviderManager providerManager = new ProviderManager(provider);
 		providerManager.setEraseCredentialsAfterAuthentication(false);
 		return providerManager;

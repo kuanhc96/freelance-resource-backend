@@ -32,6 +32,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.authentication.EmailPasswordRoleAuthenticationToken;
 import com.example.freelance_resource_backend.constants.ApplicationConstants;
 import com.example.freelance_resource_backend.dto.request.login.LoginRequest;
 import com.example.freelance_resource_backend.dto.response.login.LoginResponse;
@@ -85,30 +86,25 @@ public class LoginController {
 	@PostMapping("/apiLogin")
 	public ResponseEntity<LoginResponse> apiLogin(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 		String jwt = "";
-		boolean success = false;
-		String studentGUID = null;
-		String role = null;
-		Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getEmail(), loginRequest.getPassword());
-		try {
-			StudentEntity studentEntity = studentService.getStudentByEmail(authentication.getName());
-			success = true;
-			studentGUID = studentEntity.getStudentGUID();
-		} catch(ResourceNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.OK).body(LoginResponse.builder().success(success).build());
-		}
+		String authorization = null;
+		Authentication authentication = new EmailPasswordRoleAuthenticationToken(
+				null, loginRequest.getEmail(), loginRequest.getRole(), loginRequest.getPassword()
+		);
 
-		Authentication authenticationResponse = authenticationManager.authenticate(authentication);
+		EmailPasswordRoleAuthenticationToken authenticationResponse = (EmailPasswordRoleAuthenticationToken) authenticationManager.authenticate(authentication);
 		if (null != authenticationResponse && authenticationResponse.isAuthenticated()) {
 			if (null != env) {
 				String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY, ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
 				SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-				role = authenticationResponse.getAuthorities().stream().map(
+				authorization = authenticationResponse.getAuthorities().stream().map(
 						GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 				jwt = Jwts.builder()
 						.setIssuer("FreelanceApp")
 						.setSubject("JWT Token")
 						.claim("email", authenticationResponse.getName())
-						.claim("authorities", role)
+						.claim("userGUID", authenticationResponse.getUserGUID())
+						.claim("role", authenticationResponse.getRole())
+						.claim("authorities", authorization)
 						.setIssuedAt(new Date())
 						.setExpiration(new Date(new Date().getTime() + 30000000))
 						.signWith(secretKey)
@@ -119,14 +115,24 @@ public class LoginController {
 				cookie.setPath("/");
 				response.addCookie(cookie);
 			}
+			return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER, jwt)
+					.body(LoginResponse.builder()
+							.success(true)
+							.userId(authenticationResponse.getUserGUID())
+							.role(authenticationResponse.getRole())
+							.email(authenticationResponse.getName())
+							.build()
+					);
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body(LoginResponse.builder()
+							.success(false)
+							.userId(null)
+							.role(loginRequest.getRole())
+							.email(loginRequest.getEmail())
+							.build()
+					);
 		}
-		return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER, jwt)
-				.body(LoginResponse.builder()
-						.success(true)
-						.userId(studentGUID)
-						.role(role)
-						.build()
-				);
 	}
 
 	@GetMapping("/testLogin")
