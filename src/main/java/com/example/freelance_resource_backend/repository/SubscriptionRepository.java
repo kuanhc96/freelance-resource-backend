@@ -35,8 +35,9 @@ public class SubscriptionRepository {
 					"FROM users users " +
 					"LEFT JOIN subscriptions subscriptions " +
 					"ON subscriptions.instructor_guid = users.user_guid " +
-					"AND (subscriptions.student_guid is null or subscriptions.student_guid <> :student_guid) " +
-					"WHERE users.role = 'INSTRUCTOR'";
+					"AND (subscriptions.student_guid = :student_guid) " +
+					"WHERE users.role = 'INSTRUCTOR' " +
+					"AND subscriptions.instructor_guid IS NULL";
 	private String getStudentsByInstructorGUID =
 			"SELECT users.* " +
 					"FROM users users " +
