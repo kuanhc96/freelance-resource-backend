@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum AnnouncementStatus {
 	ACTIVE("active"),
+	DRAFT("draft"),
 	ARCHIVED("archived");
 
 	private final String value;
