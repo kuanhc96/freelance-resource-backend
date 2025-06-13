@@ -37,7 +37,7 @@ public class AnnouncementRepository {
 				AnnouncementMapper.ANNOUNCEMENT, announcement.getAnnouncement(),
 				AnnouncementMapper.INSTRUCTOR_GUID, announcement.getInstructorGUID(),
 				AnnouncementMapper.CREATED_DATE, announcement.getCreatedDate(),
-				AnnouncementMapper.ANNOUNCEMENT_STATUS, announcement.getAnnouncementStatus()
+				AnnouncementMapper.ANNOUNCEMENT_STATUS, announcement.getAnnouncementStatus().getValue()
 		);
 		jdbcTemplate.update(insertAnnouncement, params);
 	}

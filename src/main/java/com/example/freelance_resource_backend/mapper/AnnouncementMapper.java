@@ -11,13 +11,13 @@ import com.example.freelance_resource_backend.enums.AnnouncementStatus;
 
 @Component
 public class AnnouncementMapper implements RowMapper<AnnouncementEntity> {
-	public static final String ANNOUNCEMENT_ID = "announcementId";
-	public static final String ANNOUNCEMENT_GUID = "announcementGUID";
+	public static final String ANNOUNCEMENT_ID = "announcement_id";
+	public static final String ANNOUNCEMENT_GUID = "announcement_guid";
 	public static final String TITLE = "title";
 	public static final String ANNOUNCEMENT = "announcement";
-	public static final String INSTRUCTOR_GUID = "instructorGUID";
-	public static final String CREATED_DATE = "createdDate";
-	public static final String ANNOUNCEMENT_STATUS = "announcementStatus";
+	public static final String INSTRUCTOR_GUID = "instructor_guid";
+	public static final String CREATED_DATE = "created_date";
+	public static final String ANNOUNCEMENT_STATUS = "announcement_status";
 
 	@Override
 	public AnnouncementEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
