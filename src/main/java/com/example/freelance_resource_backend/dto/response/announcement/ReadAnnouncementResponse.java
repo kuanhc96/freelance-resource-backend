@@ -16,7 +16,7 @@ public class ReadAnnouncementResponse {
 
 	private String announcement;
 
-	private String instructorGUID;
+	private String instructorName;
 
 	private LocalDateTime createdDate;
 

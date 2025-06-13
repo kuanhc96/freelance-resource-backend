@@ -17,15 +17,19 @@ import lombok.RequiredArgsConstructor;
 import com.example.freelance_resource_backend.dto.request.announcement.CreateAnnouncementRequest;
 import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.announcement.ReadAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.entities.AnnouncementEntity;
+import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.service.AnnouncementService;
+import com.example.freelance_resource_backend.service.FreelanceUserDetailsService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/announcement")
 public class AnnouncementController {
 	private final AnnouncementService announcementService;
+	private final FreelanceUserDetailsService userService;
 
 	@PostMapping("/createAnnouncement")
 	public ResponseEntity<CreateAnnouncementResponse> createAnnouncement(@RequestBody CreateAnnouncementRequest request) throws ResourceNotFoundException {
@@ -42,12 +46,13 @@ public class AnnouncementController {
 	}
 
 	@GetMapping("/{instructorGUID}")
-	public ResponseEntity<List<ReadAnnouncementResponse>> getAnnouncements(@PathVariable String instructorGUID) {
-		List<AnnouncementEntity> announcementEntities = announcementService.getAnnouncementsByInstructorGUID(instructorGUID);
+	public ResponseEntity<List<ReadAnnouncementResponse>> getAnnouncements(@PathVariable String instructorGUID) throws ResourceNotFoundException {
+		GetUserResponse instructor = userService.getUserByUserGUID(instructorGUID);
+		List<AnnouncementEntity> announcementEntities = announcementService.getAnnouncementsByInstructorGUID(instructor.getUserGUID());
 
 		List<ReadAnnouncementResponse> responses = announcementEntities.stream().map(announcementEntity -> ReadAnnouncementResponse.builder()
 				.announcementGUID(announcementEntity.getAnnouncementGUID())
-				.instructorGUID(announcementEntity.getInstructorGUID())
+				.instructorName(instructor.getName())
 				.title(announcementEntity.getTitle())
 				.announcement(announcementEntity.getAnnouncement())
 				.createdDate(announcementEntity.getCreatedDate())
