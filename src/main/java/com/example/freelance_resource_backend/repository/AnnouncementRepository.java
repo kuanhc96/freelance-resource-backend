@@ -18,7 +18,7 @@ public class AnnouncementRepository {
 	private final AnnouncementMapper announcementMapper;
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
-	private String getAnnouncementsByInstructorGUID = "SELECT * FROM announcements WHERE instructor_guid = :instructorGUID";
+	private String getAnnouncementsByInstructorGUID = "SELECT * FROM announcements WHERE instructor_guid = :instructor_guid";
 
 	private String insertAnnouncement = "INSERT INTO announcements " +
 			"(announcement_guid, title, announcement, instructor_guid, created_date, announcement_status) " +
