@@ -63,7 +63,7 @@ public class ProjectSecurityConfig {
 								"/checkLogin",
 								"/apiLogin",
 								"/apiLogout",
-								"/user",
+								"/user/createUser",
 								"/forgetPassword",
 								"/error"
 						)
@@ -80,7 +80,7 @@ public class ProjectSecurityConfig {
 						"/checkLogin",
 						"/apiLogin",
 						"/apiLogout",
-						"/user",
+						"/user/createUser",
 						"/forgetPassword",
 						"/error"
 				).permitAll()

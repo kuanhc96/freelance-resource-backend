@@ -24,6 +24,7 @@ import com.example.freelance_resource_backend.dto.response.user.CreateUserRespon
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.enums.UserRole;
+import com.example.freelance_resource_backend.enums.UserStatus;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.UserRepository;
 import com.example.freelance_resource_backend.translator.UserTranslator;
@@ -42,6 +43,7 @@ public class FreelanceUserDetailsService {
 		userEntity.setPassword(passwordEncoder.encode(newStudentGUID));
 		userEntity.setCreatedDate(now);
 		userEntity.setUpdatedDate(now);
+		userEntity.setStatus(UserStatus.CREATED);
 		userRepository.insertUser(userEntity);
 		return UserTranslator.toDto(userEntity);
 	}

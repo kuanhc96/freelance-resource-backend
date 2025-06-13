@@ -23,7 +23,7 @@ import com.example.freelance_resource_backend.service.FreelanceUserDetailsServic
 public class UserController {
 	private final FreelanceUserDetailsService userDetailsService;
 
-	@PostMapping
+	@PostMapping("/createUser")
 	public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest request) {
 		return ResponseEntity.ok(userDetailsService.createUser(request));
 	}
