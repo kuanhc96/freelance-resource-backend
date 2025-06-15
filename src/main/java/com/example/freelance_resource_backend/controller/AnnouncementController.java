@@ -1,5 +1,6 @@
 package com.example.freelance_resource_backend.controller;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,8 @@ public class AnnouncementController {
 				.createdDate(announcementEntity.getCreatedDate())
 				.announcementStatus(announcementEntity.getAnnouncementStatus())
 				.build()).collect(Collectors.toList());
+
+		responses.sort(Comparator.comparing(ReadAnnouncementResponse::getCreatedDate).reversed());
 
 		return ResponseEntity.ok(responses);
 	}
