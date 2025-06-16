@@ -1,5 +1,6 @@
 package com.example.freelance_resource_backend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,6 +22,9 @@ public class SubjectRepository {
 	public final String getSubjectBySubjectNameAndInstructorGUID = "SELECT * FROM subjects " +
 			"WHERE subject_name = :subject_name AND instructor_guid = :instructor_guid";
 
+	public final String getSubjectsByInstructorGUID = "SELECT * FROM subjects " +
+			"WHERE instructor_guid = :instructor_guid";
+
 	public final String updateSubject = "UPDATE subjects " +
 			"SET subject_name = :subject_name, price = :price " +
 			"WHERE subject_id = :subject_id";
@@ -36,6 +40,16 @@ public class SubjectRepository {
 			return Optional.ofNullable(jdbcTemplate.queryForObject(getSubjectBySubjectNameAndInstructorGUID, params, subjectMapper));
 		} catch (EmptyResultDataAccessException e) {
 			return Optional.empty();
+		}
+	}
+
+	public List<SubjectEntity> getSubjectsByInstructorGUID(String instructorGUID) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue(SubjectMapper.INSTRUCTOR_GUID, instructorGUID);
+		try {
+			return jdbcTemplate.query(getSubjectsByInstructorGUID, params, subjectMapper);
+		} catch (EmptyResultDataAccessException e) {
+			return List.of();
 		}
 	}
 

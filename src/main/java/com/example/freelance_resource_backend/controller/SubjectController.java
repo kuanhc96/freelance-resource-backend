@@ -1,5 +1,10 @@
 package com.example.freelance_resource_backend.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import com.example.freelance_resource_backend.dto.request.subject.CreateSubjectRequest;
 import com.example.freelance_resource_backend.dto.request.subject.UpdateSubjectNameRequest;
 import com.example.freelance_resource_backend.dto.request.subject.UpdateSubjectPriceRequest;
+import com.example.freelance_resource_backend.dto.response.subject.GetSubjectResponse;
 import com.example.freelance_resource_backend.dto.response.subject.CreateSubjectResponse;
 import com.example.freelance_resource_backend.dto.response.subject.UpdateSubjectNameResponse;
 import com.example.freelance_resource_backend.dto.response.subject.UpdateSubjectPriceResponse;
@@ -31,6 +37,16 @@ public class SubjectController {
 				.instructorGUID(request.getInstructorGUID())
 				.price(request.getPrice())
 				.build();
+	}
+
+	@GetMapping("/{instructorGUID}")
+	public ResponseEntity<List<GetSubjectResponse>> getSubjectsByInstructor(@PathVariable String instructorGUID) throws ResourceNotFoundException {
+		List<GetSubjectResponse> subjects = subjectService.getSubjectsByInstructorGUID(instructorGUID);
+		if (subjects.isEmpty()) {
+			throw new ResourceNotFoundException("No subjects found for instructor with GUID: " + instructorGUID);
+		}
+		return ResponseEntity.ok(subjects);
+
 	}
 
 	@PutMapping("/updateSubjectName")
