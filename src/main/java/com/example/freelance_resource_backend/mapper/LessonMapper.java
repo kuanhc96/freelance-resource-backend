@@ -6,14 +6,14 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import com.example.freelance_resource_backend.entities.CourseEntity;
-import com.example.freelance_resource_backend.enums.CourseRating;
-import com.example.freelance_resource_backend.enums.CourseStatus;
+import com.example.freelance_resource_backend.entities.LessonEntity;
+import com.example.freelance_resource_backend.enums.LessonRating;
+import com.example.freelance_resource_backend.enums.LessonStatus;
 
 @Component
-public class CourseMapper implements RowMapper<CourseEntity> {
-	public static final String COURSE_ID = "course_id";
-	public static final String COURSE_GUID = "course_guid";
+public class LessonMapper implements RowMapper<LessonEntity> {
+	public static final String LESSON_ID = "lesson_id";
+	public static final String LESSON_GUID = "lesson_guid";
 	public static final String STUDENT_GUID = "student_guid";
 	public static final String INSTRUCTOR_GUID = "instructor_guid";
 	public static final String START_DATE = "start_date";
@@ -21,17 +21,17 @@ public class CourseMapper implements RowMapper<CourseEntity> {
 	public static final String TOPIC = "topic";
 	public static final String INSTRUCTOR_COMMENTS = "instructor_comments";
 	public static final String STUDENT_FEEDBACK = "student_feedback";
-	public static final String COURSE_STATUS = "course_status";
-	public static final String COURSE_RATING = "course_rating";
+	public static final String LESSON_STATUS = "lesson_status";
+	public static final String LESSON_RATING = "lesson_rating";
 	public static final String DISCOUNT = "discount";
 	public static final String SUBJECT = "subject";
 
 
 	@Override
-	public CourseEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-		CourseEntity course = CourseEntity.builder()
-				.courseId(rs.getLong(COURSE_ID))
-				.courseGUID(rs.getString(COURSE_GUID))
+	public LessonEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+		LessonEntity lesson = LessonEntity.builder()
+				.lessonId(rs.getLong(LESSON_ID))
+				.lessonGUID(rs.getString(LESSON_GUID))
 				.studentGUID(rs.getString(STUDENT_GUID))
 				.instructorGUID(rs.getString(INSTRUCTOR_GUID))
 				.startDate(rs.getTimestamp(START_DATE).toLocalDateTime())
@@ -39,11 +39,11 @@ public class CourseMapper implements RowMapper<CourseEntity> {
 				.topic(rs.getString(TOPIC))
 				.instructorComments(rs.getString(INSTRUCTOR_COMMENTS))
 				.studentFeedback(rs.getString(STUDENT_FEEDBACK))
-				.courseStatus(CourseStatus.getValue(rs.getString(COURSE_STATUS)))
-				.courseRating(CourseRating.getValue(rs.getInt(COURSE_RATING)))
+				.lessonStatus(LessonStatus.getValue(rs.getString(LESSON_STATUS)))
+				.lessonRating(LessonRating.getValue(rs.getInt(LESSON_RATING)))
 				.discount(rs.getInt(DISCOUNT))
 				.subject(rs.getString(SUBJECT))
 				.build();
-		return course;
+		return lesson;
 	}
 }

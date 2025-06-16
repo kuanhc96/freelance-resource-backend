@@ -3,7 +3,7 @@ package com.example.freelance_resource_backend.enums;
 import lombok.Getter;
 
 @Getter
-public enum CourseRating {
+public enum LessonRating {
 	POOR(1),
 	FAIR(2),
 	GOOD(3),
@@ -12,12 +12,12 @@ public enum CourseRating {
 
 	private final int value;
 
-	CourseRating(int value) {
+	LessonRating(int value) {
 		this.value = value;
 	}
 
-	public static CourseRating getValue(int value) {
-		for (CourseRating type : CourseRating.values()) {
+	public static LessonRating getValue(int value) {
+		for (LessonRating type : LessonRating.values()) {
 			if (type.getValue() == value) {
 				return type;
 			}

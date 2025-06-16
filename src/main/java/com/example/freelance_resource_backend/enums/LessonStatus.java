@@ -5,7 +5,7 @@ import java.util.Arrays;
 import lombok.Getter;
 
 @Getter
-public enum CourseStatus {
+public enum LessonStatus {
 	CREATED("created"),
 	SCHEDULED("scheduled"),
 	COMPLETED("completed"),
@@ -13,20 +13,20 @@ public enum CourseStatus {
 
 	private final String value;
 
-	CourseStatus(String value) {
+	LessonStatus(String value) {
 		this.value = value;
 	}
 
-	public static CourseStatus getValue(String value) {
-		for (CourseStatus type : CourseStatus.values()) {
+	public static LessonStatus getValue(String value) {
+		for (LessonStatus type : LessonStatus.values()) {
 			if (type.getValue().equalsIgnoreCase(value)) {
 				return type;
 			}
 		}
 
 		throw new IllegalArgumentException("Unknown enum value: %s. Valid values are [%s]".formatted(value,
-				Arrays.stream(CourseStatus.values())
-						.map(CourseStatus::getValue)  // Get the lowercase values from the enum
+				Arrays.stream(LessonStatus.values())
+						.map(LessonStatus::getValue)  // Get the lowercase values from the enum
 						.reduce((v1, v2) -> v1 + ", " + v2)  // Join the values with a comma separator
 						.orElse("")));
 	}

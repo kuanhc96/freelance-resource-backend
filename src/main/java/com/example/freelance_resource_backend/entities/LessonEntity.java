@@ -8,16 +8,16 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 
-import com.example.freelance_resource_backend.enums.CourseRating;
-import com.example.freelance_resource_backend.enums.CourseStatus;
+import com.example.freelance_resource_backend.enums.LessonRating;
+import com.example.freelance_resource_backend.enums.LessonStatus;
 
 @Data
 @Builder
-public class CourseEntity {
+public class LessonEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long courseId;
-	private String courseGUID;
+	private Long lessonId;
+	private String lessonGUID;
 	private String studentGUID;
 	private String instructorGUID;
 	private LocalDateTime startDate;
@@ -26,8 +26,8 @@ public class CourseEntity {
 	private String instructorComments;
 	private String subject;
 	private String studentFeedback;
-	private CourseStatus courseStatus;
-	private CourseRating courseRating;
+	private LessonStatus lessonStatus;
+	private LessonRating lessonRating;
 	private Integer discount;
 
 }
