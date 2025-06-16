@@ -13,9 +13,13 @@ public class SubjectEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long subjectId;
 
+	private String subjectGUID;
+
 	private String subjectName;
 
 	private String instructorGUID;
 
 	private Integer price;
+
+	private String subjectDescription;
 }

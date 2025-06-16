@@ -6,7 +6,10 @@ import lombok.Getter;
 @Builder
 @Getter
 public class GetSubjectResponse {
+	private String subjectGUID;
 	private String subjectName;
 	private String instructorName;
 	private Integer price;
+	private String subjectDescription;
+
 }

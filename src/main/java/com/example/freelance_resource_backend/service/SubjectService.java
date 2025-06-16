@@ -33,9 +33,11 @@ public class SubjectService {
 		GetUserResponse instructor = freelanceUserDetailsService.getUserByUserGUID(instructorGUID);
 		List<SubjectEntity> subjects = subjectRepository.getSubjectsByInstructorGUID(instructor.getUserGUID());
 		return subjects.stream().map(subject -> GetSubjectResponse.builder()
+				.subjectGUID((subject.getSubjectGUID()))
 				.subjectName(subject.getSubjectName())
 				.instructorName(instructor.getName())
 				.price(subject.getPrice())
+				.subjectDescription(subject.getSubjectDescription())
 				.build()).collect(Collectors.toList());
 
 	}
