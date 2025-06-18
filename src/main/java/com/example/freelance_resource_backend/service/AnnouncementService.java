@@ -31,6 +31,7 @@ public class AnnouncementService {
 					.title(title)
 					.announcement(announcement)
 					.createdDate(LocalDateTime.now())
+					.updatedDate(LocalDateTime.now())
 					.instructorGUID(instructorGUID)
 					.announcementStatus(AnnouncementStatus.ACTIVE)
 					.build();
