@@ -17,6 +17,7 @@ public class AnnouncementMapper implements RowMapper<AnnouncementEntity> {
 	public static final String ANNOUNCEMENT = "announcement";
 	public static final String INSTRUCTOR_GUID = "instructor_guid";
 	public static final String CREATED_DATE = "created_date";
+	public static final String UPDATED_DATE = "updated_date";
 	public static final String ANNOUNCEMENT_STATUS = "announcement_status";
 
 	@Override
@@ -28,6 +29,7 @@ public class AnnouncementMapper implements RowMapper<AnnouncementEntity> {
 				.announcement(rs.getString(ANNOUNCEMENT))
 				.instructorGUID(rs.getString(INSTRUCTOR_GUID))
 				.createdDate(rs.getTimestamp(CREATED_DATE).toLocalDateTime())
+				.updatedDate(rs.getTimestamp(UPDATED_DATE).toLocalDateTime())
 				.announcementStatus(AnnouncementStatus.getValue(rs.getString(ANNOUNCEMENT_STATUS)))
 				.build();
 		return announcement;

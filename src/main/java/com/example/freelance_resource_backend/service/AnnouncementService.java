@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementRequest;
 import com.example.freelance_resource_backend.entities.AnnouncementEntity;
 import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.enums.AnnouncementStatus;
@@ -42,5 +43,20 @@ public class AnnouncementService {
 
 	public List<AnnouncementEntity> getAnnouncementsByInstructorGUID(String instructorGUID) {
 		return announcementRepository.getAnnouncementsByInstructorGUID(instructorGUID);
+	}
+
+	public void updateAnnouncement(UpdateAnnouncementRequest updateAnnouncementRequest) throws ResourceNotFoundException {
+		String announcementGUID = updateAnnouncementRequest.getAnnouncementGUID();
+		Optional<AnnouncementEntity> optionalAnnouncement = announcementRepository.getAnnouncementByAnnouncementGUID(announcementGUID);
+		if (optionalAnnouncement.isPresent()) {
+			AnnouncementEntity announcementEntity = optionalAnnouncement.get();
+			announcementEntity.setTitle(updateAnnouncementRequest.getTitle());
+			announcementEntity.setAnnouncement(updateAnnouncementRequest.getAnnouncement());
+			announcementEntity.setAnnouncementStatus(updateAnnouncementRequest.getAnnouncementStatus());
+			announcementEntity.setUpdatedDate(LocalDateTime.now());
+			announcementRepository.updateAnnouncement(announcementEntity);
+		} else {
+			throw new ResourceNotFoundException("Announcement not found");
+		}
 	}
 }

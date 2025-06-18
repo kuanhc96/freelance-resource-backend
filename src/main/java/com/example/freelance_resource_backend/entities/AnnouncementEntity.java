@@ -27,5 +27,7 @@ public class AnnouncementEntity {
 
 	private LocalDateTime createdDate;
 
+	private LocalDateTime updatedDate;
+
 	private AnnouncementStatus announcementStatus;
 }
