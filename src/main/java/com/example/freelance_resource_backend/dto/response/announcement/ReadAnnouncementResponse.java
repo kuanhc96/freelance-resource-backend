@@ -20,5 +20,7 @@ public class ReadAnnouncementResponse {
 
 	private LocalDateTime createdDate;
 
+	private LocalDateTime updatedDate;
+
 	private AnnouncementStatus announcementStatus;
 }

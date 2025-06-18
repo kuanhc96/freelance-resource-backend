@@ -59,10 +59,11 @@ public class AnnouncementController {
 				.title(announcementEntity.getTitle())
 				.announcement(announcementEntity.getAnnouncement())
 				.createdDate(announcementEntity.getCreatedDate())
+				.updatedDate(announcementEntity.getUpdatedDate())
 				.announcementStatus(announcementEntity.getAnnouncementStatus())
 				.build()).collect(Collectors.toList());
 
-		responses.sort(Comparator.comparing(ReadAnnouncementResponse::getCreatedDate).reversed());
+		responses.sort(Comparator.comparing(ReadAnnouncementResponse::getUpdatedDate).reversed());
 
 		return ResponseEntity.ok(responses);
 	}
