@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +18,9 @@ import lombok.RequiredArgsConstructor;
 import com.example.freelance_resource_backend.dto.request.announcement.CreateAnnouncementRequest;
 import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementRequest;
 import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
-import com.example.freelance_resource_backend.dto.response.announcement.ReadAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.entities.AnnouncementEntity;
-import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.service.AnnouncementService;
 import com.example.freelance_resource_backend.service.FreelanceUserDetailsService;
@@ -49,11 +47,11 @@ public class AnnouncementController {
 	}
 
 	@GetMapping("/{instructorGUID}")
-	public ResponseEntity<List<ReadAnnouncementResponse>> getAnnouncements(@PathVariable String instructorGUID) throws ResourceNotFoundException {
+	public ResponseEntity<List<GetAnnouncementResponse>> getAnnouncements(@PathVariable String instructorGUID) throws ResourceNotFoundException {
 		GetUserResponse instructor = userService.getUserByUserGUID(instructorGUID);
 		List<AnnouncementEntity> announcementEntities = announcementService.getAnnouncementsByInstructorGUID(instructor.getUserGUID());
 
-		List<ReadAnnouncementResponse> responses = announcementEntities.stream().map(announcementEntity -> ReadAnnouncementResponse.builder()
+		List<GetAnnouncementResponse> responses = announcementEntities.stream().map(announcementEntity -> GetAnnouncementResponse.builder()
 				.announcementGUID(announcementEntity.getAnnouncementGUID())
 				.instructorName(instructor.getName())
 				.title(announcementEntity.getTitle())
@@ -63,7 +61,7 @@ public class AnnouncementController {
 				.announcementStatus(announcementEntity.getAnnouncementStatus())
 				.build()).collect(Collectors.toList());
 
-		responses.sort(Comparator.comparing(ReadAnnouncementResponse::getUpdatedDate).reversed());
+		responses.sort(Comparator.comparing(GetAnnouncementResponse::getUpdatedDate).reversed());
 
 		return ResponseEntity.ok(responses);
 	}

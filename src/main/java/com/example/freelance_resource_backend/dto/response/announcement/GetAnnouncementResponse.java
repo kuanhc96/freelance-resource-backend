@@ -9,7 +9,7 @@ import com.example.freelance_resource_backend.enums.AnnouncementStatus;
 
 @Data
 @Builder
-public class ReadAnnouncementResponse {
+public class GetAnnouncementResponse {
 	private String announcementGUID;
 
 	private String title;

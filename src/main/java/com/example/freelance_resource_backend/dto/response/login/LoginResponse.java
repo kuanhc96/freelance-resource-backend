@@ -11,7 +11,7 @@ import com.example.freelance_resource_backend.enums.UserRole;
 @Builder
 public class LoginResponse {
 	private Boolean success;
-	private String userId;
+	private String userGUID;
 	private String email;
 	private UserRole role;
 }
