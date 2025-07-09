@@ -77,7 +77,8 @@ public class ProjectSecurityConfig {
 						"/announcement/*",
 						"/subscription/unsubscribed/*",
 						"/subject/*",
-						"/lessons/*"
+						"/lessons/*",
+						"/lessons"
 				).authenticated()
 				.requestMatchers(
 						"/checkLogin",
