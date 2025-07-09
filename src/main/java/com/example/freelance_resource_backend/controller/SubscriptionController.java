@@ -47,7 +47,7 @@ public class SubscriptionController {
 		return ResponseEntity.ok(result);
 	}
 
-	@GetMapping("/{studentGUID}")
+	@GetMapping("/instructors/{studentGUID}")
 //	@PreAuthorize(ApplicationConstants.ROLE_INSTRUCTOR)
 	public ResponseEntity<List<GetUserResponse>> getInstructorsSubscribedTo(@PathVariable String studentGUID) {
 		List<GetUserResponse> instructorsSubscribedTo = subscriptionService.getInstructorsSubscribedTo(studentGUID);
@@ -58,5 +58,12 @@ public class SubscriptionController {
 	public ResponseEntity<List<GetUserResponse>> getInstructorsNotSubscribedTo(@PathVariable String studentGUID) {
 		List<GetUserResponse> instructorsNotSubscribedTo = subscriptionService.getInstructorsNotSubscribedTo(studentGUID);
 		return ResponseEntity.ok(instructorsNotSubscribedTo);
+	}
+
+	@GetMapping("/students/{instructorGUID}")
+//	@PreAuthorize(ApplicationConstants.ROLE_INSTRUCTOR)
+	public ResponseEntity<List<GetUserResponse>> getSubscribedStudents(@PathVariable String instructorGUID) {
+		List<GetUserResponse> instructorsSubscribedTo = subscriptionService.getInstructorsSubscribedTo(instructorGUID);
+		return ResponseEntity.ok(instructorsSubscribedTo);
 	}
 }
