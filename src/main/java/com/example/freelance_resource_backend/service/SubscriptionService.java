@@ -81,13 +81,20 @@ public class SubscriptionService {
 				.toList();
 	}
 
-	// TODO: implement subscribed students in the future
-//	public List<SubscriptionEntity> getAllStudentFollowers(String instructorGUID) {
-//		List<SubscriptionEntity> subscriptions = subscriptionRepository.getStudentsByInstructorGUID(instructorGUID);
-//		if (ObjectUtils.isEmpty(subscriptions)) {
-//			return List.of();
-//		}
-//		return subscriptions;
-//	}
+	public List<GetUserResponse> getSubscribedStudentsByInstructorGUID(String instructorGUID) {
+		List<UserEntity> subscriptions = subscriptionRepository.getSubscribedStudentsByInstructorGUID(instructorGUID);
+		if (ObjectUtils.isEmpty(subscriptions)) {
+			return List.of();
+		}
+		return subscriptions.stream()
+				.map(user -> GetUserResponse.builder()
+						.userGUID(user.getUserGUID())
+						.name(user.getName())
+						.email(user.getEmail())
+						.role(user.getRole())
+						.build()
+				)
+				.toList();
+	}
 
 }

@@ -19,10 +19,25 @@ public class LessonRepository {
 	private final LessonMapper lessonMapper;
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
-	private String getLessonByLessonGUID = "SELECT * FROM lesson WHERE lesson_guid = :lessonGUID";
-	private String getLessonsByStudentGUID = "SELECT * FROM lesson WHERE student_guid = :studentGUID";
-	private String getLessonsByInstructorGUID = "SELECT * FROM lesson WHERE instructor_guid = :instructorGUID";
-	private String getLessonsByStudentGUIDAndInstructorGUID = "SELECT * FROM lesson WHERE student_guid = :studentGUID AND instructor_guid = :instructorGUID";
+	private String getLessonByLessonGUID = "SELECT * FROM lessons WHERE lesson_guid = :lesson_guid";
+
+	private String getLessonsByStudentGUID = "SELECT i.`name` instructor_name, s.`name` student_name, l.* " +
+			"FROM lessons l " +
+			"JOIN users i " +
+			"ON l.instructor_guid = i.user_guid " +
+			"JOIN users s " +
+			"ON l.instructor_guid = s.user_guid " +
+			"WHERE student_guid = :student_guid";
+
+	private String getLessonsByInstructorGUID = "SELECT s.`name` student_name, i.`name` instructor_name, l.* " +
+			"FROM lessons l " +
+			"JOIN users s " +
+			"ON l.student_guid = s.user_guid " +
+			"JOIN users i " +
+			"ON l.student_guid = i.user_guid " +
+			"WHERE instructor_guid = :instructor_guid";
+
+	private String getLessonsByStudentGUIDAndInstructorGUID = "SELECT * FROM lesson WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 
 	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject, lesson_status, lesson_rating, discount) " +
 			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location, :topic, :instructor_comments, :student_feedback, :subject, :lesson_status, :lesson_rating, :discount)";

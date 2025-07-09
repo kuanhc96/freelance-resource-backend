@@ -38,7 +38,7 @@ public class SubscriptionRepository {
 					"AND (subscriptions.student_guid = :student_guid) " +
 					"WHERE users.role = 'INSTRUCTOR' " +
 					"AND subscriptions.instructor_guid IS NULL";
-	private String getStudentsByInstructorGUID =
+	private String getSubscribedStudentsByInstructorGUID =
 			"SELECT users.* " +
 					"FROM users users " +
 					"JOIN subscriptions subscriptions " +
@@ -61,8 +61,8 @@ public class SubscriptionRepository {
 				userMapper);
 	}
 
-	public List<UserEntity> getStudentsByInstructorGUID(String instructorGUID) {
-		return jdbcTemplate.query(getStudentsByInstructorGUID,
+	public List<UserEntity> getSubscribedStudentsByInstructorGUID(String instructorGUID) {
+		return jdbcTemplate.query(getSubscribedStudentsByInstructorGUID,
 				new MapSqlParameterSource(SubscriptionMapper.INSTRUCTOR_GUID, instructorGUID),
 				userMapper);
 	}

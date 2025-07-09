@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.micrometer.common.util.StringUtils;
@@ -46,12 +47,15 @@ public class LessonController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<GetLessonResponse>> getLessons(@RequestBody GetLessonsRequest request) throws ResourceNotFoundException {
-		if (StringUtils.isBlank(request.getStudentGUID()) && StringUtils.isBlank(request.getInstructorGUID())) {
+	public ResponseEntity<List<GetLessonResponse>> getLessons(
+			@RequestParam(value="studentGUID", required = false) String studentGUID,
+			@RequestParam(value="instructorGUID", required = false) String instructorGUID
+	) throws ResourceNotFoundException {
+		if (StringUtils.isBlank(studentGUID) && StringUtils.isBlank(instructorGUID)) {
 			return ResponseEntity.badRequest().build();
 		}
 
-		List<GetLessonResponse> lessons = lessonService.getLessons(request.getStudentGUID(), request.getInstructorGUID());
+		List<GetLessonResponse> lessons = lessonService.getLessons(studentGUID, instructorGUID);
 		return ResponseEntity.ok(lessons);
 	}
 }

@@ -19,7 +19,9 @@ public class LessonEntity {
 	private Long lessonId;
 	private String lessonGUID;
 	private String studentGUID;
+	private String studentName;
 	private String instructorGUID;
+	private String instructorName;
 	private LocalDateTime startDate;
 	private String location;
 	private String topic;
