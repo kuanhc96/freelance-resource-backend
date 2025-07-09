@@ -37,7 +37,7 @@ public class LessonRepository {
 		return jdbcTemplate.queryForObject(getLessonByLessonGUID, params, lessonMapper);
 	}
 
-	public List<LessonEntity> getLessonByStudentGUID(String studentGUID) {
+	public List<LessonEntity> getLessonsByStudentGUID(String studentGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue(LessonMapper.STUDENT_GUID, studentGUID);
 		return jdbcTemplate.query(getLessonsByStudentGUID, params, lessonMapper);

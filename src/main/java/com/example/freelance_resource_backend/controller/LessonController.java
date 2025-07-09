@@ -1,28 +1,36 @@
 package com.example.freelance_resource_backend.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.request.lesson.CreateLessonRequest;
-import com.example.freelance_resource_backend.dto.response.lesson.CreateLessonResponse;
+import com.example.freelance_resource_backend.dto.request.lesson.GetLessonsRequest;
+import com.example.freelance_resource_backend.dto.response.lesson.CreateLessonsResponse;
+import com.example.freelance_resource_backend.dto.response.lesson.GetLessonResponse;
 import com.example.freelance_resource_backend.entities.LessonEntity;
+import com.example.freelance_resource_backend.enums.LessonFrequency;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.service.LessonService;
+import com.example.freelance_resource_backend.translator.LessonTranslator;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lesson")
+@RequestMapping("/lessons")
 public class LessonController {
 	private final LessonService lessonService;
 
-	@RequestMapping("/createLesson")
-	public ResponseEntity<CreateLessonResponse> createLesson(@RequestBody CreateLessonRequest request) throws ResourceNotFoundException {
+	@PostMapping("/createLessons")
+	public ResponseEntity<CreateLessonsResponse> createLessons(@RequestBody CreateLessonRequest request) throws ResourceNotFoundException {
 		String subject = request.getSubject();
 		String instructorGUID = request.getInstructorGUID();
 		String studentGUID = request.getStudentGUID();
@@ -30,18 +38,23 @@ public class LessonController {
 		String location = request.getLocation();
 		String topic = request.getTopic();
 		Integer discount = request.getDiscount();
-		LessonEntity newLessonEntity = lessonService.createLesson(studentGUID, instructorGUID, startDate, location, topic, subject, discount);
-		CreateLessonResponse lessonResponse = CreateLessonResponse.builder()
-				.lessonGUID(newLessonEntity.getLessonGUID())
-				.studentGUID(studentGUID)
-				.instructorGUID(instructorGUID)
-				.startDate(startDate)
-				.location(location)
-				.topic(topic)
-				.subject(subject)
-				.lessonStatus(newLessonEntity.getLessonStatus())
-				.discount(discount)
+		Integer repeat = request.getRepeat();
+		LessonFrequency lessonFrequency = request.getLessonFrequency();
+
+		List<LessonEntity> newLessonEntities = lessonService.createLessons(studentGUID, instructorGUID, startDate, location, topic, subject, discount, repeat, lessonFrequency);
+		CreateLessonsResponse createLessonsResponse = CreateLessonsResponse.builder()
+				.createdLessons(newLessonEntities.stream().map(LessonTranslator::toDto).toList())
 				.build();
-		return ResponseEntity.ok(lessonResponse);
+		return ResponseEntity.ok(createLessonsResponse);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<GetLessonResponse>> getLessons(@RequestBody GetLessonsRequest request) throws ResourceNotFoundException {
+		if (StringUtils.isBlank(request.getStudentGUID()) && StringUtils.isBlank(request.getInstructorGUID())) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		List<GetLessonResponse> lessons = lessonService.getLessons(request.getStudentGUID(), request.getInstructorGUID());
+		return ResponseEntity.ok(lessons);
 	}
 }

@@ -5,11 +5,12 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
+import com.example.freelance_resource_backend.enums.LessonRating;
 import com.example.freelance_resource_backend.enums.LessonStatus;
 
 @Data
 @Builder
-public class CreateLessonResponse {
+public class GetLessonResponse {
 	private String lessonGUID;
 	private String studentGUID;
 	private String instructorGUID;
@@ -19,4 +20,7 @@ public class CreateLessonResponse {
 	private String subject;
 	private LessonStatus lessonStatus;
 	private Integer discount;
+	private String instructorComments;
+	private String studentFeedback;
+	private LessonRating lessonRating;
 }

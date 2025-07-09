@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
+import com.example.freelance_resource_backend.enums.LessonFrequency;
+
 @Data
 @Builder
 public class CreateLessonRequest {
@@ -15,4 +17,6 @@ public class CreateLessonRequest {
 	private String topic;
 	private String subject;
 	private Integer discount;
+	private Integer repeat;
+	private LessonFrequency lessonFrequency;
 }
