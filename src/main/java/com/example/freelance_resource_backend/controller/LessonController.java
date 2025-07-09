@@ -30,7 +30,7 @@ public class LessonController {
 	private final LessonService lessonService;
 
 	@PostMapping("/createLessons")
-	public ResponseEntity<CreateLessonsResponse> createLessons(@RequestBody CreateLessonRequest request) throws ResourceNotFoundException {
+	public ResponseEntity<List<GetLessonResponse>> createLessons(@RequestBody CreateLessonRequest request) throws ResourceNotFoundException {
 		String subject = request.getSubject();
 		String instructorGUID = request.getInstructorGUID();
 		String studentGUID = request.getStudentGUID();
@@ -42,10 +42,7 @@ public class LessonController {
 		LessonFrequency lessonFrequency = request.getLessonFrequency();
 
 		List<LessonEntity> newLessonEntities = lessonService.createLessons(studentGUID, instructorGUID, startDate, location, topic, subject, discount, repeat, lessonFrequency);
-		CreateLessonsResponse createLessonsResponse = CreateLessonsResponse.builder()
-				.createdLessons(newLessonEntities.stream().map(LessonTranslator::toDto).toList())
-				.build();
-		return ResponseEntity.ok(createLessonsResponse);
+		return ResponseEntity.ok(newLessonEntities.stream().map(LessonTranslator::toDto).toList());
 	}
 
 	@GetMapping

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.LessonEntity;
+import com.example.freelance_resource_backend.enums.LessonRating;
+import com.example.freelance_resource_backend.enums.LessonStatus;
 import com.example.freelance_resource_backend.mapper.LessonMapper;
 
 @Repository
@@ -22,8 +24,8 @@ public class LessonRepository {
 	private String getLessonsByInstructorGUID = "SELECT * FROM lesson WHERE instructor_guid = :instructorGUID";
 	private String getLessonsByStudentGUIDAndInstructorGUID = "SELECT * FROM lesson WHERE student_guid = :studentGUID AND instructor_guid = :instructorGUID";
 
-	private String insertLesson = "INSERT INTO lesson (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject, lesson_status, lesson_rating, discount) " +
-			"VALUES (:lessonGUID, :studentGUID, :instructorGUID, :startDate, :location, :topic, :instructorComments, :studentFeedback, :subject, :lessonStatus, :lessonRating, :discount)";
+	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject, lesson_status, lesson_rating, discount) " +
+			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location, :topic, :instructor_comments, :student_feedback, :subject, :lesson_status, :lesson_rating, :discount)";
 
 	private String updateLessonByLessonGUID = "UPDATE lesson " +
 			"SET student_guid = :studentGUID, instructor_guid = :instructorGUID, start_date = :startDate, location = :location, " +
@@ -66,8 +68,8 @@ public class LessonRepository {
 		params.addValue(LessonMapper.TOPIC, lesson.getTopic());
 		params.addValue(LessonMapper.INSTRUCTOR_COMMENTS, lesson.getInstructorComments());
 		params.addValue(LessonMapper.STUDENT_FEEDBACK, lesson.getStudentFeedback());
-		params.addValue(LessonMapper.LESSON_STATUS, lesson.getLessonStatus().name());
-		params.addValue(LessonMapper.LESSON_RATING, lesson.getLessonRating().name());
+		params.addValue(LessonMapper.LESSON_STATUS, lesson.getLessonStatus() == null? LessonStatus.CREATED.getValue(): lesson.getLessonStatus().getValue());
+		params.addValue(LessonMapper.LESSON_RATING, lesson.getLessonRating() == null? LessonRating.UNRATED.getValue(): lesson.getLessonRating().getValue());
 		params.addValue(LessonMapper.DISCOUNT, lesson.getDiscount());
 		params.addValue(LessonMapper.SUBJECT, lesson.getSubject());
 		jdbcTemplate.update(insertLesson, params);
