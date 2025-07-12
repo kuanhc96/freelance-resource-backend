@@ -97,7 +97,8 @@ public class ProjectSecurityConfig {
 		http.logout(loc -> loc
 				.invalidateHttpSession(true)
 				.clearAuthentication(true)
-				.deleteCookies("loginToken")
+				.deleteCookies("accessToken")
+				.deleteCookies("XSRF-TOKEN")
 				.deleteCookies("JSESSIONID")
 		);
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));

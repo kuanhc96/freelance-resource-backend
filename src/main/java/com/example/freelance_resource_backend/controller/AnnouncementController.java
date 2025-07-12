@@ -27,7 +27,7 @@ import com.example.freelance_resource_backend.service.FreelanceUserDetailsServic
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/announcement")
+@RequestMapping("/announcements")
 public class AnnouncementController {
 	private final AnnouncementService announcementService;
 	private final FreelanceUserDetailsService userService;

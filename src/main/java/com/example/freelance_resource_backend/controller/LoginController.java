@@ -42,7 +42,7 @@ public class LoginController {
 	@PostMapping("/checkLogin")
 	public ResponseEntity<LoginResponse> checkLogin(HttpServletRequest request, HttpServletResponse response) {
 		String jwt = Arrays.stream(request.getCookies())
-				.filter(cookie -> "loginToken".equals(cookie.getName()))
+				.filter(cookie -> "accessToken".equals(cookie.getName()))
 				.map(Cookie::getValue)
 				.findFirst()
 				.orElse(null);
@@ -61,7 +61,6 @@ public class LoginController {
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 					return ResponseEntity.status(HttpStatus.OK)
 							.body(LoginResponse.builder()
-									.success(true)
 									.userGUID(userGUID)
 									.role(role)
 									.email(email)
@@ -79,7 +78,7 @@ public class LoginController {
 
 	@PostMapping("/apiLogin")
 	public ResponseEntity<LoginResponse> apiLogin(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-		String jwt = "";
+		String accessTokenJwt = "";
 		String authorization = null;
 		Authentication authentication = new EmailPasswordRoleAuthenticationToken(
 				null, loginRequest.getEmail(), loginRequest.getRole(), loginRequest.getPassword()
@@ -92,9 +91,9 @@ public class LoginController {
 				SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 				authorization = authenticationResponse.getAuthorities().stream().map(
 						GrantedAuthority::getAuthority).collect(Collectors.joining(","));
-				jwt = Jwts.builder()
+				accessTokenJwt = Jwts.builder()
 						.setIssuer("FreelanceApp")
-						.setSubject("JWT Token")
+						.setSubject("JWT accessToken")
 						.claim("email", authenticationResponse.getName())
 						.claim("userGUID", authenticationResponse.getUserGUID())
 						.claim("role", authenticationResponse.getRole())
@@ -103,15 +102,14 @@ public class LoginController {
 						.setExpiration(new Date(new Date().getTime() + 30000000))
 						.signWith(secretKey)
 						.compact();
-				Cookie cookie = new Cookie("loginToken", jwt);
+				Cookie cookie = new Cookie("accessToken", accessTokenJwt);
 				cookie.setHttpOnly(true);
 				cookie.setSecure(true);
 				cookie.setPath("/");
 				response.addCookie(cookie);
 			}
-			return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER, jwt)
+			return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER, accessTokenJwt)
 					.body(LoginResponse.builder()
-							.success(true)
 							.userGUID(authenticationResponse.getUserGUID())
 							.role(authenticationResponse.getRole())
 							.email(authenticationResponse.getName())
@@ -120,7 +118,6 @@ public class LoginController {
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 					.body(LoginResponse.builder()
-							.success(false)
 							.userGUID(null)
 							.role(loginRequest.getRole())
 							.email(loginRequest.getEmail())
@@ -132,7 +129,7 @@ public class LoginController {
 	@PostMapping("/apiLogout")
 	public ResponseEntity<Void> logout(HttpServletResponse response) {
 		// Clear the JWT cookie
-		clearCookie("loginToken", response, true);
+		clearCookie("accessToken", response, true);
 		clearCookie("XSRF-TOKEN", response, false);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

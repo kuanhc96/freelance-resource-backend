@@ -33,7 +33,7 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		String jwt = Arrays.stream(request.getCookies())
-				.filter(cookie -> "loginToken".equals(cookie.getName()))
+				.filter(cookie -> "accessToken".equals(cookie.getName()))
 				.map(Cookie::getValue)
 				.findFirst()
 				.orElse(null);

@@ -10,8 +10,8 @@ import com.example.freelance_resource_backend.enums.UserRole;
 @Data
 @Builder
 public class LoginResponse {
-	private Boolean success;
 	private String userGUID;
 	private String email;
 	private UserRole role;
+//	private Long tokenDuration;
 }
