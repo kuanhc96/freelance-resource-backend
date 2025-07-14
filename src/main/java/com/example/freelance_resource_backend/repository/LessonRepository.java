@@ -39,13 +39,13 @@ public class LessonRepository {
 
 	private String getLessonsByStudentGUIDAndInstructorGUID = "SELECT * FROM lesson WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 
-	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject, lesson_status, lesson_rating, discount) " +
-			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location, :topic, :instructor_comments, :student_feedback, :subject, :lesson_status, :lesson_rating, :discount)";
+	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject, lesson_status, lesson_rating) " +
+			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location, :topic, :instructor_comments, :student_feedback, :subject, :lesson_status, :lesson_rating)";
 
 	private String updateLessonByLessonGUID = "UPDATE lesson " +
 			"SET student_guid = :studentGUID, instructor_guid = :instructorGUID, start_date = :startDate, location = :location, " +
 				"topic = :topic, instructor_comments = :instructorComments, student_feedback = :studentFeedback, subject = :subject, " +
-				"lesson_status = :lessonStatus, lesson_rating = :lessonRating, discount = :discount " +
+				"lesson_status = :lessonStatus, lesson_rating = :lessonRating " +
 			"WHERE lesson_guid = :lessonGUID";
 
 	public LessonEntity getLessonByLessonGUID(String lessonGUID) {
@@ -85,7 +85,6 @@ public class LessonRepository {
 		params.addValue(LessonMapper.STUDENT_FEEDBACK, lesson.getStudentFeedback());
 		params.addValue(LessonMapper.LESSON_STATUS, lesson.getLessonStatus() == null? LessonStatus.CREATED.getValue(): lesson.getLessonStatus().getValue());
 		params.addValue(LessonMapper.LESSON_RATING, lesson.getLessonRating() == null? LessonRating.UNRATED.getValue(): lesson.getLessonRating().getValue());
-		params.addValue(LessonMapper.DISCOUNT, lesson.getDiscount());
 		params.addValue(LessonMapper.SUBJECT, lesson.getSubject());
 		jdbcTemplate.update(insertLesson, params);
 	}
@@ -102,7 +101,6 @@ public class LessonRepository {
 		params.addValue(LessonMapper.STUDENT_FEEDBACK, lesson.getStudentFeedback());
 		params.addValue(LessonMapper.LESSON_STATUS, lesson.getLessonStatus().name());
 		params.addValue(LessonMapper.LESSON_RATING, lesson.getLessonRating().name());
-		params.addValue(LessonMapper.DISCOUNT, lesson.getDiscount());
 		params.addValue(LessonMapper.SUBJECT, lesson.getSubject());
 		jdbcTemplate.update(updateLessonByLessonGUID, params);
 	}

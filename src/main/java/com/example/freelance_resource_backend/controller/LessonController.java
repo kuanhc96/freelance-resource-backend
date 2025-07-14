@@ -15,8 +15,6 @@ import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.request.lesson.CreateLessonRequest;
-import com.example.freelance_resource_backend.dto.request.lesson.GetLessonsRequest;
-import com.example.freelance_resource_backend.dto.response.lesson.CreateLessonsResponse;
 import com.example.freelance_resource_backend.dto.response.lesson.GetLessonResponse;
 import com.example.freelance_resource_backend.entities.LessonEntity;
 import com.example.freelance_resource_backend.enums.LessonFrequency;
@@ -38,11 +36,10 @@ public class LessonController {
 		LocalDateTime startDate = request.getStartDate();
 		String location = request.getLocation();
 		String topic = request.getTopic();
-		Integer discount = request.getDiscount();
 		Integer repeat = request.getRepeat();
 		LessonFrequency lessonFrequency = request.getLessonFrequency();
 
-		List<LessonEntity> newLessonEntities = lessonService.createLessons(studentGUID, instructorGUID, startDate, location, topic, subject, discount, repeat, lessonFrequency);
+		List<LessonEntity> newLessonEntities = lessonService.createLessons(studentGUID, instructorGUID, startDate, location, topic, subject, repeat, lessonFrequency);
 		return ResponseEntity.ok(newLessonEntities.stream().map(LessonTranslator::toDto).toList());
 	}
 

@@ -16,7 +16,6 @@ public class CreateLessonRequest {
 	private String location;
 	private String topic;
 	private String subject;
-	private Integer discount;
 	private Integer repeat;
 	private LessonFrequency lessonFrequency;
 }

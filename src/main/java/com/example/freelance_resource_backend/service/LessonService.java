@@ -35,7 +35,6 @@ public class LessonService {
 			String location,
 			String topic,
 			String subject,
-			Integer discount,
 			Integer repeat,
 			LessonFrequency lessonFrequency
 	) throws ResourceNotFoundException {
@@ -54,7 +53,6 @@ public class LessonService {
 						.topic(topic)
 						.lessonStatus(lessonStatus)
 						.subject(subject)
-						.discount(discount)
 						.build()
 				);
 				switch (lessonFrequency) {

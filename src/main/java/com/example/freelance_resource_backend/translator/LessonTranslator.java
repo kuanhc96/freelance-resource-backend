@@ -18,7 +18,6 @@ public class LessonTranslator {
 				.location(lessonEntity.getLocation())
 				.subject(lessonEntity.getSubject())
 				.lessonStatus(lessonEntity.getLessonStatus())
-				.discount(lessonEntity.getDiscount())
 				.build();
 	}
 }
