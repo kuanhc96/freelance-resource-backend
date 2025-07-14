@@ -31,7 +31,7 @@ public class SubjectController {
 
 	@PostMapping("/createSubject")
 	public CreateSubjectResponse createSubject(@RequestBody CreateSubjectRequest request) {
-		subjectService.createSubject(request.getSubjectName(), request.getInstructorGUID(), request.getPrice());
+		subjectService.createSubject(request.getSubjectName(), request.getInstructorGUID(), request.getPrice(), request.getDuration());
 		return CreateSubjectResponse.builder()
 				.subjectName(request.getSubjectName())
 				.instructorGUID(request.getInstructorGUID())

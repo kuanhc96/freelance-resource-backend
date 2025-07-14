@@ -11,5 +11,6 @@ public class GetSubjectResponse {
 	private String instructorName;
 	private Integer price;
 	private String subjectDescription;
+	private Integer duration;
 
 }

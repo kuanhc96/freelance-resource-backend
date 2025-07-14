@@ -16,6 +16,7 @@ public class SubjectMapper implements RowMapper<SubjectEntity> {
 	public static final String INSTRUCTOR_GUID = "instructor_guid";
 	public static final String SUBJECT_DESCRIPTION = "subject_description";
 	public static final String PRICE = "price";
+	public static final String DURATION = "duration";
 
 	@Override
 	public SubjectEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -26,6 +27,7 @@ public class SubjectMapper implements RowMapper<SubjectEntity> {
 				.instructorGUID(rs.getString(INSTRUCTOR_GUID))
 				.price(rs.getInt(PRICE))
 				.subjectDescription(rs.getString(SUBJECT_DESCRIPTION))
+				.duration(rs.getInt(DURATION))
 				.build();
 	}
 }

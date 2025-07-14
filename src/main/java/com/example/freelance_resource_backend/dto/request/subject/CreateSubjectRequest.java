@@ -9,4 +9,5 @@ public class CreateSubjectRequest {
 	private String subjectName;
 	private String instructorGUID;
 	private Integer price;
+	private Integer duration;
 }

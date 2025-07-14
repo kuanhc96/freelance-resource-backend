@@ -22,4 +22,6 @@ public class SubjectEntity {
 	private Integer price;
 
 	private String subjectDescription;
+
+	private Integer duration;
 }

@@ -38,15 +38,17 @@ public class SubjectService {
 				.instructorName(instructor.getName())
 				.price(subject.getPrice())
 				.subjectDescription(subject.getSubjectDescription())
+				.duration(subject.getDuration())
 				.build()).collect(Collectors.toList());
 
 	}
 
-	public void createSubject(String subjectName, String instructorGUID, Integer price) {
+	public void createSubject(String subjectName, String instructorGUID, Integer price, Integer duration) {
 		SubjectEntity subjectEntity = SubjectEntity.builder()
 				.subjectName(subjectName)
 				.instructorGUID(instructorGUID)
 				.price(price)
+				.duration(duration)
 				.build();
 		subjectRepository.insertSubject(subjectEntity);
 	}
