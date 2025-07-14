@@ -85,6 +85,7 @@ public class LoginController {
 		);
 
 		EmailPasswordRoleAuthenticationToken authenticationResponse = (EmailPasswordRoleAuthenticationToken) authenticationManager.authenticate(authentication);
+		Long expirationTimestamp = new Date().getTime() + 30000000; // 30 million milliseconds = ~8.3 hours
 		if (null != authenticationResponse && authenticationResponse.isAuthenticated()) {
 			if (null != env) {
 				String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY, ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
@@ -99,7 +100,6 @@ public class LoginController {
 						.claim("role", authenticationResponse.getRole())
 						.claim("authorities", authorization)
 						.setIssuedAt(new Date())
-						.setExpiration(new Date(new Date().getTime() + 30000000))
 						.signWith(secretKey)
 						.compact();
 				Cookie cookie = new Cookie("accessToken", accessTokenJwt);
@@ -113,6 +113,7 @@ public class LoginController {
 							.userGUID(authenticationResponse.getUserGUID())
 							.role(authenticationResponse.getRole())
 							.email(authenticationResponse.getName())
+							.expirationTimestamp(expirationTimestamp)
 							.build()
 					);
 		} else {

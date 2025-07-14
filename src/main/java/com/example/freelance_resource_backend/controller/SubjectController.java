@@ -24,7 +24,7 @@ import com.example.freelance_resource_backend.exceptions.ResourceNotFoundExcepti
 import com.example.freelance_resource_backend.service.SubjectService;
 
 @RestController
-@RequestMapping("/subject")
+@RequestMapping("/subjects")
 @RequiredArgsConstructor
 public class SubjectController {
 	private final SubjectService subjectService;
