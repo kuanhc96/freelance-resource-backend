@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class CreateSubjectResponse {
+	private String subjectGUID;
 	private String subjectName;
 	private String instructorGUID;
 	private Integer price;

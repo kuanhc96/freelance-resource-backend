@@ -20,6 +20,7 @@ import com.example.freelance_resource_backend.dto.response.subject.GetSubjectRes
 import com.example.freelance_resource_backend.dto.response.subject.CreateSubjectResponse;
 import com.example.freelance_resource_backend.dto.response.subject.UpdateSubjectNameResponse;
 import com.example.freelance_resource_backend.dto.response.subject.UpdateSubjectPriceResponse;
+import com.example.freelance_resource_backend.entities.SubjectEntity;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.service.SubjectService;
 
@@ -31,8 +32,9 @@ public class SubjectController {
 
 	@PostMapping("/createSubject")
 	public CreateSubjectResponse createSubject(@RequestBody CreateSubjectRequest request) {
-		subjectService.createSubject(request.getSubjectName(), request.getInstructorGUID(), request.getPrice(), request.getDuration());
+		SubjectEntity subjectEntity = subjectService.createSubject(request.getSubjectName(), request.getInstructorGUID(), request.getPrice(), request.getDuration());
 		return CreateSubjectResponse.builder()
+				.subjectGUID(subjectEntity.getSubjectGUID())
 				.subjectName(request.getSubjectName())
 				.instructorGUID(request.getInstructorGUID())
 				.price(request.getPrice())

@@ -43,14 +43,16 @@ public class SubjectService {
 
 	}
 
-	public void createSubject(String subjectName, String instructorGUID, Integer price, Integer duration) {
+	public SubjectEntity createSubject(String subjectName, String instructorGUID, Integer price, Integer duration) {
 		SubjectEntity subjectEntity = SubjectEntity.builder()
+				.subjectGUID(java.util.UUID.randomUUID().toString())
 				.subjectName(subjectName)
 				.instructorGUID(instructorGUID)
 				.price(price)
 				.duration(duration)
 				.build();
 		subjectRepository.insertSubject(subjectEntity);
+		return subjectEntity;
 	}
 
 	public void updateSubjectName(String subjectName, String instructorGUID, String newSubjectName) throws ResourceNotFoundException {
