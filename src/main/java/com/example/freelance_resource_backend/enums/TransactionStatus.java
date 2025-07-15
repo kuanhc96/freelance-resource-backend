@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum TransactionStatus {
-	CREATED("created"),
-	CONFIRMED("confirmed"),
+	PENDING("pending"),
+	COMPLETED("completed"),
 	CANCELED("canceled");
 
 	private final String value;
