@@ -1,5 +1,6 @@
 package com.example.freelance_resource_backend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,9 +19,10 @@ public class PackageRepository {
 	private final PackageMapper packageMapper;
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	public final String getPackageByPackageGUID = "SELECT * FROM packages WHERE package_guid = :package_guid";
-	public final String getPackageByDiscountCodeAndSubjectGUID = "SELECT * FROM packages WHERE discount_code = :discount_code AND subject_guid = :subject_guid";
-	public final String insertPackage = "INSERT INTO packages (package_guid, subject_guid, discount_code, number_of_lessons, discount_rate) " +
+	public final String getPackageByPackageGUID = "SELECT * FROM package WHERE package_guid = :package_guid";
+	public final String getPackageByDiscountCodeAndSubjectGUID = "SELECT * FROM package WHERE discount_code = :discount_code AND subject_guid = :subject_guid";
+	public final String getPackagesBySubjectGUID = "SELECT * FROM package WHERE subject_guid = :subject_guid";
+	public final String insertPackage = "INSERT INTO package (package_guid, subject_guid, discount_code, number_of_lessons, discount_rate) " +
 			"VALUES (:package_guid, :subject_guid, :discount_code, :number_of_lessons, :discount_rate)";
 
 	public Optional<PackageEntity> getPackageByPackageGUID(String package_guid) {
@@ -41,6 +43,16 @@ public class PackageRepository {
 			return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(getPackageByDiscountCodeAndSubjectGUID, parameterSource, packageMapper));
 		} catch (EmptyResultDataAccessException e) {
 			return Optional.empty();
+		}
+	}
+
+	public List<PackageEntity> getPackagesBySubjectGUID(String subjectGUID) {
+		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+		parameterSource.addValue(PackageMapper.SUBJECT_GUID, subjectGUID);
+		try {
+			return namedParameterJdbcTemplate.query(getPackagesBySubjectGUID, parameterSource, packageMapper);
+		} catch (EmptyResultDataAccessException e) {
+			return List.of();
 		}
 	}
 

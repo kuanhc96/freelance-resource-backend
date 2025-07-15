@@ -76,7 +76,8 @@ public class ProjectSecurityConfig {
 						"/subscription/*",
 						"/announcement/*",
 						"/subscription/unsubscribed/*",
-						"/subject/*",
+						"/subjects/*",
+						"/packages/*",
 						"/lessons/*",
 						"/lessons"
 				).authenticated()

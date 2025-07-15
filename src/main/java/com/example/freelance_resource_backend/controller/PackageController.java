@@ -1,5 +1,7 @@
 package com.example.freelance_resource_backend.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +37,7 @@ public class PackageController {
 				.build());
 	}
 
-	@GetMapping("/{subjectGUID}/{discountCode}")
+	@GetMapping("/subject/{subjectGUID}/{discountCode}")
 	public ResponseEntity<GetPackageResponse> getPackage(@PathVariable String subjectGUID, @PathVariable String discountCode) throws ResourceNotFoundException {
 		PackageEntity packageEntity = packageService.getPackageByDiscountCodeAndSubjectGUID(discountCode, subjectGUID);
 		return ResponseEntity.ok(GetPackageResponse.builder()
@@ -45,6 +47,22 @@ public class PackageController {
 				.numberOfLessons(packageEntity.getNumberOfLessons())
 				.discountRate(packageEntity.getDiscountRate())
 				.build());
+	}
+
+	@GetMapping("/subject/{subjectGUID}")
+	public ResponseEntity<List<GetPackageResponse>> getPackageBySubject(@PathVariable String subjectGUID) throws ResourceNotFoundException {
+		List<GetPackageResponse> packages = packageService.getPackagesBySubjectGUID(subjectGUID)
+				.stream()
+				.map(packageEntity -> GetPackageResponse.builder()
+						.packageGUID(packageEntity.getPackageGUID())
+						.discountCode(packageEntity.getDiscountCode())
+						.subjectGUID(packageEntity.getSubjectGUID())
+						.numberOfLessons(packageEntity.getNumberOfLessons())
+						.discountRate(packageEntity.getDiscountRate())
+						.build())
+				.toList();
+
+		return ResponseEntity.ok(packages);
 	}
 
 	@PostMapping("/create")

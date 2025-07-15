@@ -1,5 +1,7 @@
 package com.example.freelance_resource_backend.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,14 @@ public class PackageService {
 	public PackageEntity getPackageByDiscountCodeAndSubjectGUID(String discountCode, String subjectGUID) throws ResourceNotFoundException {
 		return packageRepository.getPackageByDiscountCodeAndSubjectGUID(discountCode, subjectGUID)
 				.orElseThrow(() -> new ResourceNotFoundException("Package not found with discount code: " + discountCode + " and subject GUID: " + subjectGUID));
+	}
+
+	public List<PackageEntity> getPackagesBySubjectGUID(String subjectGUID) throws ResourceNotFoundException {
+		List<PackageEntity> packages = packageRepository.getPackagesBySubjectGUID(subjectGUID);
+		if (packages.isEmpty()) {
+			throw new ResourceNotFoundException("No packages found for subject GUID: " + subjectGUID);
+		}
+		return packages;
 	}
 
 	public PackageEntity createPackage(String subjectGUID, String discountCode, Integer numberOfLessons, Double discountRate) {

@@ -6,7 +6,6 @@ import lombok.Data;
 @Builder
 @Data
 public class GetPackageResponse {
-	private Long packageId;
 	private String packageGUID;
 	private String discountCode;
 	private String subjectGUID;
