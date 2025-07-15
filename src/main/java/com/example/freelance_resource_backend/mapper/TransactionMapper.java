@@ -15,6 +15,8 @@ public class TransactionMapper implements RowMapper<TransactionEntity> {
 	public static final String TRANSACTION_GUID = "transaction_guid";
 	public static final String STUDENT_GUID = "student_guid";
 	public static final String INSTRUCTOR_GUID = "instructor_guid";
+	public static final String SUBJECT_GUID = "subject_guid";
+	public static final String PACKAGE_GUID = "package_guid";
 	public static final String TRANSACTION_STATUS = "transaction_status";
 	public static final String PAYMENT_AMOUNT = "payment_amount";
 	public static final String CREATION_DATE = "creation_date";
@@ -28,6 +30,8 @@ public class TransactionMapper implements RowMapper<TransactionEntity> {
 				.transactionId(rs.getLong(TRANSACTION_ID))
 				.studentGUID(rs.getString(STUDENT_GUID))
 				.instructorGUID(rs.getString(INSTRUCTOR_GUID))
+				.subjectGUID(rs.getString(SUBJECT_GUID))
+				.packageGUID(rs.getString(PACKAGE_GUID))
 				.transactionStatus(TransactionStatus.getValue(rs.getString(TRANSACTION_STATUS)))
 				.paymentAmount(rs.getInt(PAYMENT_AMOUNT))
 				.creationDate(rs.getTimestamp(CREATION_DATE).toLocalDateTime())

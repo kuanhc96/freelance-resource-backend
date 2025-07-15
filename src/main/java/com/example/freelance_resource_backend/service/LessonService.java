@@ -14,12 +14,17 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.response.lesson.GetLessonResponse;
 import com.example.freelance_resource_backend.entities.LessonEntity;
+import com.example.freelance_resource_backend.entities.PackageEntity;
 import com.example.freelance_resource_backend.entities.SubjectEntity;
+import com.example.freelance_resource_backend.entities.TransactionEntity;
 import com.example.freelance_resource_backend.enums.LessonFrequency;
 import com.example.freelance_resource_backend.enums.LessonStatus;
+import com.example.freelance_resource_backend.enums.TransactionStatus;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.LessonRepository;
+import com.example.freelance_resource_backend.repository.PackageRepository;
 import com.example.freelance_resource_backend.repository.SubjectRepository;
+import com.example.freelance_resource_backend.repository.TransactionRepository;
 import com.example.freelance_resource_backend.translator.LessonTranslator;
 
 @Service
@@ -27,6 +32,8 @@ import com.example.freelance_resource_backend.translator.LessonTranslator;
 public class LessonService {
 	private final LessonRepository lessonRepository;
 	private final SubjectRepository subjectRepository;
+	private final PackageRepository packageRepository;
+	private final TransactionRepository transactionRepository;
 
 	public List<LessonEntity> createLessons(
 			String studentGUID,
@@ -34,14 +41,17 @@ public class LessonService {
 			LocalDateTime startDate,
 			String location,
 			String topic,
-			String subject,
-			Integer repeat,
+			String subjectGUID,
+			String packageGUID,
 			LessonFrequency lessonFrequency
 	) throws ResourceNotFoundException {
-		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectNameAndInstructorGUID(subject, instructorGUID);
-		if (optionalSubject.isPresent()) {
+		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectNameAndInstructorGUID(subjectGUID, instructorGUID);
+		Optional<PackageEntity> optionalPackage = packageRepository.getPackageByPackageGUID(packageGUID);
+		if (optionalSubject.isPresent() && optionalPackage.isPresent()) {
+			SubjectEntity subjectEntity = optionalSubject.get();
+			PackageEntity packageEntity = optionalPackage.get();
 			List<LessonEntity> lessonEntities = new LinkedList<>();
-			for (int i = 0; i <= repeat; i++) {
+			for (int i = 0; i <= packageEntity.getNumberOfLessons(); i++) {
 				LessonStatus lessonStatus = startDate == null? LessonStatus.CREATED : LessonStatus.SCHEDULED;
 				lessonEntities.add(
 					LessonEntity.builder()
@@ -52,7 +62,7 @@ public class LessonService {
 						.location(location)
 						.topic(topic)
 						.lessonStatus(lessonStatus)
-						.subject(subject)
+						.subject(subjectGUID)
 						.build()
 				);
 				switch (lessonFrequency) {
@@ -63,12 +73,27 @@ public class LessonService {
 				}
 			}
 
+			String transactionGUID = UUID.randomUUID().toString();
+			TransactionStatus transactionStatus = TransactionStatus.PENDING;
+			LocalDateTime creationDate = LocalDateTime.now();
+			int paymentAmount = (int) (packageEntity.getNumberOfLessons() * subjectEntity.getPrice() * packageEntity.getDiscountRate());
+			TransactionEntity transactionEntity = TransactionEntity.builder()
+					.transactionGUID(transactionGUID)
+					.studentGUID(studentGUID)
+					.instructorGUID(instructorGUID)
+					.subjectGUID(subjectGUID)
+					.packageGUID(packageGUID)
+					.transactionStatus(transactionStatus)
+					.paymentAmount(paymentAmount)
+					.creationDate(creationDate).build();
+			transactionRepository.insertTransaction(transactionEntity);
+
 			for (LessonEntity newLessonEntity : lessonEntities) {
 				lessonRepository.insertLesson(newLessonEntity);
 			}
 			return lessonEntities;
 		} else {
-			throw new ResourceNotFoundException("Subject with name: " + subject + " not found for instructorGUID: " + instructorGUID);
+			throw new ResourceNotFoundException("subjectGUID: " + subjectGUID + " or packageGUID: " + packageGUID + " not found for instructorGUID: " + instructorGUID);
 		}
 	}
 

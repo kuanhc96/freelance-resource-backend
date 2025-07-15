@@ -20,8 +20,8 @@ public class TransactionRepository {
 	private String getTransactionsByStudentGUIDAndInstructorGUID = "SELECT * FROM transactions WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 	private String getTransactionByTransactionGUID = "SELECT * FROM transactions WHERE transaction_guid = :transaction_guid";
 	private String insertTransaction = "INSERT INTO transactions " +
-			"(transaction_guid, student_guid, instructor_guid, transaction_date, transaction_amount, transaction_status, creation_date, confirmed_date, canceled_date, comments) " +
-			"VALUES (:transaction_guid, :student_guid, :instructor_guid, :transaction_date, :transaction_amount, :transaction_status, :creation_date, :confirmed_date, :canceled_date, :comments)";
+			"(transaction_guid, subject_guid, package_guid, student_guid, instructor_guid, transaction_status, payment_amount, creation_date, confirmed_date, canceled_date, comments) " +
+			"VALUES (:transaction_guid, :subject_guid, :package_guid, :student_guid, :instructor_guid, :transaction_status, :payment_amount, :creation_date, :confirmed_date, :canceled_date, :comments)";
 	private String updateTransaction = "UPDATE transactions " +
 			"SET transaction_status = :transaction_status, confirmed_date = :confirmed_date, canceled_date = :canceled_date, comments = :comments" +
 			" WHERE transaction_guid = :transaction_guid";

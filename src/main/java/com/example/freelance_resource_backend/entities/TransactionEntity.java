@@ -19,6 +19,8 @@ public class TransactionEntity {
 	private String transactionGUID;
 	private String studentGUID;
 	private String instructorGUID;
+	private String subjectGUID;
+	private String packageGUID;
 	private TransactionStatus transactionStatus;
 	private Integer paymentAmount;
 	private LocalDateTime creationDate;

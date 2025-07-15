@@ -22,7 +22,7 @@ public class TransactionService {
 
 	public TransactionEntity createTransaction(String studentGUID, String instructorGUID, Integer paymentAmount, String comments) {
 		String transactionGUID = UUID.randomUUID().toString();
-		TransactionStatus transactionStatus = TransactionStatus.CREATED;
+		TransactionStatus transactionStatus = TransactionStatus.PENDING;
 		LocalDateTime creationDate = LocalDateTime.now();
 		TransactionEntity transactionEntity = TransactionEntity.builder()
 				.transactionGUID(transactionGUID)

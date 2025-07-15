@@ -15,7 +15,7 @@ public class CreateLessonRequest {
 	private LocalDateTime startDate;
 	private String location;
 	private String topic;
-	private String subject;
-	private Integer repeat;
+	private String subjectGUID;
+	private String packageGUID;
 	private LessonFrequency lessonFrequency;
 }
