@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import io.micrometer.common.util.StringUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.response.lesson.GetLessonResponse;
@@ -35,6 +36,7 @@ public class LessonService {
 	private final PackageRepository packageRepository;
 	private final TransactionRepository transactionRepository;
 
+	@Transactional
 	public List<LessonEntity> createLessons(
 			String studentGUID,
 			String instructorGUID,
@@ -45,13 +47,13 @@ public class LessonService {
 			String packageGUID,
 			LessonFrequency lessonFrequency
 	) throws ResourceNotFoundException {
-		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectNameAndInstructorGUID(subjectGUID, instructorGUID);
+		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectGUID(subjectGUID);
 		Optional<PackageEntity> optionalPackage = packageRepository.getPackageByPackageGUID(packageGUID);
 		if (optionalSubject.isPresent() && optionalPackage.isPresent()) {
 			SubjectEntity subjectEntity = optionalSubject.get();
 			PackageEntity packageEntity = optionalPackage.get();
 			List<LessonEntity> lessonEntities = new LinkedList<>();
-			for (int i = 0; i <= packageEntity.getNumberOfLessons(); i++) {
+			for (int i = 0; i < packageEntity.getNumberOfLessons(); i++) {
 				LessonStatus lessonStatus = startDate == null? LessonStatus.CREATED : LessonStatus.SCHEDULED;
 				lessonEntities.add(
 					LessonEntity.builder()

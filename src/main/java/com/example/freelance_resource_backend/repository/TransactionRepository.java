@@ -64,9 +64,12 @@ public class TransactionRepository {
 	public void insertTransaction(TransactionEntity transaction) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue(TransactionMapper.TRANSACTION_GUID, transaction.getTransactionGUID());
+		params.addValue(TransactionMapper.SUBJECT_GUID, transaction.getSubjectGUID());
+		params.addValue(TransactionMapper.PACKAGE_GUID, transaction.getPackageGUID());
 		params.addValue(TransactionMapper.STUDENT_GUID, transaction.getStudentGUID());
 		params.addValue(TransactionMapper.INSTRUCTOR_GUID, transaction.getInstructorGUID());
 		params.addValue(TransactionMapper.TRANSACTION_STATUS, transaction.getTransactionStatus().name());
+		params.addValue(TransactionMapper.PAYMENT_AMOUNT, transaction.getPaymentAmount());
 		params.addValue(TransactionMapper.CREATION_DATE, transaction.getCreationDate());
 		params.addValue(TransactionMapper.CONFIRMED_DATE, transaction.getConfirmedDate());
 		params.addValue(TransactionMapper.CANCELED_DATE, transaction.getCanceledDate());

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.SubjectEntity;
+import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.mapper.SubjectMapper;
 
 @Repository
@@ -21,6 +22,9 @@ public class SubjectRepository {
 
 	public final String getSubjectBySubjectNameAndInstructorGUID = "SELECT * FROM subjects " +
 			"WHERE subject_name = :subject_name AND instructor_guid = :instructor_guid";
+
+	public final String getSubjectBySubjectGUID = "SELECT * FROM subjects " +
+			"WHERE subject_guid = :subject_guid";
 
 	public final String getSubjectsByInstructorGUID = "SELECT * FROM subjects " +
 			"WHERE instructor_guid = :instructor_guid";
@@ -40,6 +44,16 @@ public class SubjectRepository {
 			return Optional.ofNullable(jdbcTemplate.queryForObject(getSubjectBySubjectNameAndInstructorGUID, params, subjectMapper));
 		} catch (EmptyResultDataAccessException e) {
 			return Optional.empty();
+		}
+	}
+
+	public Optional<SubjectEntity> getSubjectBySubjectGUID(String subjectGUID) throws ResourceNotFoundException {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue(SubjectMapper.SUBJECT_GUID, subjectGUID);
+		try {
+			return Optional.ofNullable(jdbcTemplate.queryForObject(getSubjectBySubjectGUID, params, subjectMapper));
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("Subject with GUID: " + subjectGUID + " not found");
 		}
 	}
 

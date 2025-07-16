@@ -1,6 +1,7 @@
 package com.example.freelance_resource_backend.controller;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.request.lesson.CreateLessonRequest;
+import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.lesson.GetLessonResponse;
 import com.example.freelance_resource_backend.entities.LessonEntity;
 import com.example.freelance_resource_backend.enums.LessonFrequency;
@@ -53,6 +55,7 @@ public class LessonController {
 		}
 
 		List<GetLessonResponse> lessons = lessonService.getLessons(studentGUID, instructorGUID);
+		lessons.sort(Comparator.comparing(GetLessonResponse::getStartDate));
 		return ResponseEntity.ok(lessons);
 	}
 }
