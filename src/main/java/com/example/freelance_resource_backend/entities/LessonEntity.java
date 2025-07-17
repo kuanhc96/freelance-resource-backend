@@ -26,7 +26,7 @@ public class LessonEntity {
 	private String location;
 	private String topic;
 	private String instructorComments;
-	private String subject;
+	private String subjectGUID;
 	private String studentFeedback;
 	private LessonStatus lessonStatus;
 	private LessonRating lessonRating;

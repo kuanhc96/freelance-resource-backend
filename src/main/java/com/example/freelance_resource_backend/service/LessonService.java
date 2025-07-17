@@ -64,7 +64,7 @@ public class LessonService {
 						.location(location)
 						.topic(topic)
 						.lessonStatus(lessonStatus)
-						.subject(subjectGUID)
+						.subjectGUID(subjectGUID)
 						.build()
 				);
 				switch (lessonFrequency) {
