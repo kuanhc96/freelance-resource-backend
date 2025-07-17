@@ -16,6 +16,13 @@ public class TransactionEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long transactionId;
+	private String studentName;
+	private String instructorName;
+	private String subjectName;
+	private String subjectDescription;
+	private String discountCode;
+	private Integer numberOfLessons;
+	private Double discountRate;
 	private String transactionGUID;
 	private String studentGUID;
 	private String instructorGUID;

@@ -1,6 +1,7 @@
 package com.example.freelance_resource_backend.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -20,6 +21,14 @@ public class TransactionService {
 		return transactionRepository.getTransactionByTransactionGUID(transactionGUID);
 	}
 
+	public List<TransactionEntity> getTransactionsByStudentGUID(String studentGUID) {
+		return transactionRepository.getTransactionsByStudentGUID(studentGUID);
+	}
+
+	public List<TransactionEntity> getTransactionsByInstructorGUID(String instructorGUID) {
+		return transactionRepository.getTransactionsByInstructorGUID(instructorGUID);
+	}
+
 	public TransactionEntity createTransaction(String studentGUID, String instructorGUID, Integer paymentAmount, String comments) {
 		String transactionGUID = UUID.randomUUID().toString();
 		TransactionStatus transactionStatus = TransactionStatus.PENDING;
@@ -37,10 +46,6 @@ public class TransactionService {
 				.build();
 		transactionRepository.insertTransaction(transactionEntity);
 		return transactionEntity;
-	}
-
-	public TransactionEntity createTransaction(String studentGUID, String instructorGUID, Integer paymentAmount) {
-		return createTransaction(studentGUID, instructorGUID, paymentAmount, "");
 	}
 
 	public TransactionEntity updateTransactionComments(String transactionGUID, String comments) {
