@@ -10,14 +10,17 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.response.subject.GetSubjectResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
+import com.example.freelance_resource_backend.entities.PackageEntity;
 import com.example.freelance_resource_backend.entities.SubjectEntity;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
+import com.example.freelance_resource_backend.repository.PackageRepository;
 import com.example.freelance_resource_backend.repository.SubjectRepository;
 
 @Service
 @RequiredArgsConstructor
 public class SubjectService {
 	private final SubjectRepository subjectRepository;
+	private final PackageRepository packageRepository;
 	private final FreelanceUserDetailsService freelanceUserDetailsService;
 
 	public SubjectEntity getSubject(String subjectName, String instructorGUID) throws ResourceNotFoundException {
@@ -52,7 +55,15 @@ public class SubjectService {
 				.duration(duration)
 				.subjectDescription(subjectDescription)
 				.build();
+		PackageEntity packageEntity = PackageEntity.builder()
+				.packageGUID(java.util.UUID.randomUUID().toString())
+				.subjectGUID(subjectEntity.getSubjectGUID())
+				.discountCode("BASIC")
+				.numberOfLessons(1)
+				.discountRate(1.0)
+				.build();
 		subjectRepository.insertSubject(subjectEntity);
+		packageRepository.insertPackage(packageEntity);
 		return subjectEntity;
 	}
 

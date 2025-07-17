@@ -65,7 +65,7 @@ public class PackageController {
 		return ResponseEntity.ok(packages);
 	}
 
-	@PostMapping("/create")
+	@PostMapping("/createPackage")
 	public ResponseEntity<CreatePackageResponse> createPackage(@RequestBody CreatePackageRequest request) {
 		PackageEntity packageEntity = packageService.createPackage(request.getSubjectGUID(), request.getDiscountCode(), request.getNumberOfLessons(), request.getDiscountRate());
 		return ResponseEntity.ok(CreatePackageResponse.builder()

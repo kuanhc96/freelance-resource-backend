@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.PackageEntity;
@@ -33,6 +34,7 @@ public class PackageService {
 		return packages;
 	}
 
+	@Transactional
 	public PackageEntity createPackage(String subjectGUID, String discountCode, Integer numberOfLessons, Double discountRate) {
 		PackageEntity packageEntity = PackageEntity.builder()
 				.packageGUID(java.util.UUID.randomUUID().toString())
