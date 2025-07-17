@@ -30,5 +30,6 @@ public class LessonEntity {
 	private String studentFeedback;
 	private LessonStatus lessonStatus;
 	private LessonRating lessonRating;
+	private String transactionGUID;
 
 }

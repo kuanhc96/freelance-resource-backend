@@ -53,6 +53,7 @@ public class LessonService {
 			SubjectEntity subjectEntity = optionalSubject.get();
 			PackageEntity packageEntity = optionalPackage.get();
 			List<LessonEntity> lessonEntities = new LinkedList<>();
+			String transactionGUID = UUID.randomUUID().toString();
 			for (int i = 0; i < packageEntity.getNumberOfLessons(); i++) {
 				LessonStatus lessonStatus = startDate == null? LessonStatus.CREATED : LessonStatus.SCHEDULED;
 				lessonEntities.add(
@@ -65,6 +66,7 @@ public class LessonService {
 						.topic(topic)
 						.lessonStatus(lessonStatus)
 						.subjectGUID(subjectGUID)
+						.transactionGUID(transactionGUID)
 						.build()
 				);
 				switch (lessonFrequency) {
@@ -75,7 +77,6 @@ public class LessonService {
 				}
 			}
 
-			String transactionGUID = UUID.randomUUID().toString();
 			TransactionStatus transactionStatus = TransactionStatus.PENDING;
 			LocalDateTime creationDate = LocalDateTime.now();
 			int paymentAmount = (int) (packageEntity.getNumberOfLessons() * subjectEntity.getPrice() * packageEntity.getDiscountRate());

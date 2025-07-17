@@ -39,8 +39,8 @@ public class LessonRepository {
 
 	private String getLessonsByStudentGUIDAndInstructorGUID = "SELECT * FROM lesson WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 
-	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject_guid, lesson_status, lesson_rating) " +
-			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location, :topic, :instructor_comments, :student_feedback, :subject_guid, :lesson_status, :lesson_rating)";
+	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject_guid, lesson_status, lesson_rating, transaction_guid) " +
+			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location, :topic, :instructor_comments, :student_feedback, :subject_guid, :lesson_status, :lesson_rating, :transaction_guid)";
 
 	private String updateLessonByLessonGUID = "UPDATE lesson " +
 			"SET student_guid = :studentGUID, instructor_guid = :instructorGUID, start_date = :startDate, location = :location, " +
@@ -86,6 +86,7 @@ public class LessonRepository {
 		params.addValue(LessonMapper.LESSON_STATUS, lesson.getLessonStatus() == null? LessonStatus.CREATED.getValue(): lesson.getLessonStatus().getValue());
 		params.addValue(LessonMapper.LESSON_RATING, lesson.getLessonRating() == null? LessonRating.UNRATED.getValue(): lesson.getLessonRating().getValue());
 		params.addValue(LessonMapper.SUBJECT_GUID, lesson.getSubjectGUID());
+		params.addValue(LessonMapper.TRANSACTION_GUID, lesson.getTransactionGUID());
 		jdbcTemplate.update(insertLesson, params);
 	}
 

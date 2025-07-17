@@ -21,7 +21,7 @@ import com.example.freelance_resource_backend.translator.TransactionTranslator;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/transaction")
+@RequestMapping("/transactions")
 public class TransactionController {
 
 	private final TransactionService transactionService;
@@ -52,7 +52,7 @@ public class TransactionController {
 
 	@GetMapping("/instructor/{instructorGUID}")
 	public ResponseEntity<List<GetTransactionResponse>> getTransactionByInstructor(@PathVariable String instructorGUID) {
-		List<TransactionEntity> transactionEntities = transactionService.getTransactionsByStudentGUID(instructorGUID);
+		List<TransactionEntity> transactionEntities = transactionService.getTransactionsByInstructorGUID(instructorGUID);
 		List<GetTransactionResponse> responses = transactionEntities.stream().map(TransactionTranslator::toDto).toList();
 		return ResponseEntity.ok(responses);
 	}

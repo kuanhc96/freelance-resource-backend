@@ -18,7 +18,11 @@ public class TransactionRepository {
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
 	private String getTransactionsByStudentGUID =
-			"SELECT u1.`name` student_name, u2.`name` instructor_name, s.subject_name, s.subject_description, p.discount_code, p.number_of_lessons, p.discount_rate, t.transaction_status, t.payment_amount, t.creation_date, t.confirmed_date, t.canceled_date, t.comments " +
+			"SELECT t.transaction_id, t.transaction_guid, t.student_guid, t.instructor_guid, " +
+					"u1.`name` student_name, u2.`name` instructor_name, " +
+					"s.subject_guid, s.subject_name, s.subject_description, " +
+					"p.package_guid, p.discount_code, p.number_of_lessons, p.discount_rate, " +
+					"t.transaction_status, t.payment_amount, t.creation_date, t.confirmed_date, t.canceled_date, t.comments " +
 					"FROM transactions t " +
 					"JOIN users u1 " +
 					"ON t.student_guid = u1.user_guid " +
@@ -30,7 +34,11 @@ public class TransactionRepository {
 					"ON t.package_guid = p.package_guid " +
 					"WHERE t.student_guid = :student_guid";
 	private String getTransactionsByInstructorGUID =
-			"SELECT u1.`name` student_name, u2.`name` instructor_name, s.subject_name, s.subject_description, p.discount_code, p.number_of_lessons, p.discount_rate, t.transaction_status, t.payment_amount, t.creation_date, t.confirmed_date, t.canceled_date, t.comments " +
+			"SELECT t.transaction_id, t.transaction_guid, t.student_guid, t.instructor_guid, " +
+					"u1.`name` student_name, u2.`name` instructor_name, " +
+					"s.subject_guid, s.subject_name, s.subject_description, " +
+					"p.package_guid, p.discount_code, p.number_of_lessons, p.discount_rate, " +
+					"t.transaction_status, t.payment_amount, t.creation_date, t.confirmed_date, t.canceled_date, t.comments " +
 					"FROM transactions t " +
 					"JOIN users u1 " +
 					"ON t.student_guid = u1.user_guid " +
@@ -57,8 +65,8 @@ public class TransactionRepository {
 					"AND t.student_guid = :student_guid";
 	private String getTransactionByTransactionGUID = "SELECT * FROM transactions WHERE transaction_guid = :transaction_guid";
 	private String insertTransaction = "INSERT INTO transactions " +
-			"(transaction_guid, subject_guid, package_guid, student_guid, instructor_guid, transaction_status, payment_amount, creation_date, confirmed_date, canceled_date, comments) " +
-			"VALUES (:transaction_guid, :subject_guid, :package_guid, :student_guid, :instructor_guid, :transaction_status, :payment_amount, :creation_date, :confirmed_date, :canceled_date, :comments)";
+			"(transaction_guid, subject_guid, package_guid, student_guid, instructor_guid, transaction_status, payment_amount, creation_date, confirmed_date, canceled_date) " +
+			"VALUES (:transaction_guid, :subject_guid, :package_guid, :student_guid, :instructor_guid, :transaction_status, :payment_amount, :creation_date, :confirmed_date, :canceled_date)";
 	private String updateTransaction = "UPDATE transactions " +
 			"SET transaction_status = :transaction_status, confirmed_date = :confirmed_date, canceled_date = :canceled_date, comments = :comments" +
 			" WHERE transaction_guid = :transaction_guid";

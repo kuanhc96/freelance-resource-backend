@@ -26,6 +26,7 @@ public class LessonMapper implements RowMapper<LessonEntity> {
 	public static final String LESSON_STATUS = "lesson_status";
 	public static final String LESSON_RATING = "lesson_rating";
 	public static final String SUBJECT_GUID = "subject_guid";
+	public static final String TRANSACTION_GUID = "transaction_guid";
 
 
 	@Override
