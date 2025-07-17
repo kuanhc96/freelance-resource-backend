@@ -43,13 +43,14 @@ public class SubjectService {
 
 	}
 
-	public SubjectEntity createSubject(String subjectName, String instructorGUID, Integer price, Integer duration) {
+	public SubjectEntity createSubject(String subjectName, String instructorGUID, Integer price, Integer duration, String subjectDescription) {
 		SubjectEntity subjectEntity = SubjectEntity.builder()
 				.subjectGUID(java.util.UUID.randomUUID().toString())
 				.subjectName(subjectName)
 				.instructorGUID(instructorGUID)
 				.price(price)
 				.duration(duration)
+				.subjectDescription(subjectDescription)
 				.build();
 		subjectRepository.insertSubject(subjectEntity);
 		return subjectEntity;

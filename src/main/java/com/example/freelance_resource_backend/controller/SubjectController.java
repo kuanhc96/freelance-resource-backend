@@ -32,7 +32,13 @@ public class SubjectController {
 
 	@PostMapping("/createSubject")
 	public CreateSubjectResponse createSubject(@RequestBody CreateSubjectRequest request) {
-		SubjectEntity subjectEntity = subjectService.createSubject(request.getSubjectName(), request.getInstructorGUID(), request.getPrice(), request.getDuration());
+		SubjectEntity subjectEntity = subjectService.createSubject(
+				request.getSubjectName(),
+				request.getInstructorGUID(),
+				request.getPrice(),
+				request.getDuration(),
+				request.getSubjectDescription()
+		);
 		return CreateSubjectResponse.builder()
 				.subjectGUID(subjectEntity.getSubjectGUID())
 				.subjectName(request.getSubjectName())

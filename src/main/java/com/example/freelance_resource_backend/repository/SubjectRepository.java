@@ -33,8 +33,8 @@ public class SubjectRepository {
 			"SET subject_name = :subject_name, price = :price " +
 			"WHERE subject_id = :subject_id";
 
-	public final String insertSubject = "INSERT INTO subjects (subject_guid, subject_name, instructor_guid, price, duration) " +
-			"VALUES (:subject_guid, :subject_name, :istructor_guid, :price, :duration)";
+	public final String insertSubject = "INSERT INTO subjects (subject_guid, subject_name, instructor_guid, price, duration, subject_description) " +
+			"VALUES (:subject_guid, :subject_name, :instructor_guid, :price, :duration, :subject_description)";
 
 	public Optional<SubjectEntity> getSubjectBySubjectNameAndInstructorGUID(String subjectName, String instructorGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -74,6 +74,7 @@ public class SubjectRepository {
 		params.addValue(SubjectMapper.INSTRUCTOR_GUID, subject.getInstructorGUID());
 		params.addValue(SubjectMapper.PRICE, subject.getPrice());
 		params.addValue(SubjectMapper.DURATION, subject.getDuration());
+		params.addValue(SubjectMapper.SUBJECT_DESCRIPTION, subject.getSubjectDescription());
 		jdbcTemplate.update(insertSubject, params);
 	}
 
