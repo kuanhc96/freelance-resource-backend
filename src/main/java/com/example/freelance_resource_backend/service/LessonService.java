@@ -61,7 +61,7 @@ public class LessonService {
 						.lessonGUID(UUID.randomUUID().toString())
 						.studentGUID(studentGUID)
 						.instructorGUID(instructorGUID)
-						.startDate(startDate)
+						.startDate(startDate == null? LocalDateTime.MAX: startDate)
 						.location(location)
 						.topic(topic)
 						.lessonStatus(lessonStatus)
