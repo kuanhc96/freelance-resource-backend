@@ -6,6 +6,7 @@ import com.example.freelance_resource_backend.entities.TransactionEntity;
 public class TransactionTranslator {
 	public static GetTransactionResponse toDto(TransactionEntity transactionEntity) {
 		return GetTransactionResponse.builder()
+				.transactionGUID(transactionEntity.getTransactionGUID())
 				.subjectName(transactionEntity.getSubjectName())
 				.subjectDescription(transactionEntity.getSubjectDescription())
 				.studentName(transactionEntity.getStudentName())

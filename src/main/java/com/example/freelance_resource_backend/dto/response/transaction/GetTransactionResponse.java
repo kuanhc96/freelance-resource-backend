@@ -10,6 +10,7 @@ import com.example.freelance_resource_backend.enums.TransactionStatus;
 @Data
 @Builder
 public class GetTransactionResponse {
+	private String transactionGUID;
 	private String studentName;
 	private String instructorName;
 	private String subjectName;
