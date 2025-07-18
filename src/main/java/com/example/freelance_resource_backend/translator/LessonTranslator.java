@@ -16,7 +16,7 @@ public class LessonTranslator {
 				.lessonRating(lessonEntity.getLessonRating())
 				.startDate(lessonEntity.getStartDate())
 				.location(lessonEntity.getLocation())
-				.subjectGUID(lessonEntity.getSubjectGUID())
+				.subjectName(lessonEntity.getSubjectName())
 				.lessonStatus(lessonEntity.getLessonStatus())
 				.build();
 	}

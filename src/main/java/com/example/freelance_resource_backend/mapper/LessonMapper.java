@@ -26,6 +26,7 @@ public class LessonMapper implements RowMapper<LessonEntity> {
 	public static final String LESSON_STATUS = "lesson_status";
 	public static final String LESSON_RATING = "lesson_rating";
 	public static final String SUBJECT_GUID = "subject_guid";
+	public static final String SUBJECT_NAME = "subject_name";
 	public static final String TRANSACTION_GUID = "transaction_guid";
 
 
@@ -46,6 +47,7 @@ public class LessonMapper implements RowMapper<LessonEntity> {
 				.lessonStatus(LessonStatus.getValue(rs.getString(LESSON_STATUS)))
 				.lessonRating(LessonRating.getValue(rs.getInt(LESSON_RATING)))
 				.subjectGUID(rs.getString(SUBJECT_GUID))
+				.subjectName(rs.getString(SUBJECT_NAME))
 				.build();
 		return lesson;
 	}

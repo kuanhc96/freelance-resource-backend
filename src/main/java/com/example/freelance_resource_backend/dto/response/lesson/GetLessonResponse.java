@@ -19,7 +19,7 @@ public class GetLessonResponse {
 	private LocalDateTime startDate;
 	private String location;
 	private String topic;
-	private String subjectGUID;
+	private String subjectName;
 	private LessonStatus lessonStatus;
 	private Integer discount;
 	private String instructorComments;
