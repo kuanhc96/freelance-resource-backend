@@ -52,6 +52,8 @@ public class LessonRepository {
 				"lesson_status = :lessonStatus, lesson_rating = :lessonRating " +
 			"WHERE lesson_guid = :lessonGUID";
 
+	private String deleteLessonsByTransactionGUID = "DELETE FROM lessons WHERE transaction_guid = :transaction_guid";
+
 	public LessonEntity getLessonByLessonGUID(String lessonGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue(LessonMapper.LESSON_GUID, lessonGUID);
@@ -108,6 +110,12 @@ public class LessonRepository {
 		params.addValue(LessonMapper.LESSON_RATING, lesson.getLessonRating().name());
 		params.addValue(LessonMapper.SUBJECT_GUID, lesson.getSubjectGUID());
 		jdbcTemplate.update(updateLessonByLessonGUID, params);
+	}
+
+	public void deleteLessonsByTransactionGUID(String transactionGUID) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue(LessonMapper.TRANSACTION_GUID, transactionGUID);
+		jdbcTemplate.update(deleteLessonsByTransactionGUID, params);
 	}
 
 }

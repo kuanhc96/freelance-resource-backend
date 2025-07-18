@@ -3,6 +3,7 @@ package com.example.freelance_resource_backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import com.example.freelance_resource_backend.dto.request.transaction.CreateTran
 import com.example.freelance_resource_backend.dto.response.transaction.CreateTransactionResponse;
 import com.example.freelance_resource_backend.dto.response.transaction.GetTransactionResponse;
 import com.example.freelance_resource_backend.entities.TransactionEntity;
+import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.service.TransactionService;
 import com.example.freelance_resource_backend.translator.TransactionTranslator;
 
@@ -62,5 +64,11 @@ public class TransactionController {
 		TransactionEntity transactionEntity = transactionService.getTransactionByTransactionGUID(transactionGUID);
 		GetTransactionResponse response = TransactionTranslator.toDto(transactionEntity);
 		return ResponseEntity.ok(response);
+	}
+
+	@DeleteMapping("/{transactionGUID}")
+	public ResponseEntity<Void> deleteTransaction(@PathVariable String transactionGUID) throws ResourceNotFoundException {
+		transactionService.deleteTransaction(transactionGUID);
+		return ResponseEntity.noContent().build();
 	}
 }

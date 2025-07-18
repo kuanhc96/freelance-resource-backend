@@ -6,16 +6,20 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.entities.TransactionEntity;
 import com.example.freelance_resource_backend.enums.TransactionStatus;
+import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
+import com.example.freelance_resource_backend.repository.LessonRepository;
 import com.example.freelance_resource_backend.repository.TransactionRepository;
 
 @Service
 @RequiredArgsConstructor
 public class TransactionService {
 	private final TransactionRepository transactionRepository;
+	private final LessonRepository lessonRepository;
 
 	public TransactionEntity getTransactionByTransactionGUID(String transactionGUID) {
 		return transactionRepository.getTransactionByTransactionGUID(transactionGUID);
@@ -53,5 +57,16 @@ public class TransactionService {
 		existingTransactionEntity.setComments(comments);
 		transactionRepository.updateTransaction(existingTransactionEntity);
 		return existingTransactionEntity;
+	}
+
+	@Transactional
+	public void deleteTransaction(String transactionGUID) throws ResourceNotFoundException {
+		TransactionEntity existingTransactionEntity = transactionRepository.getTransactionByTransactionGUID(transactionGUID);
+		if (existingTransactionEntity != null) {
+			lessonRepository.deleteLessonsByTransactionGUID(transactionGUID);
+			transactionRepository.deleteTransaction(transactionGUID);
+		} else {
+			throw new ResourceNotFoundException("Transaction with GUID: " + transactionGUID + " does not exist.");
+		}
 	}
 }
