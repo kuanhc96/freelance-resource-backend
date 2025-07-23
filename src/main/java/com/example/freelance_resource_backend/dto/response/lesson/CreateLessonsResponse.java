@@ -8,5 +8,5 @@ import lombok.Data;
 @Data
 @Builder
 public class CreateLessonsResponse {
-	private List<GetLessonResponse> createdLessons;
+	private String transactionGUID;
 }

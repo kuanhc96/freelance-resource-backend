@@ -17,8 +17,26 @@ public class LessonTranslator {
 				.startDate(lessonEntity.getStartDate())
 				.location(lessonEntity.getLocation())
 				.subjectName(lessonEntity.getSubjectName())
-				.endDate(lessonEntity.getStartDate().plusMinutes(lessonEntity.getDuration()))
+				.endDate(lessonEntity.getEndDate())
 				.lessonStatus(lessonEntity.getLessonStatus())
+				.build();
+	}
+
+	public static LessonEntity toEntity(GetLessonResponse response) {
+		return LessonEntity.builder()
+				.lessonGUID(response.getLessonGUID())
+				.topic(response.getTopic())
+				.instructorGUID(response.getInstructorGUID())
+				.instructorName(response.getInstructorName())
+				.instructorComments(response.getInstructorComments())
+				.studentGUID(response.getStudentGUID())
+				.studentName(response.getStudentName())
+				.lessonRating(response.getLessonRating())
+				.startDate(response.getStartDate())
+				.location(response.getLocation())
+				.subjectName(response.getSubjectName())
+				.endDate(response.getEndDate())
+				.lessonStatus(response.getLessonStatus())
 				.build();
 	}
 }

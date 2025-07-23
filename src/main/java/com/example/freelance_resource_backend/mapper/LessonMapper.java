@@ -19,6 +19,7 @@ public class LessonMapper implements RowMapper<LessonEntity> {
 	public static final String INSTRUCTOR_GUID = "instructor_guid";
 	public static final String INSTRUCTOR_NAME = "instructor_name";
 	public static final String START_DATE = "start_date";
+	public static final String END_DATE = "start_date";
 	public static final String LOCATION = "location";
 	public static final String TOPIC = "topic";
 	public static final String INSTRUCTOR_COMMENTS = "instructor_comments";
@@ -41,6 +42,7 @@ public class LessonMapper implements RowMapper<LessonEntity> {
 				.instructorGUID(rs.getString(INSTRUCTOR_GUID))
 				.instructorName(rs.getString(INSTRUCTOR_NAME))
 				.startDate(rs.getTimestamp(START_DATE).toLocalDateTime())
+				.endDate(rs.getTimestamp(END_DATE).toLocalDateTime())
 				.location(rs.getString(LOCATION))
 				.topic(rs.getString(TOPIC))
 				.instructorComments(rs.getString(INSTRUCTOR_COMMENTS))

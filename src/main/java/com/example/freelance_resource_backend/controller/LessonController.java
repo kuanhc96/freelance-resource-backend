@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
-import com.example.freelance_resource_backend.dto.request.lesson.CreateLessonRequest;
-import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.request.lesson.CreateLessonsRequest;
+import com.example.freelance_resource_backend.dto.request.lesson.PrecreateLessonsRequest;
+import com.example.freelance_resource_backend.dto.response.lesson.CreateLessonsResponse;
 import com.example.freelance_resource_backend.dto.response.lesson.GetLessonResponse;
 import com.example.freelance_resource_backend.entities.LessonEntity;
 import com.example.freelance_resource_backend.enums.LessonFrequency;
@@ -30,19 +31,34 @@ import com.example.freelance_resource_backend.translator.LessonTranslator;
 public class LessonController {
 	private final LessonService lessonService;
 
-	@PostMapping("/createLessons")
-	public ResponseEntity<List<GetLessonResponse>> createLessons(@RequestBody CreateLessonRequest request) throws ResourceNotFoundException {
+	@PostMapping("/precreateLessons")
+	public ResponseEntity<List<GetLessonResponse>> precreateLessons(@RequestBody PrecreateLessonsRequest request) throws ResourceNotFoundException {
 		String subjectGUID = request.getSubjectGUID();
 		String instructorGUID = request.getInstructorGUID();
 		String studentGUID = request.getStudentGUID();
 		LocalDateTime startDate = request.getStartDate();
 		String location = request.getLocation();
-		String topic = request.getTopic();
-		String packageGUID = request.getPackageGUID();
 		LessonFrequency lessonFrequency = request.getLessonFrequency();
+		String packageGUID = request.getPackageGUID();
 
-		List<LessonEntity> newLessonEntities = lessonService.createLessons(studentGUID, instructorGUID, startDate, location, topic, subjectGUID, packageGUID, lessonFrequency);
-		return ResponseEntity.ok(newLessonEntities.stream().map(LessonTranslator::toDto).toList());
+		List<LessonEntity> lessonEntities = lessonService.precreateLessons(studentGUID, instructorGUID, subjectGUID, packageGUID, startDate, lessonFrequency, location);
+		return ResponseEntity.ok(lessonEntities.stream().map(LessonTranslator::toDto).toList());
+	}
+
+	@PostMapping("/createLessons")
+	public ResponseEntity<CreateLessonsResponse> createLessons(@RequestBody CreateLessonsRequest request) throws ResourceNotFoundException {
+		String subjectGUID = request.getSubjectGUID();
+		String instructorGUID = request.getInstructorGUID();
+		String studentGUID = request.getStudentGUID();
+		String packageGUID = request.getPackageGUID();
+
+
+		List<LessonEntity> lessonEntities = request.getPrecreatedLessons().stream().map(LessonTranslator::toEntity).toList();
+		String transactionGUID = lessonService.createLessons(lessonEntities, studentGUID, instructorGUID, subjectGUID, packageGUID);
+		return ResponseEntity.ok(CreateLessonsResponse.builder()
+				.transactionGUID(transactionGUID)
+				.build()
+		);
 	}
 
 	@GetMapping

@@ -23,6 +23,7 @@ public class LessonEntity {
 	private String instructorGUID;
 	private String instructorName;
 	private LocalDateTime startDate;
+	private LocalDateTime endDate;
 	private String location;
 	private String topic;
 	private String instructorComments;

@@ -36,16 +36,14 @@ public class LessonService {
 	private final PackageRepository packageRepository;
 	private final TransactionRepository transactionRepository;
 
-	@Transactional
-	public List<LessonEntity> createLessons(
+	public List<LessonEntity> precreateLessons(
 			String studentGUID,
 			String instructorGUID,
-			LocalDateTime startDate,
-			String location,
-			String topic,
 			String subjectGUID,
 			String packageGUID,
-			LessonFrequency lessonFrequency
+			LocalDateTime startDate,
+			LessonFrequency lessonFrequency,
+			String location
 	) throws ResourceNotFoundException {
 		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectGUID(subjectGUID);
 		Optional<PackageEntity> optionalPackage = packageRepository.getPackageByPackageGUID(packageGUID);
@@ -53,21 +51,19 @@ public class LessonService {
 			SubjectEntity subjectEntity = optionalSubject.get();
 			PackageEntity packageEntity = optionalPackage.get();
 			List<LessonEntity> lessonEntities = new LinkedList<>();
-			String transactionGUID = UUID.randomUUID().toString();
 			for (int i = 0; i < packageEntity.getNumberOfLessons(); i++) {
 				LessonStatus lessonStatus = startDate == null? LessonStatus.CREATED : LessonStatus.SCHEDULED;
 				lessonEntities.add(
-					LessonEntity.builder()
-						.lessonGUID(UUID.randomUUID().toString())
-						.studentGUID(studentGUID)
-						.instructorGUID(instructorGUID)
-						.startDate(startDate == null? LocalDateTime.MAX: startDate)
-						.location(location)
-						.topic(topic)
-						.lessonStatus(lessonStatus)
-						.subjectGUID(subjectGUID)
-						.transactionGUID(transactionGUID)
-						.build()
+						LessonEntity.builder()
+								.lessonGUID(UUID.randomUUID().toString())
+								.studentGUID(studentGUID)
+								.instructorGUID(instructorGUID)
+								.startDate(startDate == null? LocalDateTime.MAX: startDate)
+								.endDate(startDate == null? LocalDateTime.MAX: startDate.plusMinutes(subjectEntity.getDuration()))
+								.location(location)
+								.lessonStatus(lessonStatus)
+								.subjectGUID(subjectGUID)
+								.build()
 				);
 				switch (lessonFrequency) {
 					case DAILY -> startDate = startDate.plusDays(1);
@@ -76,6 +72,28 @@ public class LessonService {
 					default -> startDate = null;
 				}
 			}
+
+			return lessonEntities;
+		} else {
+			throw new ResourceNotFoundException("subjectGUID: " + subjectGUID + " or packageGUID: " + packageGUID + " not found for instructorGUID: " + instructorGUID);
+		}
+
+	}
+
+	@Transactional
+	public String createLessons(
+			List<LessonEntity> lessonEntities,
+			String studentGUID,
+			String instructorGUID,
+			String subjectGUID,
+			String packageGUID
+	) throws ResourceNotFoundException {
+		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectGUID(subjectGUID);
+		Optional<PackageEntity> optionalPackage = packageRepository.getPackageByPackageGUID(packageGUID);
+		if (optionalSubject.isPresent() && optionalPackage.isPresent()) {
+			SubjectEntity subjectEntity = optionalSubject.get();
+			PackageEntity packageEntity = optionalPackage.get();
+			String transactionGUID = UUID.randomUUID().toString();
 
 			TransactionStatus transactionStatus = TransactionStatus.PENDING;
 			LocalDateTime creationDate = LocalDateTime.now();
@@ -92,9 +110,10 @@ public class LessonService {
 			transactionRepository.insertTransaction(transactionEntity);
 
 			for (LessonEntity newLessonEntity : lessonEntities) {
+				newLessonEntity.setSubjectGUID(subjectGUID);
 				lessonRepository.insertLesson(newLessonEntity);
 			}
-			return lessonEntities;
+			return transactionGUID;
 		} else {
 			throw new ResourceNotFoundException("subjectGUID: " + subjectGUID + " or packageGUID: " + packageGUID + " not found for instructorGUID: " + instructorGUID);
 		}
