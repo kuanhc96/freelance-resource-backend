@@ -28,6 +28,7 @@ public class LessonMapper implements RowMapper<LessonEntity> {
 	public static final String SUBJECT_GUID = "subject_guid";
 	public static final String SUBJECT_NAME = "subject_name";
 	public static final String TRANSACTION_GUID = "transaction_guid";
+	public static final String DURATION = "duration";
 
 
 	@Override
@@ -48,6 +49,7 @@ public class LessonMapper implements RowMapper<LessonEntity> {
 				.lessonRating(LessonRating.getValue(rs.getInt(LESSON_RATING)))
 				.subjectGUID(rs.getString(SUBJECT_GUID))
 				.subjectName(rs.getString(SUBJECT_NAME))
+				.duration(rs.getInt(DURATION))
 				.build();
 		return lesson;
 	}

@@ -17,6 +17,7 @@ public class LessonTranslator {
 				.startDate(lessonEntity.getStartDate())
 				.location(lessonEntity.getLocation())
 				.subjectName(lessonEntity.getSubjectName())
+				.endDate(lessonEntity.getStartDate().plusMinutes(lessonEntity.getDuration()))
 				.lessonStatus(lessonEntity.getLessonStatus())
 				.build();
 	}

@@ -21,22 +21,22 @@ public class LessonRepository {
 
 	private String getLessonByLessonGUID = "SELECT * FROM lessons WHERE lesson_guid = :lesson_guid";
 
-	private String getLessonsByStudentGUID = "SELECT i.`name` instructor_name, s.`name` student_name, l.*, sub.subject_name " +
+	private String getLessonsByStudentGUID = "SELECT i.`name` instructor_name, s.`name` student_name, l.*, sub.subject_name, sub.duration " +
 			"FROM lessons l " +
 			"JOIN users i " +
 			"ON l.instructor_guid = i.user_guid " +
 			"JOIN users s " +
-			"ON l.instructor_guid = s.user_guid " +
+			"ON l.student_guid = s.user_guid " +
 			"JOIN subjects sub " +
 			"ON l.subject_guid = sub.subject_guid " +
 			"WHERE l.student_guid = :student_guid";
 
-	private String getLessonsByInstructorGUID = "SELECT s.`name` student_name, i.`name` instructor_name, l.*, sub.subject_name " +
+	private String getLessonsByInstructorGUID = "SELECT s.`name` student_name, i.`name` instructor_name, l.*, sub.subject_name, sub.duration " +
 			"FROM lessons l " +
 			"JOIN users s " +
 			"ON l.student_guid = s.user_guid " +
 			"JOIN users i " +
-			"ON l.student_guid = i.user_guid " +
+			"ON l.instructor_guid = i.user_guid " +
 			"JOIN subjects sub " +
 			"ON l.subject_guid = sub.subject_guid " +
 			"WHERE l.instructor_guid = :instructor_guid";

@@ -28,6 +28,7 @@ public class LessonEntity {
 	private String instructorComments;
 	private String subjectGUID;
 	private String subjectName;
+	private Integer duration;
 	private String studentFeedback;
 	private LessonStatus lessonStatus;
 	private LessonRating lessonRating;
