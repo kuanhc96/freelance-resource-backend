@@ -19,7 +19,7 @@ public class LessonMapper implements RowMapper<LessonEntity> {
 	public static final String INSTRUCTOR_GUID = "instructor_guid";
 	public static final String INSTRUCTOR_NAME = "instructor_name";
 	public static final String START_DATE = "start_date";
-	public static final String END_DATE = "start_date";
+	public static final String END_DATE = "end_date";
 	public static final String LOCATION = "location";
 	public static final String TOPIC = "topic";
 	public static final String INSTRUCTOR_COMMENTS = "instructor_comments";
