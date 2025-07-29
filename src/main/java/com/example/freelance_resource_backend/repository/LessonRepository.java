@@ -43,11 +43,11 @@ public class LessonRepository {
 
 	private String getLessonsByStudentGUIDAndInstructorGUID = "SELECT * FROM lesson WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 
-	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject_guid, lesson_status, lesson_rating, transaction_guid) " +
-			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location, :topic, :instructor_comments, :student_feedback, :subject_guid, :lesson_status, :lesson_rating, :transaction_guid)";
+	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location_guid, topic, instructor_comments, student_feedback, subject_guid, lesson_status, lesson_rating, transaction_guid) " +
+			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location_guid, :topic, :instructor_comments, :student_feedback, :subject_guid, :lesson_status, :lesson_rating, :transaction_guid)";
 
 	private String updateLessonByLessonGUID = "UPDATE lesson " +
-			"SET student_guid = :studentGUID, instructor_guid = :instructorGUID, start_date = :startDate, location = :location, " +
+			"SET student_guid = :studentGUID, instructor_guid = :instructorGUID, start_date = :startDate, location_guid = :location_guid, " +
 				"topic = :topic, instructor_comments = :instructorComments, student_feedback = :studentFeedback, subject_guid = :subject_guid, " +
 				"lesson_status = :lessonStatus, lesson_rating = :lessonRating " +
 			"WHERE lesson_guid = :lessonGUID";

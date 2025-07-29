@@ -24,7 +24,7 @@ public class LessonEntity {
 	private String instructorName;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
-	private String location;
+	private String locationGUID;
 	private String topic;
 	private String instructorComments;
 	private String subjectGUID;

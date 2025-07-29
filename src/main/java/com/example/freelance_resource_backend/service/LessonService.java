@@ -43,7 +43,7 @@ public class LessonService {
 			String packageGUID,
 			LocalDateTime startDate,
 			LessonFrequency lessonFrequency,
-			String location
+			String locationGUID
 	) throws ResourceNotFoundException {
 		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectGUID(subjectGUID);
 		Optional<PackageEntity> optionalPackage = packageRepository.getPackageByPackageGUID(packageGUID);
@@ -60,7 +60,7 @@ public class LessonService {
 								.instructorGUID(instructorGUID)
 								.startDate(startDate == null? LocalDateTime.MAX: startDate)
 								.endDate(startDate == null? LocalDateTime.MAX: startDate.plusMinutes(subjectEntity.getDuration()))
-								.location(location)
+								.locationGUID(locationGUID)
 								.lessonStatus(lessonStatus)
 								.subjectGUID(subjectGUID)
 								.build()
