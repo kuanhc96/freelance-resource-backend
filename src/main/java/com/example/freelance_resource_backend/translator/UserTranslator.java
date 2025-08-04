@@ -14,7 +14,7 @@ public class UserTranslator {
 				.gender(dto.getGender())
 				.description(dto.getDescription())
 				.birthday(dto.getBirthday())
-				.profilePicture(dto.getProfilePicture())
+				.profilePicture(dto.getProfilePicture() == null? "favicon.ico": dto.getProfilePicture())
 				.build();
 	}
 
