@@ -1,0 +1,33 @@
+services:
+  db:
+    image: "kuanskchen344/mysql-test:garmin"
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    networks:
+      - backend
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: user
+  freelance-resource-backend:
+    image: "kuanskchen344/test:garmin"
+    container_name: "freelance-resource-backend"
+    ports:
+      - "8081:8081"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    depends_on:
+      - db
+    networks:
+      - backend
+    environment:
+      DATABASE_HOST: db
+networks:
+  backend:
+    driver: "bridge"
