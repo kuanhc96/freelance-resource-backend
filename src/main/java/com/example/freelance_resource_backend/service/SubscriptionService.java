@@ -60,6 +60,8 @@ public class SubscriptionService {
 						.name(user.getName())
 						.email(user.getEmail())
 						.role(user.getRole())
+						.gender(user.getGender())
+						.profilePicture(user.getProfilePicture())
 						.build()
 				)
 				.toList();
@@ -76,6 +78,8 @@ public class SubscriptionService {
 						.name(user.getName())
 						.email(user.getEmail())
 						.role(user.getRole())
+						.gender(user.getGender())
+						.profilePicture(user.getProfilePicture())
 						.build()
 				)
 				.toList();
@@ -92,6 +96,8 @@ public class SubscriptionService {
 						.name(user.getName())
 						.email(user.getEmail())
 						.role(user.getRole())
+						.gender(user.getGender())
+						.profilePicture(user.getProfilePicture())
 						.build()
 				)
 				.toList();
