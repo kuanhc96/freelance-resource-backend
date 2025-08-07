@@ -21,7 +21,7 @@ public class LessonRepository {
 
 	private String getLessonByLessonGUID = "SELECT * FROM lessons WHERE lesson_guid = :lesson_guid";
 
-	private String getLessonsByStudentGUID = "SELECT i.`name` instructor_name, s.`name` student_name, l.*, sub.subject_name, sub.duration " +
+	private String getLessonsByStudentGUID = "SELECT i.`name` instructor_name, s.`name` student_name, l.*, sub.subject_name, sub.duration, loc.location_name " +
 			"FROM lessons l " +
 			"JOIN users i " +
 			"ON l.instructor_guid = i.user_guid " +
@@ -29,9 +29,11 @@ public class LessonRepository {
 			"ON l.student_guid = s.user_guid " +
 			"JOIN subjects sub " +
 			"ON l.subject_guid = sub.subject_guid " +
+			"JOIN locations loc " +
+			"ON loc.location_guid = l.location_guid " +
 			"WHERE l.student_guid = :student_guid";
 
-	private String getLessonsByInstructorGUID = "SELECT s.`name` student_name, i.`name` instructor_name, l.*, sub.subject_name, sub.duration " +
+	private String getLessonsByInstructorGUID = "SELECT s.`name` student_name, i.`name` instructor_name, l.*, sub.subject_name, sub.duration, loc.location_name " +
 			"FROM lessons l " +
 			"JOIN users s " +
 			"ON l.student_guid = s.user_guid " +
@@ -39,15 +41,17 @@ public class LessonRepository {
 			"ON l.instructor_guid = i.user_guid " +
 			"JOIN subjects sub " +
 			"ON l.subject_guid = sub.subject_guid " +
+			"JOIN locations loc " +
+			"ON loc.location_guid = l.location_guid " +
 			"WHERE l.instructor_guid = :instructor_guid";
 
 	private String getLessonsByStudentGUIDAndInstructorGUID = "SELECT * FROM lesson WHERE student_guid = :student_guid AND instructor_guid = :instructor_guid";
 
-	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location, topic, instructor_comments, student_feedback, subject_guid, lesson_status, lesson_rating, transaction_guid) " +
-			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location, :topic, :instructor_comments, :student_feedback, :subject_guid, :lesson_status, :lesson_rating, :transaction_guid)";
+	private String insertLesson = "INSERT INTO lessons (lesson_guid, student_guid, instructor_guid, start_date, location_guid, topic, instructor_comments, student_feedback, subject_guid, lesson_status, lesson_rating, transaction_guid) " +
+			"VALUES (:lesson_guid, :student_guid, :instructor_guid, :start_date, :location_guid, :topic, :instructor_comments, :student_feedback, :subject_guid, :lesson_status, :lesson_rating, :transaction_guid)";
 
 	private String updateLessonByLessonGUID = "UPDATE lesson " +
-			"SET student_guid = :studentGUID, instructor_guid = :instructorGUID, start_date = :startDate, location = :location, " +
+			"SET student_guid = :studentGUID, instructor_guid = :instructorGUID, start_date = :startDate, location_guid = :location_guid, " +
 				"topic = :topic, instructor_comments = :instructorComments, student_feedback = :studentFeedback, subject_guid = :subject_guid, " +
 				"lesson_status = :lessonStatus, lesson_rating = :lessonRating " +
 			"WHERE lesson_guid = :lessonGUID";
@@ -85,7 +89,7 @@ public class LessonRepository {
 		params.addValue(LessonMapper.STUDENT_GUID, lesson.getStudentGUID());
 		params.addValue(LessonMapper.INSTRUCTOR_GUID, lesson.getInstructorGUID());
 		params.addValue(LessonMapper.START_DATE, lesson.getStartDate());
-		params.addValue(LessonMapper.LOCATION, lesson.getLocation());
+		params.addValue(LessonMapper.LOCATION_GUID, lesson.getLocationGUID());
 		params.addValue(LessonMapper.TOPIC, lesson.getTopic());
 		params.addValue(LessonMapper.INSTRUCTOR_COMMENTS, lesson.getInstructorComments());
 		params.addValue(LessonMapper.STUDENT_FEEDBACK, lesson.getStudentFeedback());
@@ -102,7 +106,7 @@ public class LessonRepository {
 		params.addValue(LessonMapper.STUDENT_GUID, lesson.getStudentGUID());
 		params.addValue(LessonMapper.INSTRUCTOR_GUID, lesson.getInstructorGUID());
 		params.addValue(LessonMapper.START_DATE, lesson.getStartDate());
-		params.addValue(LessonMapper.LOCATION, lesson.getLocation());
+		params.addValue(LessonMapper.LOCATION_GUID, lesson.getLocationGUID());
 		params.addValue(LessonMapper.TOPIC, lesson.getTopic());
 		params.addValue(LessonMapper.INSTRUCTOR_COMMENTS, lesson.getInstructorComments());
 		params.addValue(LessonMapper.STUDENT_FEEDBACK, lesson.getStudentFeedback());

@@ -56,6 +56,10 @@ public class FreelanceUserDetailsService {
 				.userGUID(userEntity.getUserGUID())
 				.email(userEntity.getEmail())
 				.name(userEntity.getName())
+				.gender(userEntity.getGender())
+				.description(userEntity.getDescription())
+				.birthday(userEntity.getBirthday())
+				.profilePicture(userEntity.getProfilePicture())
 				.build();
 	}
 

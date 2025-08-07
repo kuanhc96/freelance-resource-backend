@@ -37,11 +37,11 @@ public class LessonController {
 		String instructorGUID = request.getInstructorGUID();
 		String studentGUID = request.getStudentGUID();
 		LocalDateTime startDate = request.getStartDate();
-		String location = request.getLocation();
+		String locationGUID = request.getLocationGUID();
 		LessonFrequency lessonFrequency = request.getLessonFrequency();
 		String packageGUID = request.getPackageGUID();
 
-		List<LessonEntity> lessonEntities = lessonService.precreateLessons(studentGUID, instructorGUID, subjectGUID, packageGUID, startDate, lessonFrequency, location);
+		List<LessonEntity> lessonEntities = lessonService.precreateLessons(studentGUID, instructorGUID, subjectGUID, packageGUID, startDate, lessonFrequency, locationGUID);
 		return ResponseEntity.ok(lessonEntities.stream().map(LessonTranslator::toDto).toList());
 	}
 

@@ -13,7 +13,7 @@ public class PrecreateLessonsRequest {
 	private String studentGUID;
 	private String instructorGUID;
 	private LocalDateTime startDate;
-	private String location;
+	private String locationGUID;
 	private String subjectGUID;
 	private String packageGUID;
 	private LessonFrequency lessonFrequency;
