@@ -11,6 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>freelance-resource-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>freelance-resource-backend</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -111,6 +112,21 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.2</version>
+				<configuration>
+					<from>
+						<image>
+							azul/zulu-openjdk:21.0.8
+						</image>
+					</from>
+					<to>
+						<image>kuanchen334/${project.artifactId}:v1</image>
+					</to>
 				</configuration>
 			</plugin>
 		</plugins>
