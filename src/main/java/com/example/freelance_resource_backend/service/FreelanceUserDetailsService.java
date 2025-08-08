@@ -60,6 +60,7 @@ public class FreelanceUserDetailsService {
 				.description(userEntity.getDescription())
 				.birthday(userEntity.getBirthday())
 				.profilePicture(userEntity.getProfilePicture())
+				.role(userEntity.getRole())
 				.build();
 	}
 
