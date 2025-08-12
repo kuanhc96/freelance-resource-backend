@@ -12,16 +12,18 @@ import com.example.freelance_resource_backend.dto.response.subject.GetSubjectRes
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.entities.PackageEntity;
 import com.example.freelance_resource_backend.entities.SubjectEntity;
+import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.PackageRepository;
 import com.example.freelance_resource_backend.repository.SubjectRepository;
+import com.example.freelance_resource_backend.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class SubjectService {
 	private final SubjectRepository subjectRepository;
 	private final PackageRepository packageRepository;
-	private final FreelanceUserDetailsService freelanceUserDetailsService;
+	private final UserRepository userRepository;
 
 	public SubjectEntity getSubject(String subjectName, String instructorGUID) throws ResourceNotFoundException {
 		Optional<SubjectEntity> optionalSubject = subjectRepository.getSubjectBySubjectNameAndInstructorGUID(subjectName, instructorGUID);
@@ -33,17 +35,21 @@ public class SubjectService {
 	}
 
 	public List<GetSubjectResponse> getSubjectsByInstructorGUID(String instructorGUID) throws ResourceNotFoundException {
-		GetUserResponse instructor = freelanceUserDetailsService.getUserByUserGUID(instructorGUID);
-		List<SubjectEntity> subjects = subjectRepository.getSubjectsByInstructorGUID(instructor.getUserGUID());
-		return subjects.stream().map(subject -> GetSubjectResponse.builder()
-				.subjectGUID((subject.getSubjectGUID()))
-				.subjectName(subject.getSubjectName())
-				.instructorName(instructor.getName())
-				.price(subject.getPrice())
-				.subjectDescription(subject.getSubjectDescription())
-				.duration(subject.getDuration())
-				.build()).collect(Collectors.toList());
-
+		Optional<UserEntity> optionalInstructor = userRepository.getUserByUserGUID(instructorGUID);
+		if (optionalInstructor.isPresent()) {
+			UserEntity instructor = optionalInstructor.get();
+			List<SubjectEntity> subjects = subjectRepository.getSubjectsByInstructorGUID(instructor.getUserGUID());
+			return subjects.stream().map(subject -> GetSubjectResponse.builder()
+					.subjectGUID((subject.getSubjectGUID()))
+					.subjectName(subject.getSubjectName())
+					.instructorName(instructor.getName())
+					.price(subject.getPrice())
+					.subjectDescription(subject.getSubjectDescription())
+					.duration(subject.getDuration())
+					.build()).collect(Collectors.toList());
+		} else {
+			throw new ResourceNotFoundException("Instructor with GUID: " + instructorGUID + " not found");
+		}
 	}
 
 	public SubjectEntity createSubject(String subjectName, String instructorGUID, Integer price, Integer duration, String subjectDescription) {
