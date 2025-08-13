@@ -3,6 +3,7 @@ package com.example.freelance_resource_backend.controller;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,12 @@ import com.example.freelance_resource_backend.repository.UserRepository;
 @RequiredArgsConstructor
 public class UserController {
 	private final UserRepository userRepository;
+
+	@GetMapping("/test")
+	@PreAuthorize("hasRole('ROLE_INSTRUCTOR')")
+	public ResponseEntity<String> test() {
+		return ResponseEntity.ok("User service is running");
+	}
 
 	@GetMapping("/{userGUID}")
 	public ResponseEntity<GetUserResponse> getUserByUserGUID(@PathVariable String userGUID) throws ResourceNotFoundException {
