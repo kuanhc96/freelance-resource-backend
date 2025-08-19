@@ -20,7 +20,6 @@ public class AuthServerRoleConverter implements Converter<Jwt, Collection<Grante
 			return new ArrayList<>();
 		}
 		Collection<GrantedAuthority> grantedAuthorities = scopes.stream()
-				.map(scope -> "ROLE_" + scope) // Prefixing with "ROLE_"
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
 
