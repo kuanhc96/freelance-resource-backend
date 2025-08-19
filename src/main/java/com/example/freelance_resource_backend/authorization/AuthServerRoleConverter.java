@@ -15,13 +15,22 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class AuthServerRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 	@Override
 	public Collection<GrantedAuthority> convert(Jwt source) {
-		ArrayList<String> roles = (ArrayList<String>) source.getClaims().get("scope");
-		if (roles == null || roles.isEmpty()) {
+		ArrayList<String> scopes = (ArrayList<String>) source.getClaims().get("scope");
+		if (scopes == null || scopes.isEmpty()) {
 			return new ArrayList<>();
 		}
-		Collection<GrantedAuthority> returnValue = roles.stream().map(roleName -> "ROLE_" + roleName)
+		Collection<GrantedAuthority> grantedAuthorities = scopes.stream()
+				.map(scope -> "ROLE_" + scope) // Prefixing with "ROLE_"
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
-		return returnValue;
+
+		ArrayList<String> roles = (ArrayList<String>) source.getClaims().get("roles");
+		if (roles == null || roles.isEmpty()) {
+			return grantedAuthorities;
+		}
+		grantedAuthorities.addAll(roles.stream()
+				.map(SimpleGrantedAuthority::new)
+				.toList());
+		return grantedAuthorities;
 	}
 }

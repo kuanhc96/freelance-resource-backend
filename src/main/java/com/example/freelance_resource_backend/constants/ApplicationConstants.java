@@ -7,10 +7,10 @@ public class ApplicationConstants {
 	public static final String ROLE_INSTRUCTOR = "hasRole('ROLE_INSTRUCTOR')";
 
 	// client level security
-	public static final String ROLE_INTEGRATION_TEST = "hasRole('ROLE_INTEGRATION_TEST')";
-	public static final String ROLE_FREELANCE_FE = "hasRole('ROLE_FREELANCE_FE')";
+	public static final String INTEGRATION_TEST = "hasRole('INTEGRATION_TEST')";
+	public static final String FREELANCE_FE = "hasRole('FREELANCE_FE')";
 
-	public static final String INSTRUCTOR = "(" + ROLE_INSTRUCTOR + " and " + ROLE_FREELANCE_FE + ") or " + ROLE_INTEGRATION_TEST;
-	public static final String STUDENT = "(" + ROLE_STUDENT + " and " + ROLE_FREELANCE_FE + ") or " + ROLE_INTEGRATION_TEST;
-	public static final String INSTRUCTOR_OR_STUDENT = ROLE_INSTRUCTOR + " or " + ROLE_STUDENT + " or " + ROLE_INTEGRATION_TEST;
+	public static final String INSTRUCTOR = "(" + ROLE_INSTRUCTOR + " and " + FREELANCE_FE + ") or " + INTEGRATION_TEST;
+	public static final String STUDENT = "(" + ROLE_STUDENT + " and " + FREELANCE_FE + ") or " + INTEGRATION_TEST;
+	public static final String INSTRUCTOR_OR_STUDENT = ROLE_INSTRUCTOR + " or " + ROLE_STUDENT + " or " + INTEGRATION_TEST;
 }

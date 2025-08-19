@@ -1,11 +1,14 @@
 package com.example.freelance_resource_backend.controller;
 
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +38,7 @@ public class AnnouncementController {
 	private final UserRepository userRepository;
 
 	@PostMapping("/createAnnouncement")
+	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<CreateAnnouncementResponse> createAnnouncement(@RequestBody CreateAnnouncementRequest request) throws ResourceNotFoundException {
 		AnnouncementEntity announcementEntity = announcementService.createAnnouncement(request.getInstructorGUID(), request.getTitle(), request.getAnnouncement());
 

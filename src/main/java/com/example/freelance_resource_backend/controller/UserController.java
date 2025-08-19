@@ -1,5 +1,8 @@
 package com.example.freelance_resource_backend.controller;
 
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.STUDENT;
+
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -28,7 +31,7 @@ public class UserController {
 	private final UserRepository userRepository;
 
 	@GetMapping("/test")
-	@PreAuthorize("hasRole('ROLE_INSTRUCTOR')")
+	@PreAuthorize(STUDENT)
 	public ResponseEntity<String> test() {
 		return ResponseEntity.ok("User service is running");
 	}
