@@ -1,6 +1,7 @@
 package com.example.freelance_resource_backend.controller;
 
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR_OR_STUDENT;
 
 import java.util.Comparator;
 import java.util.List;
@@ -53,6 +54,7 @@ public class AnnouncementController {
 	}
 
 	@GetMapping("/{instructorGUID}")
+	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<List<GetAnnouncementResponse>> getAnnouncements(@PathVariable String instructorGUID) throws ResourceNotFoundException {
 		Optional<UserEntity> optionalInstructor = userRepository.getUserByUserGUID(instructorGUID);
 		if (optionalInstructor.isPresent()) {
@@ -78,6 +80,7 @@ public class AnnouncementController {
 	}
 
 	@PutMapping("/update")
+	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<Void> updateAnnouncement(@RequestBody UpdateAnnouncementRequest updateAnnouncementRequest) throws ResourceNotFoundException {
 		announcementService.updateAnnouncement(updateAnnouncementRequest);
 		return ResponseEntity.ok().build();

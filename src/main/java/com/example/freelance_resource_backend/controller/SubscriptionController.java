@@ -1,5 +1,8 @@
 package com.example.freelance_resource_backend.controller;
 
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.STUDENT;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,7 @@ public class SubscriptionController {
 	private final SubscriptionService subscriptionService;
 
 	@PostMapping
+	@PreAuthorize(STUDENT)
 	public ResponseEntity<Boolean> subscribe(@RequestBody SubscribeRequest subscribeRequest) {
 		// Logic for subscription
 		boolean result = subscriptionService.subscribe(subscribeRequest.getStudentGUID(), subscribeRequest.getInstructorGUID());
@@ -34,6 +38,7 @@ public class SubscriptionController {
 	}
 
 	@DeleteMapping
+	@PreAuthorize(STUDENT)
 	public ResponseEntity<Boolean> unsubscribe(@RequestBody SubscribeRequest unsubscribeRequest) {
 		// Logic for subscription
 		boolean result = subscriptionService.unsubscribe(unsubscribeRequest.getStudentGUID(), unsubscribeRequest.getInstructorGUID());
@@ -41,6 +46,7 @@ public class SubscriptionController {
 	}
 
 	@PutMapping
+	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<Boolean> confirmSubscription(@RequestBody SubscribeRequest confirmRequest) {
 		// Logic for updating subscription
 		boolean result = subscriptionService.confirmSubscription(confirmRequest.getStudentGUID(), confirmRequest.getInstructorGUID());
@@ -48,20 +54,21 @@ public class SubscriptionController {
 	}
 
 	@GetMapping("/instructors/{studentGUID}")
-//	@PreAuthorize(ApplicationConstants.ROLE_INSTRUCTOR)
+	@PreAuthorize(STUDENT)
 	public ResponseEntity<List<GetUserResponse>> getInstructorsSubscribedTo(@PathVariable String studentGUID) {
 		List<GetUserResponse> instructorsSubscribedTo = subscriptionService.getInstructorsSubscribedTo(studentGUID);
 		return ResponseEntity.ok(instructorsSubscribedTo);
 	}
 
 	@GetMapping("/unsubscribed/{studentGUID}")
+	@PreAuthorize(STUDENT)
 	public ResponseEntity<List<GetUserResponse>> getInstructorsNotSubscribedTo(@PathVariable String studentGUID) {
 		List<GetUserResponse> instructorsNotSubscribedTo = subscriptionService.getInstructorsNotSubscribedTo(studentGUID);
 		return ResponseEntity.ok(instructorsNotSubscribedTo);
 	}
 
 	@GetMapping("/students/{instructorGUID}")
-//	@PreAuthorize(ApplicationConstants.ROLE_INSTRUCTOR)
+	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<List<GetUserResponse>> getSubscribedStudents(@PathVariable String instructorGUID) {
 		List<GetUserResponse> myStudents = subscriptionService.getSubscribedStudentsByInstructorGUID(instructorGUID);
 		return ResponseEntity.ok(myStudents);
