@@ -30,7 +30,6 @@ import com.example.freelance_resource_backend.handler.CustomAuthenticationFailur
 import com.example.freelance_resource_backend.handler.CustomAuthenticationSuccessHandler;
 
 @Configuration
-@Profile("!dev")
 public class ProjectSecurityConfig {
 	@Autowired
 	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
@@ -39,6 +38,18 @@ public class ProjectSecurityConfig {
 	private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 	@Bean
+	@Profile("dev")
+	public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
+		http
+				.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests((requests) -> requests
+						.anyRequest().permitAll()
+				);
+		return http.build();
+	}
+
+	@Bean
+	@Profile("!dev")
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
 		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new AuthServerRoleConverter());

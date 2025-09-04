@@ -30,5 +30,7 @@ accounts:
     - 123456789
     - 987654321
 logging:
+  level:
+    org.springframework.security: DEBUG
   pattern:
     console: "%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n"
