@@ -1,7 +1,10 @@
 package com.example.freelance_resource_backend.controller;
 
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR_OR_STUDENT;
+
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +28,7 @@ public class LocationController {
 	private final LocationService locationService;
 
 	@PostMapping("/createLocation")
+	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public CreateLocationResponse createLocation(@RequestBody CreateLocationRequest request) throws ResourceNotFoundException {
 		LocationEntity locationEntity = locationService.createLocation(
 				request.getUserGUID(),
@@ -40,6 +44,7 @@ public class LocationController {
 	}
 
 	@GetMapping("/{userGUID}")
+	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public List<GetLocationResponse> getLocations(@PathVariable String userGUID) throws ResourceNotFoundException {
 		return locationService.getLocationsByUserGUID(userGUID);
 	}

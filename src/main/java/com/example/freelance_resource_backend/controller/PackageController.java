@@ -1,8 +1,12 @@
 package com.example.freelance_resource_backend.controller;
 
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR_OR_STUDENT;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +30,7 @@ public class PackageController {
 	private final PackageService packageService;
 
 	@GetMapping("/{packageGUID}")
+	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<GetPackageResponse> getPackage(@PathVariable String packageGUID) throws ResourceNotFoundException {
 		PackageEntity packageEntity = packageService.getPackageByPackageGUID(packageGUID);
 		return ResponseEntity.ok(GetPackageResponse.builder()
@@ -38,6 +43,7 @@ public class PackageController {
 	}
 
 	@GetMapping("/subject/{subjectGUID}/{discountCode}")
+	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<GetPackageResponse> getPackage(@PathVariable String subjectGUID, @PathVariable String discountCode) throws ResourceNotFoundException {
 		PackageEntity packageEntity = packageService.getPackageByDiscountCodeAndSubjectGUID(discountCode, subjectGUID);
 		return ResponseEntity.ok(GetPackageResponse.builder()
@@ -50,6 +56,7 @@ public class PackageController {
 	}
 
 	@GetMapping("/subject/{subjectGUID}")
+	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<List<GetPackageResponse>> getPackageBySubject(@PathVariable String subjectGUID) throws ResourceNotFoundException {
 		List<GetPackageResponse> packages = packageService.getPackagesBySubjectGUID(subjectGUID)
 				.stream()
@@ -66,6 +73,7 @@ public class PackageController {
 	}
 
 	@PostMapping("/createPackage")
+	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<CreatePackageResponse> createPackage(@RequestBody CreatePackageRequest request) {
 		PackageEntity packageEntity = packageService.createPackage(request.getSubjectGUID(), request.getDiscountCode(), request.getNumberOfLessons(), request.getDiscountRate());
 		return ResponseEntity.ok(CreatePackageResponse.builder()

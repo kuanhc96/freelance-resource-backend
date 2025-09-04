@@ -1,8 +1,12 @@
 package com.example.freelance_resource_backend.controller;
 
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR_OR_STUDENT;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +35,7 @@ public class SubjectController {
 	private final SubjectService subjectService;
 
 	@PostMapping("/createSubject")
+	@PreAuthorize(INSTRUCTOR)
 	public CreateSubjectResponse createSubject(@RequestBody CreateSubjectRequest request) {
 		SubjectEntity subjectEntity = subjectService.createSubject(
 				request.getSubjectName(),
@@ -48,6 +53,7 @@ public class SubjectController {
 	}
 
 	@GetMapping("/{instructorGUID}")
+	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<List<GetSubjectResponse>> getSubjectsByInstructor(@PathVariable String instructorGUID) throws ResourceNotFoundException {
 		List<GetSubjectResponse> subjects = subjectService.getSubjectsByInstructorGUID(instructorGUID);
 		if (subjects.isEmpty()) {
@@ -58,6 +64,7 @@ public class SubjectController {
 	}
 
 	@PutMapping("/updateSubjectName")
+	@PreAuthorize(INSTRUCTOR)
 	public UpdateSubjectNameResponse updateSubjectName(@RequestBody UpdateSubjectNameRequest updateSubjectRequest) throws ResourceNotFoundException {
 		subjectService.updateSubjectName(updateSubjectRequest.getSubjectName(), updateSubjectRequest.getInstructorGUID(), updateSubjectRequest.getNewSubjectName());
 		return UpdateSubjectNameResponse.builder()
@@ -67,6 +74,7 @@ public class SubjectController {
 	}
 
 	@PutMapping("/updateSubjectPrice")
+	@PreAuthorize(INSTRUCTOR)
 	public UpdateSubjectPriceResponse updateSubjectPrice(@RequestBody UpdateSubjectPriceRequest updateSubjectRequest) throws ResourceNotFoundException {
 		subjectService.updateSubjectPrice(updateSubjectRequest.getSubjectName(), updateSubjectRequest.getInstructorGUID(), updateSubjectRequest.getPrice());
 		return UpdateSubjectPriceResponse.builder()
