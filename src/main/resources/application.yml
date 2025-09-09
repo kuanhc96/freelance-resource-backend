@@ -3,3 +3,9 @@ spring:
     name: freelance-resource-backend
   config:
     import: configserver:http://localhost:8071
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

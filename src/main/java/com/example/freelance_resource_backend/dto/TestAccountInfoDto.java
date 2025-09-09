@@ -5,10 +5,14 @@ import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @ConfigurationProperties(prefix = "accounts")
-public record TestAccountInfoDto(
-		String message,
-		Map<String, String> details,
-		List<String> support
-) {
+@Getter
+@Setter
+public class TestAccountInfoDto {
+	private String message;
+	private Map<String, String> details;
+	private List<String> support;
 }
