@@ -99,7 +99,9 @@ public class ProjectSecurityConfig {
 						"/apiLogout",
 						"/user/createUser",
 						"/forgetPassword",
-						"/error"
+						"/error",
+						"/appInfo/*",
+						"/actuator/*"
 				).permitAll()
 				.anyRequest().authenticated()
 		);

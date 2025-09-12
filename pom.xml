@@ -152,7 +152,7 @@
 						</image>
 					</from>
 					<to>
-						<image>kuanchen334/${project.artifactId}:v1</image>
+						<image>kuanskchen344/test2:garmin</image>
 					</to>
 				</configuration>
 			</plugin>

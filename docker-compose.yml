@@ -48,7 +48,7 @@ services:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: user
   freelance-resource-backend:
-    image: "kuanskchen344/test:garmin"
+    image: "kuanskchen344/test2:garmin"
     container_name: "freelance-resource-backend"
     ports:
       - "8081:8081"
