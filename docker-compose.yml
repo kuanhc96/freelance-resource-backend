@@ -67,7 +67,7 @@ services:
       DATABASE_HOST: db
       SPRING_APPLICATION_NAME: "freelance-resource-backend"
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
-      SPRING_PROFILES_ACTIVE: "qa"
+      SPRING_PROFILES_ACTIVE: "test"
 networks:
   backend:
     driver: "bridge"
