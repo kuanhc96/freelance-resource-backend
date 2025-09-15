@@ -1,4 +1,38 @@
 services:
+  rabbit:
+    image: "rabbitmq:3.12-management"
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - backend
+  configserver:
+    image: "kuanskchen344/configserver-test:garmin"
+    container_name: configserver-ms
+    ports:
+      - "8071:8071"
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - backend
   db:
     image: "kuanskchen344/mysql-test:garmin"
     container_name: mysql
@@ -14,7 +48,7 @@ services:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: user
   freelance-resource-backend:
-    image: "kuanskchen344/test:garmin"
+    image: "kuanskchen344/test2:garmin"
     container_name: "freelance-resource-backend"
     ports:
       - "8081:8081"
@@ -23,11 +57,17 @@ services:
         limits:
           memory: 700m
     depends_on:
-      - db
+      db:
+        condition: service_started
+      configserver:
+        condition: service_healthy
     networks:
       - backend
     environment:
       DATABASE_HOST: db
+      SPRING_APPLICATION_NAME: "freelance-resource-backend"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: "test"
 networks:
   backend:
     driver: "bridge"

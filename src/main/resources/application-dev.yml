@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: freelance-resource-backend
+  cloud:
+    config:
+      enabled: false
+    bus:
+      enabled: false
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+      platform: h2
+      schema-locations: classpath:dump.sql
+server:
+  port: 8081
+
+management:
+  health:
+    rabbit:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+app:
+  version: "1.0"
+
+accounts:
+  message: "test message DEV"
+  details:
+    name: "Kuan"
+    email: "test@example.com"
+  support:
+    - 123456789
+    - 987654321
+logging:
+  level:
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n"

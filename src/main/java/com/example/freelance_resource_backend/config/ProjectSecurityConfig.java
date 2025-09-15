@@ -5,6 +5,9 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,6 +38,19 @@ public class ProjectSecurityConfig {
 	private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 	@Bean
+	@Profile("dev")
+	public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
+		http
+				.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests((requests) -> requests
+						.anyRequest().permitAll()
+				)
+				.headers(h -> h.frameOptions(fo -> fo.sameOrigin()));
+		return http.build();
+	}
+
+	@Bean
+	@Profile("!dev")
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
 		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new AuthServerRoleConverter());
@@ -84,7 +100,9 @@ public class ProjectSecurityConfig {
 						"/apiLogout",
 						"/user/createUser",
 						"/forgetPassword",
-						"/error"
+						"/error",
+						"/appInfo/*",
+						"/actuator/*"
 				).permitAll()
 				.anyRequest().authenticated()
 		);
