@@ -1,6 +1,11 @@
 spring:
   application:
     name: freelance-resource-backend
+  cloud:
+    config:
+      enabled: false
+    bus:
+      enabled: false
   config:
     activate:
       on-profile: dev
@@ -26,8 +31,11 @@ spring:
       platform: h2
 server:
   port: 8081
-  
+
 management:
+  health:
+    rabbit:
+      enabled: false
   endpoints:
     web:
       exposure:
