@@ -44,7 +44,8 @@ public class ProjectSecurityConfig {
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests((requests) -> requests
 						.anyRequest().permitAll()
-				);
+				)
+				.headers(h -> h.frameOptions(fo -> fo.sameOrigin()));
 		return http.build();
 	}
 
