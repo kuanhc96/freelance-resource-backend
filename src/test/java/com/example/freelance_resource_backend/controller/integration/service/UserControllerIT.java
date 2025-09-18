@@ -10,6 +10,7 @@ import static com.example.freelance_resource_backend.controller.integration.conf
 import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_STUDENT_GUID;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.UUID;
 
@@ -66,6 +67,15 @@ public class UserControllerIT {
 
 		GetUserResponse student = helper.getUserByUserEmailAndRole(TEST_STUDENT_EMAIL, UserRole.STUDENT);
 		checkStudentDetails(student);
+	}
+
+	@Test
+	void getUserByUserEmailAndRole_notFound_404() {
+		HttpClientErrorException ex = assertThrows(
+				HttpClientErrorException.class,
+				() -> helper.getUserByUserEmailAndRole("testEmail" + LocalDateTime.now().toString(), UserRole.INSTRUCTOR)
+		);
+		assertEquals(ex.getStatusCode(), HttpStatus.NOT_FOUND);
 	}
 
 	private void checkInstructorDetails(GetUserResponse instructor) {
