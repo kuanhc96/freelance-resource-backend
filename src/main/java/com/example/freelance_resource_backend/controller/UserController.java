@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import com.example.freelance_resource_backend.dto.request.user.GetUserRequest;
 import com.example.freelance_resource_backend.dto.response.user.CreateUserResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.entities.UserEntity;
+import com.example.freelance_resource_backend.enums.UserRole;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
 import com.example.freelance_resource_backend.repository.UserRepository;
 
@@ -71,8 +73,11 @@ public class UserController {
 
 	@GetMapping
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
-	public ResponseEntity<GetUserResponse> getUserByUserEmailAndRole(@RequestBody GetUserRequest request) throws ResourceNotFoundException {
-		Optional<UserEntity> optionalUserEntity = userRepository.getUserByEmailAndRole(request.getEmail(), request.getRole());
+	public ResponseEntity<GetUserResponse> getUserByUserEmailAndRole(
+			@RequestParam String email,
+			@RequestParam UserRole role
+	) throws ResourceNotFoundException {
+		Optional<UserEntity> optionalUserEntity = userRepository.getUserByEmailAndRole(email, role);
 		if (optionalUserEntity.isPresent()) {
 			UserEntity userEntity = optionalUserEntity.get();
 			return ResponseEntity.ok(
@@ -88,7 +93,7 @@ public class UserController {
 							.build()
 			);
 		} else {
-			throw new ResourceNotFoundException("User with email " + request.getEmail() + " and role " + request.getRole() + " not found.");
+			throw new ResourceNotFoundException("User with email " + email + " and role " + role + " not found.");
 		}
 	}
 }

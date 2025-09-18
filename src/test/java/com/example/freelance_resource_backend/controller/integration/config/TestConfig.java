@@ -15,7 +15,9 @@ import com.example.freelance_resource_backend.controller.integration.helper.OAut
 @EnableConfigurationProperties
 public class TestConfig {
 	public static final String TEST_INSTRUCTOR_GUID = "36946828-6696-4b83-be33-6093f2efef70";
+	public static final String TEST_INSTRUCTOR_EMAIL = "kuandalice@gmail.com";
 	public static final String TEST_STUDENT_GUID = "3b7adf98-c0b1-4fe5-959f-23ba833c74a0";
+	public static final String TEST_STUDENT_EMAIL = "kuantest1234@example.com";
 
 	@Value("${application.resourceUrl}")
 	private String resourceUrl;

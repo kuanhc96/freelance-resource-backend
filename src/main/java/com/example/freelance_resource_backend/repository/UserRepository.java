@@ -36,7 +36,7 @@ public class UserRepository {
 	public Optional<UserEntity> getUserByEmailAndRole(String email, UserRole role) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue(UserMapper.EMAIL, email);
-		params.addValue(UserMapper.ROLE, role.getValue());
+		params.addValue(UserMapper.ROLE, role.name());
 		try {
 			return Optional.ofNullable(jdbcTemplate.queryForObject(getUserByEmailAndRole, params, userMapper));
 		} catch (EmptyResultDataAccessException e) {
