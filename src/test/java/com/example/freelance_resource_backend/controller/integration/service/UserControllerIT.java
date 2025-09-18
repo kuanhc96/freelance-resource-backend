@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_INSTRUCTOR_EMAIL;
 import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_INSTRUCTOR_GUID;
+import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_STUDENT_EMAIL;
 import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_STUDENT_GUID;
 
 import java.time.LocalDate;
@@ -43,24 +45,11 @@ public class UserControllerIT {
 	@Test
 	void getUserByUserGUID_success() {
 		GetUserResponse instructor = helper.getUserByUserGUID(TEST_INSTRUCTOR_GUID);
-
-		assertNotNull(instructor);
-		assertEquals(TEST_INSTRUCTOR_GUID, instructor.getUserGUID());
-		assertEquals(UserRole.INSTRUCTOR, instructor.getRole());
-		assertEquals("Alice Ho", instructor.getName());
-		assertEquals("kuandalice@gmail.com", instructor.getEmail());
-		assertEquals(Gender.FEMALE, instructor.getGender());
-		assertEquals(LocalDate.of(1996, Month.AUGUST, 5), instructor.getBirthday());
+		checkInstructorDetails(instructor);
 
 		GetUserResponse student = helper.getUserByUserGUID(TEST_STUDENT_GUID);
+		checkStudentDetails(student);
 
-		assertNotNull(student);
-		assertEquals(TEST_STUDENT_GUID, student.getUserGUID());
-		assertEquals(UserRole.STUDENT, student.getRole());
-		assertEquals("kuantest1234@example.com", student.getEmail());
-		assertEquals("Kuantest", student.getName());
-		assertEquals(Gender.MALE, student.getGender());
-		assertEquals(LocalDate.of(2025, Month.MAY, 12), student.getBirthday());
 	}
 
 	@Test
@@ -69,4 +58,35 @@ public class UserControllerIT {
 		assertEquals(ex.getStatusCode(), HttpStatus.NOT_FOUND);
 		System.out.println(ex.getMessage());
 	}
+
+	@Test
+	void getUserByUserEmailAndRole_success() {
+		GetUserResponse instructor = helper.getUserByUserEmailAndRole(TEST_INSTRUCTOR_EMAIL, UserRole.INSTRUCTOR);
+		checkInstructorDetails(instructor);
+
+		GetUserResponse student = helper.getUserByUserEmailAndRole(TEST_STUDENT_EMAIL, UserRole.STUDENT);
+		checkStudentDetails(student);
+	}
+
+	private void checkInstructorDetails(GetUserResponse instructor) {
+		assertNotNull(instructor);
+		assertEquals(TEST_INSTRUCTOR_GUID, instructor.getUserGUID());
+		assertEquals(UserRole.INSTRUCTOR, instructor.getRole());
+		assertEquals("Alice Ho", instructor.getName());
+		assertEquals(TEST_INSTRUCTOR_EMAIL, instructor.getEmail());
+		assertEquals(Gender.FEMALE, instructor.getGender());
+		assertEquals(LocalDate.of(1996, Month.AUGUST, 5), instructor.getBirthday());
+	}
+
+	private void checkStudentDetails(GetUserResponse student) {
+		assertNotNull(student);
+		assertEquals(TEST_STUDENT_GUID, student.getUserGUID());
+		assertEquals(UserRole.STUDENT, student.getRole());
+		assertEquals(TEST_STUDENT_EMAIL, student.getEmail());
+		assertEquals("Kuantest", student.getName());
+		assertEquals(Gender.MALE, student.getGender());
+		assertEquals(LocalDate.of(2025, Month.MAY, 12), student.getBirthday());
+
+	}
+
 }

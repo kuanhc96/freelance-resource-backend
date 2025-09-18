@@ -7,7 +7,9 @@ import org.springframework.web.client.RestTemplate;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.dto.request.user.GetUserRequest;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
+import com.example.freelance_resource_backend.enums.UserRole;
 
 @RequiredArgsConstructor
 public class APIHelper {
@@ -30,6 +32,19 @@ public class APIHelper {
 				resourceUrl + "/user" + "/" + userGUID,
 				HttpMethod.GET,
 				httpEntity,
+				GetUserResponse.class
+		).getBody();
+	}
+
+	public GetUserResponse getUserByUserEmailAndRole(String email, UserRole userRole) {
+		GetUserRequest request = GetUserRequest.builder()
+				.email(email)
+				.role(userRole)
+				.build();
+		return restTemplate.exchange(
+				resourceUrl + "/user?email=" + email + "&role=" + userRole,
+				HttpMethod.GET,
+				new HttpEntity<>(request, httpEntity.getHeaders()),
 				GetUserResponse.class
 		).getBody();
 	}
