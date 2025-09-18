@@ -15,7 +15,7 @@ import com.example.freelance_resource_backend.controller.integration.helper.OAut
 @EnableConfigurationProperties
 public class TestConfig {
 	public static final String TEST_INSTRUCTOR_GUID = "36946828-6696-4b83-be33-6093f2efef70";
-	public static final String TEST_STUDENT_GUID = "edf7e0b4-55bf-4302-8685-c546a78a05e9";
+	public static final String TEST_STUDENT_GUID = "3b7adf98-c0b1-4fe5-959f-23ba833c74a0";
 
 	@Value("${application.resourceUrl}")
 	private String resourceUrl;

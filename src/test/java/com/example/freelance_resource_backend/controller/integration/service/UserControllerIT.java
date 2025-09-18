@@ -2,24 +2,23 @@ package com.example.freelance_resource_backend.controller.integration.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_INSTRUCTOR_GUID;
+import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_STUDENT_GUID;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.example.freelance_resource_backend.controller.integration.config.TestConfig;
 import com.example.freelance_resource_backend.controller.integration.helper.APIHelper;
@@ -43,13 +42,31 @@ public class UserControllerIT {
 
 	@Test
 	void getUserByUserGUID_success() {
-		GetUserResponse user = helper.getUserByUserGUID(TEST_INSTRUCTOR_GUID);
+		GetUserResponse instructor = helper.getUserByUserGUID(TEST_INSTRUCTOR_GUID);
 
-		assertNotNull(user);
-		assertEquals(TEST_INSTRUCTOR_GUID, user.getUserGUID());
-		assertEquals(UserRole.INSTRUCTOR, user.getRole());
-		assertEquals("Alice Ho", user.getName());
-		assertEquals(Gender.FEMALE, user.getGender());
-		assertEquals(LocalDate.of(1996, Month.AUGUST, 5), user.getBirthday());
+		assertNotNull(instructor);
+		assertEquals(TEST_INSTRUCTOR_GUID, instructor.getUserGUID());
+		assertEquals(UserRole.INSTRUCTOR, instructor.getRole());
+		assertEquals("Alice Ho", instructor.getName());
+		assertEquals("kuandalice@gmail.com", instructor.getEmail());
+		assertEquals(Gender.FEMALE, instructor.getGender());
+		assertEquals(LocalDate.of(1996, Month.AUGUST, 5), instructor.getBirthday());
+
+		GetUserResponse student = helper.getUserByUserGUID(TEST_STUDENT_GUID);
+
+		assertNotNull(student);
+		assertEquals(TEST_STUDENT_GUID, student.getUserGUID());
+		assertEquals(UserRole.STUDENT, student.getRole());
+		assertEquals("kuantest1234@example.com", student.getEmail());
+		assertEquals("Kuantest", student.getName());
+		assertEquals(Gender.MALE, student.getGender());
+		assertEquals(LocalDate.of(2025, Month.MAY, 12), student.getBirthday());
+	}
+
+	@Test
+	void getUserByUserGUID_userNotFound_404() {
+		HttpClientErrorException ex = assertThrows(HttpClientErrorException.class, () -> helper.getUserByUserGUID(UUID.randomUUID().toString()));
+		assertEquals(ex.getStatusCode(), HttpStatus.NOT_FOUND);
+		System.out.println(ex.getMessage());
 	}
 }
