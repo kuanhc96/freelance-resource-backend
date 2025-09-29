@@ -42,6 +42,15 @@ public class AnnouncementService {
 		}
 	}
 
+	public void deleteAnnouncement(String announcementGUID) throws ResourceNotFoundException {
+		Optional<AnnouncementEntity> optionalAnnouncement = announcementRepository.getAnnouncementByAnnouncementGUID(announcementGUID);
+		if (optionalAnnouncement.isPresent()) {
+			announcementRepository.deleteAnnouncementByAnnouncementGUID(announcementGUID);
+		} else {
+			throw new ResourceNotFoundException("Announcement with announcementGUID=" + announcementGUID + " not found");
+		}
+	}
+
 	public List<AnnouncementEntity> getAnnouncementsByInstructorGUID(String instructorGUID) {
 		return announcementRepository.getAnnouncementsByInstructorGUID(instructorGUID);
 	}

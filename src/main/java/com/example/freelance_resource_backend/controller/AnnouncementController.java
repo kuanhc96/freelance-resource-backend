@@ -2,6 +2,7 @@ package com.example.freelance_resource_backend.controller;
 
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR_OR_STUDENT;
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INTEGRATION_TEST;
 
 import java.util.Comparator;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,6 @@ import com.example.freelance_resource_backend.dto.request.announcement.CreateAnn
 import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementRequest;
 import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
-import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.entities.AnnouncementEntity;
 import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
@@ -51,6 +52,13 @@ public class AnnouncementController {
 				.createdDate(announcementEntity.getCreatedDate())
 				.announcementStatus(announcementEntity.getAnnouncementStatus())
 				.build());
+	}
+
+	@DeleteMapping("/deleteAnnouncement/{announcementGUID}")
+	@PreAuthorize(INTEGRATION_TEST)
+	public ResponseEntity<Void> deleteAnnouncement(@PathVariable String announcementGUID) throws ResourceNotFoundException {
+		announcementService.deleteAnnouncement(announcementGUID);
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/{instructorGUID}")

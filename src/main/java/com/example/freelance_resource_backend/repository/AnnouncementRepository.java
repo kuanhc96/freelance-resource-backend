@@ -35,6 +35,14 @@ public class AnnouncementRepository {
 			"announcement_status = :announcement_status " +
 			"WHERE announcement_guid = :announcement_guid";
 
+	private String deleteAnnouncement = "DELETE FROM announcements WHERE announcement_guid = :announcement_guid";
+
+	public void deleteAnnouncementByAnnouncementGUID(String announcementGUID) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue(AnnouncementMapper.ANNOUNCEMENT_GUID, announcementGUID);
+		jdbcTemplate.update(deleteAnnouncement, params);
+	}
+
 	public List<AnnouncementEntity> getAnnouncementsByInstructorGUID(String instructorGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue(AnnouncementMapper.INSTRUCTOR_GUID, instructorGUID);
