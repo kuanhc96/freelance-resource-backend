@@ -96,7 +96,6 @@ public class UserControllerIT {
 		assertEquals("Kuantest", student.getName());
 		assertEquals(Gender.MALE, student.getGender());
 		assertEquals(LocalDate.of(2025, Month.MAY, 12), student.getBirthday());
-
 	}
 
 }

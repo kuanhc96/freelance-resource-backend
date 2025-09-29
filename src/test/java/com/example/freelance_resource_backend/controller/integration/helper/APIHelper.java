@@ -7,7 +7,9 @@ import org.springframework.web.client.RestTemplate;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.dto.request.announcement.CreateAnnouncementRequest;
 import com.example.freelance_resource_backend.dto.request.user.GetUserRequest;
+import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.enums.UserRole;
 
@@ -47,5 +49,23 @@ public class APIHelper {
 				new HttpEntity<>(request, httpEntity.getHeaders()),
 				GetUserResponse.class
 		).getBody();
+	}
+
+	public CreateAnnouncementResponse createAnnouncement(CreateAnnouncementRequest createAnnouncementRequest) {
+		return restTemplate.exchange(
+				resourceUrl + "/announcements/createAnnouncement",
+				HttpMethod.POST,
+				new HttpEntity<>(createAnnouncementRequest, httpEntity.getHeaders()),
+				CreateAnnouncementResponse.class
+		).getBody();
+	}
+
+	public void deleteAnnouncement(String announcementGUID) {
+		restTemplate.exchange(
+				resourceUrl + "/announcements/deleteAnnouncement" + announcementGUID,
+				HttpMethod.DELETE,
+				httpEntity,
+				Void.class
+		);
 	}
 }
