@@ -1,5 +1,9 @@
 package com.example.freelance_resource_backend.controller.integration.helper;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.MultiValueMap;
@@ -10,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import com.example.freelance_resource_backend.dto.request.announcement.CreateAnnouncementRequest;
 import com.example.freelance_resource_backend.dto.request.user.GetUserRequest;
 import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.enums.UserRole;
 
@@ -62,10 +67,19 @@ public class APIHelper {
 
 	public void deleteAnnouncement(String announcementGUID) {
 		restTemplate.exchange(
-				resourceUrl + "/announcements/deleteAnnouncement" + announcementGUID,
+				resourceUrl + "/announcements/deleteAnnouncement/%s".formatted(announcementGUID),
 				HttpMethod.DELETE,
 				httpEntity,
 				Void.class
 		);
+	}
+
+	public List<GetAnnouncementResponse> getAnnouncements(String instructorGUID) {
+		return restTemplate.exchange(
+				resourceUrl + "/announcements/%s".formatted(instructorGUID),
+				HttpMethod.GET,
+				httpEntity,
+				new ParameterizedTypeReference<List<GetAnnouncementResponse>>() {}
+		).getBody();
 	}
 }
