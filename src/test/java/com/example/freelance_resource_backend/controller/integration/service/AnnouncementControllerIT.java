@@ -3,6 +3,7 @@ package com.example.freelance_resource_backend.controller.integration.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_INSTRUCTOR_GUID;
@@ -15,10 +16,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.example.freelance_resource_backend.controller.integration.config.TestConfig;
 import com.example.freelance_resource_backend.controller.integration.helper.APIHelper;
@@ -96,7 +100,13 @@ public class AnnouncementControllerIT {
 		List<GetAnnouncementResponse> announcements = helper.getAnnouncements(TEST_INSTRUCTOR_GUID);
 		GetAnnouncementResponse announcement = announcements.stream().filter(a -> a.getAnnouncementGUID().equals(announcementGUID)).findFirst().orElse(null);
 		assertNotNull(announcement);
-		assertEquals(announcement.getAnnouncementStatus(), announcement.getAnnouncementStatus());
+		assertEquals(announcement.getAnnouncementStatus(), response.getAnnouncementStatus());
+	}
+
+	@Test
+	void updateAnnouncementTitle_blankTitle_400() {
+		HttpClientErrorException ex = assertThrows(HttpClientErrorException.class, () -> helper.updateAnnouncementTitle(announcementGUID, ""));
+		assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
 	}
 
 	@AfterEach

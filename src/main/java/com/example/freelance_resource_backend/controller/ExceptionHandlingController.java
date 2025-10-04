@@ -14,4 +14,9 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
 	ResponseEntity<String> handleBusinessException_NotFound(Exception ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
+
+	@ExceptionHandler({IllegalArgumentException.class})
+	ResponseEntity<String> handleBusinessException_BadRequest(Exception ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 }
