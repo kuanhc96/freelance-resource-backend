@@ -1,6 +1,5 @@
 package com.example.freelance_resource_backend.controller.integration.helper;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -12,10 +11,15 @@ import org.springframework.web.client.RestTemplate;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.request.announcement.CreateAnnouncementRequest;
+import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementContentRequest;
+import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementStatusRequest;
+import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementTitleRequest;
 import com.example.freelance_resource_backend.dto.request.user.GetUserRequest;
 import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.response.announcement.UpdateAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
+import com.example.freelance_resource_backend.enums.AnnouncementStatus;
 import com.example.freelance_resource_backend.enums.UserRole;
 
 @RequiredArgsConstructor
@@ -80,6 +84,33 @@ public class APIHelper {
 				HttpMethod.GET,
 				httpEntity,
 				new ParameterizedTypeReference<List<GetAnnouncementResponse>>() {}
+		).getBody();
+	}
+
+	public UpdateAnnouncementResponse updateAnnouncementTitle(String announcementGUID, String title) {
+		return restTemplate.exchange(
+				resourceUrl + "/announcements/updateTitle/%s".formatted(announcementGUID),
+				HttpMethod.PUT,
+				new HttpEntity<>(UpdateAnnouncementTitleRequest.builder().title(title).build(), httpEntity.getHeaders()),
+				UpdateAnnouncementResponse.class
+		).getBody();
+	}
+
+	public UpdateAnnouncementResponse updateAnnouncementContent(String announcementGUID, String announcement) {
+		return restTemplate.exchange(
+				resourceUrl + "/announcements/updateContent/%s".formatted(announcementGUID),
+				HttpMethod.PUT,
+				new HttpEntity<>(UpdateAnnouncementContentRequest.builder().announcement(announcement).build(), httpEntity.getHeaders()),
+				UpdateAnnouncementResponse.class
+		).getBody();
+	}
+
+	public UpdateAnnouncementResponse updateAnnouncementStatus(String announcementGUID, AnnouncementStatus status) {
+		return restTemplate.exchange(
+				resourceUrl + "/announcements/updateStatus/%s".formatted(announcementGUID),
+				HttpMethod.PUT,
+				new HttpEntity<>(UpdateAnnouncementStatusRequest.builder().announcementStatus(status).build(), httpEntity.getHeaders()),
+				UpdateAnnouncementResponse.class
 		).getBody();
 	}
 }

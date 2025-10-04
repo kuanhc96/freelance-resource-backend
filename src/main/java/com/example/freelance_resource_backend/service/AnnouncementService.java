@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementRequest;
+import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.response.announcement.UpdateAnnouncementResponse;
 import com.example.freelance_resource_backend.entities.AnnouncementEntity;
 import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.enums.AnnouncementStatus;
@@ -55,18 +56,57 @@ public class AnnouncementService {
 		return announcementRepository.getAnnouncementsByInstructorGUID(instructorGUID);
 	}
 
-	public void updateAnnouncement(UpdateAnnouncementRequest updateAnnouncementRequest) throws ResourceNotFoundException {
-		String announcementGUID = updateAnnouncementRequest.getAnnouncementGUID();
+	public UpdateAnnouncementResponse updateAnnouncementTitle(String announcementGUID, String title) throws ResourceNotFoundException {
 		Optional<AnnouncementEntity> optionalAnnouncement = announcementRepository.getAnnouncementByAnnouncementGUID(announcementGUID);
 		if (optionalAnnouncement.isPresent()) {
 			AnnouncementEntity announcementEntity = optionalAnnouncement.get();
-			announcementEntity.setTitle(updateAnnouncementRequest.getTitle());
-			announcementEntity.setAnnouncement(updateAnnouncementRequest.getAnnouncement());
-			announcementEntity.setAnnouncementStatus(updateAnnouncementRequest.getAnnouncementStatus());
+			announcementEntity.setTitle(title);
 			announcementEntity.setUpdatedDate(LocalDateTime.now());
 			announcementRepository.updateAnnouncement(announcementEntity);
+			return UpdateAnnouncementResponse.builder()
+					.announcementGUID(announcementGUID)
+					.title(announcementEntity.getTitle())
+					.announcement(announcementEntity.getAnnouncement())
+					.announcementStatus(announcementEntity.getAnnouncementStatus())
+					.build();
 		} else {
-			throw new ResourceNotFoundException("Announcement not found");
+			throw new ResourceNotFoundException("Announcement with announcementGUID=%s not found".formatted(announcementGUID));
+		}
+	}
+
+	public UpdateAnnouncementResponse updateAnnouncementContent(String announcementGUID, String announcement) throws ResourceNotFoundException {
+		Optional<AnnouncementEntity> optionalAnnouncement = announcementRepository.getAnnouncementByAnnouncementGUID(announcementGUID);
+		if (optionalAnnouncement.isPresent()) {
+			AnnouncementEntity announcementEntity = optionalAnnouncement.get();
+			announcementEntity.setAnnouncement(announcement);
+			announcementEntity.setUpdatedDate(LocalDateTime.now());
+			announcementRepository.updateAnnouncement(announcementEntity);
+			return UpdateAnnouncementResponse.builder()
+					.announcementGUID(announcementGUID)
+					.title(announcementEntity.getTitle())
+					.announcement(announcementEntity.getAnnouncement())
+					.announcementStatus(announcementEntity.getAnnouncementStatus())
+					.build();
+		} else {
+			throw new ResourceNotFoundException("Announcement with announcementGUID=%s not found".formatted(announcementGUID));
+		}
+	}
+
+	public UpdateAnnouncementResponse updateAnnouncementStatus(String announcementGUID, AnnouncementStatus announcementStatus) throws ResourceNotFoundException {
+		Optional<AnnouncementEntity> optionalAnnouncement = announcementRepository.getAnnouncementByAnnouncementGUID(announcementGUID);
+		if (optionalAnnouncement.isPresent()) {
+			AnnouncementEntity announcementEntity = optionalAnnouncement.get();
+			announcementEntity.setAnnouncementStatus(announcementStatus);
+			announcementEntity.setUpdatedDate(LocalDateTime.now());
+			announcementRepository.updateAnnouncement(announcementEntity);
+			return UpdateAnnouncementResponse.builder()
+					.announcementGUID(announcementGUID)
+					.title(announcementEntity.getTitle())
+					.announcement(announcementEntity.getAnnouncement())
+					.announcementStatus(announcementEntity.getAnnouncementStatus())
+					.build();
+		} else {
+			throw new ResourceNotFoundException("Announcement with announcementGUID=%s not found".formatted(announcementGUID));
 		}
 	}
 }

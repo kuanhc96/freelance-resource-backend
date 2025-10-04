@@ -20,12 +20,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.request.announcement.CreateAnnouncementRequest;
-import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementRequest;
+import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementContentRequest;
+import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementStatusRequest;
+import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementTitleRequest;
 import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.response.announcement.UpdateAnnouncementResponse;
 import com.example.freelance_resource_backend.entities.AnnouncementEntity;
 import com.example.freelance_resource_backend.entities.UserEntity;
 import com.example.freelance_resource_backend.exceptions.ResourceNotFoundException;
@@ -42,6 +46,9 @@ public class AnnouncementController {
 	@PostMapping("/createAnnouncement")
 	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<CreateAnnouncementResponse> createAnnouncement(@RequestBody CreateAnnouncementRequest request) throws ResourceNotFoundException {
+		if (StringUtils.isEmpty(request.getTitle())) {
+			throw new IllegalArgumentException("Title cannot be null or empty");
+		}
 		AnnouncementEntity announcementEntity = announcementService.createAnnouncement(request.getInstructorGUID(), request.getTitle(), request.getAnnouncement());
 
 		return ResponseEntity.ok(CreateAnnouncementResponse.builder()
@@ -87,11 +94,37 @@ public class AnnouncementController {
 		}
 	}
 
-	@PutMapping("/update")
+	@PutMapping("/updateTitle/{announcementGUID}")
 	@PreAuthorize(INSTRUCTOR)
-	public ResponseEntity<Void> updateAnnouncement(@RequestBody UpdateAnnouncementRequest updateAnnouncementRequest) throws ResourceNotFoundException {
-		announcementService.updateAnnouncement(updateAnnouncementRequest);
-		return ResponseEntity.ok().build();
+	public ResponseEntity<UpdateAnnouncementResponse> updateAnnouncementTitle(@PathVariable String announcementGUID, @RequestBody UpdateAnnouncementTitleRequest updateAnnouncementTitleRequest) throws ResourceNotFoundException {
+		if (StringUtils.isEmpty(announcementGUID)) {
+			throw new IllegalArgumentException("announcementGUID cannot be null or empty");
+		}
+		if (StringUtils.isEmpty(updateAnnouncementTitleRequest.getTitle())) {
+			throw new IllegalArgumentException("Title cannot be null or empty");
+		}
+		UpdateAnnouncementResponse response = announcementService.updateAnnouncementTitle(announcementGUID, updateAnnouncementTitleRequest.getTitle());
+		return ResponseEntity.ok(response);
+	}
+
+	@PutMapping("/updateContent/{announcementGUID}")
+	@PreAuthorize(INSTRUCTOR)
+	public ResponseEntity<UpdateAnnouncementResponse> updateAnnouncementContent(@PathVariable String announcementGUID, @RequestBody UpdateAnnouncementContentRequest updateAnnouncementContentRequest) throws ResourceNotFoundException {
+		if (StringUtils.isEmpty(announcementGUID)) {
+			throw new IllegalArgumentException("announcementGUID cannot be null or empty");
+		}
+		UpdateAnnouncementResponse response = announcementService.updateAnnouncementContent(announcementGUID, updateAnnouncementContentRequest.getAnnouncement());
+		return ResponseEntity.ok(response);
+	}
+
+	@PutMapping("/updateStatus/{announcementGUID}")
+	@PreAuthorize(INSTRUCTOR)
+	public ResponseEntity<UpdateAnnouncementResponse> updateAnnouncementStatus(@PathVariable String announcementGUID, @RequestBody UpdateAnnouncementStatusRequest updateAnnouncementStatusRequest) throws ResourceNotFoundException {
+		if (StringUtils.isEmpty(announcementGUID)) {
+			throw new IllegalArgumentException("announcementGUID cannot be null or empty");
+		}
+		UpdateAnnouncementResponse response = announcementService.updateAnnouncementStatus(announcementGUID, updateAnnouncementStatusRequest.getAnnouncementStatus());
+		return ResponseEntity.ok(response);
 	}
 
 }

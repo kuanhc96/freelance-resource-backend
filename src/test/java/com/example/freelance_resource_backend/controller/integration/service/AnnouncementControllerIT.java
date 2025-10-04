@@ -24,8 +24,10 @@ import com.example.freelance_resource_backend.controller.integration.config.Test
 import com.example.freelance_resource_backend.controller.integration.helper.APIHelper;
 import com.example.freelance_resource_backend.controller.integration.helper.OAuthTokenHelper;
 import com.example.freelance_resource_backend.dto.request.announcement.CreateAnnouncementRequest;
+import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementTitleRequest;
 import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.response.announcement.UpdateAnnouncementResponse;
 import com.example.freelance_resource_backend.enums.AnnouncementStatus;
 
 @ExtendWith(SpringExtension.class)
@@ -60,6 +62,41 @@ public class AnnouncementControllerIT {
 		List<GetAnnouncementResponse> announcements = helper.getAnnouncements(TEST_INSTRUCTOR_GUID);
 		assertFalse(ObjectUtils.isEmpty(announcements));
 		assertTrue(announcements.stream().anyMatch(announcement -> announcement.getAnnouncementGUID().equals(announcementGUID)));
+	}
+
+	@Test
+	void updateAnnouncementTitle_success() {
+		UpdateAnnouncementResponse response = helper.updateAnnouncementTitle(announcementGUID, "Updated Title");
+		assertEquals(response.getAnnouncementGUID(), announcementGUID);
+		assertEquals("Updated Title", response.getTitle());
+		assertEquals(AnnouncementStatus.ACTIVE, response.getAnnouncementStatus());
+		List<GetAnnouncementResponse> announcements = helper.getAnnouncements(TEST_INSTRUCTOR_GUID);
+		GetAnnouncementResponse announcement = announcements.stream().filter(a -> a.getAnnouncementGUID().equals(announcementGUID)).findFirst().orElse(null);
+		assertNotNull(announcement);
+		assertEquals("Updated Title", announcement.getTitle());
+	}
+
+	@Test
+	void updateAnnouncementContent_success() {
+		UpdateAnnouncementResponse response = helper.updateAnnouncementContent(announcementGUID, "Updated Announcement");
+		assertEquals(response.getAnnouncementGUID(), announcementGUID);
+		assertEquals("Updated Announcement", response.getAnnouncement());
+		assertEquals(AnnouncementStatus.ACTIVE, response.getAnnouncementStatus());
+		List<GetAnnouncementResponse> announcements = helper.getAnnouncements(TEST_INSTRUCTOR_GUID);
+		GetAnnouncementResponse announcement = announcements.stream().filter(a -> a.getAnnouncementGUID().equals(announcementGUID)).findFirst().orElse(null);
+		assertNotNull(announcement);
+		assertEquals("Updated Announcement", announcement.getAnnouncement());
+	}
+
+	@Test
+	void updateAnnouncementStatus_success() {
+		UpdateAnnouncementResponse response = helper.updateAnnouncementStatus(announcementGUID, AnnouncementStatus.ARCHIVED);
+		assertEquals(response.getAnnouncementGUID(), announcementGUID);
+		assertEquals(AnnouncementStatus.ARCHIVED, response.getAnnouncementStatus());
+		List<GetAnnouncementResponse> announcements = helper.getAnnouncements(TEST_INSTRUCTOR_GUID);
+		GetAnnouncementResponse announcement = announcements.stream().filter(a -> a.getAnnouncementGUID().equals(announcementGUID)).findFirst().orElse(null);
+		assertNotNull(announcement);
+		assertEquals(announcement.getAnnouncementStatus(), announcement.getAnnouncementStatus());
 	}
 
 	@AfterEach
