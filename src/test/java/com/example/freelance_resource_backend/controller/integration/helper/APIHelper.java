@@ -113,4 +113,31 @@ public class APIHelper {
 				UpdateAnnouncementResponse.class
 		).getBody();
 	}
+
+	public List<GetUserResponse> getInstructorsSubscribedTo(String studentGUID) {
+		return restTemplate.exchange(
+				resourceUrl + "/subscription/instructors/%s".formatted(studentGUID),
+				HttpMethod.GET,
+				httpEntity,
+				new ParameterizedTypeReference<List<GetUserResponse>>() {}
+		).getBody();
+	}
+
+	public List<GetUserResponse> getInstructorsNotSubscribedTo(String studentGUID) {
+		return restTemplate.exchange(
+				resourceUrl + "/subscription/unsubscribed/%s".formatted(studentGUID),
+				HttpMethod.GET,
+				httpEntity,
+				new ParameterizedTypeReference<List<GetUserResponse>>() {}
+		).getBody();
+	}
+
+	public List<GetUserResponse> getSubscribedStudents(String instructorGUID) {
+		return restTemplate.exchange(
+				resourceUrl + "/subscription/students/%s".formatted(instructorGUID),
+				HttpMethod.GET,
+				httpEntity,
+				new ParameterizedTypeReference<List<GetUserResponse>>() {}
+		).getBody();
+	}
 }
