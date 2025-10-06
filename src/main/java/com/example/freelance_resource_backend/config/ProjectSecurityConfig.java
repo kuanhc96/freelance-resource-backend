@@ -78,7 +78,9 @@ public class ProjectSecurityConfig {
 								"/apiLogout",
 								"/user/createUser",
 								"/forgetPassword",
-								"/error"
+								"/error",
+								"/appInfo/*",
+								"/actuator/*"
 						)
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				)
