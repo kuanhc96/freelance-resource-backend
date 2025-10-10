@@ -2,6 +2,7 @@ package com.example.freelance_resource_backend.controller;
 
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR_OR_STUDENT;
+import static com.example.freelance_resource_backend.constants.ApplicationConstants.INTEGRATION_TEST;
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.STUDENT;
 
 import java.util.Optional;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.freelance_resource_backend.client.AuthServerFeignClient;
 import com.example.freelance_resource_backend.dto.request.user.CreateUserRequest;
 import com.example.freelance_resource_backend.dto.request.user.GetUserRequest;
 import com.example.freelance_resource_backend.dto.response.user.CreateUserResponse;
@@ -30,6 +32,13 @@ import com.example.freelance_resource_backend.repository.UserRepository;
 @RequiredArgsConstructor
 public class UserController {
 	private final UserRepository userRepository;
+	private final AuthServerFeignClient authServerFeignClient;
+
+	@PostMapping("/create")
+	@PreAuthorize(INTEGRATION_TEST)
+	public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest request){
+		return authServerFeignClient.createUser(request);
+	}
 
 	@GetMapping("/test")
 	@PreAuthorize(STUDENT)

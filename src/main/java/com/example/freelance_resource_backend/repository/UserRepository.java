@@ -23,29 +23,6 @@ public class UserRepository {
 
 	private String getUserByEmailAndRole = "SELECT * FROM users WHERE email = :email AND role = :role";
 
-	private String insertUser = "INSERT INTO users " +
-			"(user_guid, email, password, role, status, name, gender, description, birthday, profile_picture," +
-			" created_date, updated_date) " +
-			"VALUES (:user_guid, :email, :password, :role, :status, :name, :gender, :description, :birthday, :profile_picture," +
-			" :created_date, :updated_date)";
-
-	public void insertUser(UserEntity user) {
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue(UserMapper.USER_GUID, user.getUserGUID());
-		params.addValue(UserMapper.EMAIL, user.getEmail());
-		params.addValue(UserMapper.PASSWORD, user.getPassword());
-		params.addValue(UserMapper.ROLE, user.getRole().name());
-		params.addValue(UserMapper.STATUS, user.getStatus().name());
-		params.addValue(UserMapper.NAME, user.getName());
-		params.addValue(UserMapper.GENDER, user.getGender().name());
-		params.addValue(UserMapper.DESCRIPTION, user.getDescription());
-		params.addValue(UserMapper.BIRTHDAY, user.getBirthday());
-		params.addValue(UserMapper.PROFILE_PICTURE, user.getProfilePicture());
-		params.addValue(UserMapper.CREATED_DATE, user.getCreatedDate());
-		params.addValue(UserMapper.UPDATED_DATE, user.getUpdatedDate());
-		jdbcTemplate.update(insertUser, params);
-	}
-
 	public Optional<UserEntity> getUserByUserGUID(String userGUID) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue(UserMapper.USER_GUID, userGUID);
