@@ -89,7 +89,7 @@ public class ProjectSecurityConfig {
 						"/testLogin",
 						"/subscription",
 						"/subscription/*",
-						"/announcement/*",
+						"/announcements/*",
 						"/subscription/unsubscribed/*",
 						"/subjects/*",
 						"/packages/*",
