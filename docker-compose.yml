@@ -14,7 +14,7 @@ services:
     networks:
       - backend
   configserver:
-    image: "kuanskchen344/configserver-test:garmin"
+    image: "kuanskchen344/configserver:garmin"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -33,6 +33,35 @@ services:
           memory: 700m
     networks:
       - backend
+    environment:
+      PRIVATE_KEY: "${PRIVATE_KEY}"
+      ENCRYPT_KEY: "${ENCRYPT_KEY}"
+      SPRING_APPLICATION_NAME: "configserver"
+      SPRING_PROFILES_ACTIVE: "git,qa"
+      SPRING_RABBITMQ_HOST: "rabbit"
+  eurekaserver:
+    image: "kuanskchen344/eurekatest:garmin"
+    container_name: eurekaserver-ms
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: "curl --fail --silent localhost:8761/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      configserver:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    networks:
+      - backend
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+      SPRING_PROFILES_ACTIVE: "qa"
   db:
     image: "kuanskchen344/mysql-test:garmin"
     container_name: mysql
@@ -47,6 +76,34 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: user
+  freelance-authserver:
+    image: "kuanskchen344/auth-test:garmin"
+    container_name: "freelance-authserver"
+    ports:
+      - "9000:9000"
+    healthcheck:
+      test: "curl --fail --silent localhost:9000/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    depends_on:
+      db:
+        condition: service_started
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    networks:
+      - backend
+    environment:
+      SPRING_PROFILES_ACTIVE: "qa"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_APPLICATION_NAME: "freelance-authserver"
   freelance-resource-backend:
     image: "kuanskchen344/test2:garmin"
     container_name: "freelance-resource-backend"
@@ -61,13 +118,17 @@ services:
         condition: service_started
       configserver:
         condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+      freelance-authserver:
+        condition: service_healthy
     networks:
       - backend
     environment:
       DATABASE_HOST: db
       SPRING_APPLICATION_NAME: "freelance-resource-backend"
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
-      SPRING_PROFILES_ACTIVE: "test"
+      SPRING_PROFILES_ACTIVE: "qa"
 networks:
   backend:
     driver: "bridge"
