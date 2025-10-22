@@ -102,7 +102,6 @@ services:
       - backend
     environment:
       SPRING_PROFILES_ACTIVE: "qa"
-      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_APPLICATION_NAME: "freelance-authserver"
   freelance-resource-backend:
     image: "kuanskchen344/test2:garmin"
@@ -127,7 +126,6 @@ services:
     environment:
       DATABASE_HOST: db
       SPRING_APPLICATION_NAME: "freelance-resource-backend"
-      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_PROFILES_ACTIVE: "qa"
 networks:
   backend:
