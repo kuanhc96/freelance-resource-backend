@@ -3,6 +3,7 @@ package com.example.freelance_resource_backend.controller.integration.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_INSTRUCTOR_EMAIL;
 import static com.example.freelance_resource_backend.controller.integration.config.TestConfig.TEST_INSTRUCTOR_GUID;
@@ -14,11 +15,17 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.client.HttpClientErrorException;
@@ -26,16 +33,23 @@ import org.springframework.web.client.HttpClientErrorException;
 import com.example.freelance_resource_backend.controller.integration.config.TestConfig;
 import com.example.freelance_resource_backend.controller.integration.helper.APIHelper;
 import com.example.freelance_resource_backend.controller.integration.helper.OAuthTokenHelper;
+import com.example.freelance_resource_backend.controller.integration.helper.TestHelper;
+import com.example.freelance_resource_backend.dto.request.user.CreateUserRequest;
+import com.example.freelance_resource_backend.dto.response.user.CreateUserResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.enums.Gender;
 import com.example.freelance_resource_backend.enums.UserRole;
+import com.example.freelance_resource_backend.enums.UserStatus;
 
 @ExtendWith(SpringExtension.class)
 @SpringJUnitConfig(classes = {TestConfig.class, OAuthTokenHelper.class})
 @TestPropertySource("/test-test.properties")
 public class UserControllerIT {
 	@Autowired
+	@Qualifier("apiHelper")
 	private APIHelper helper;
+
+	private TestHelper testHelper;
 
 	@Test
 	void testTestEndpoint() {
@@ -76,6 +90,40 @@ public class UserControllerIT {
 				() -> helper.getUserByUserEmailAndRole("testEmail" + LocalDateTime.now().toString(), UserRole.INSTRUCTOR)
 		);
 		assertEquals(ex.getStatusCode(), HttpStatus.NOT_FOUND);
+	}
+
+	@Nested
+	@EnabledIf(expression = "#{environment.getProperty('spring.profiles.active') != 'dev'}", reason = "OAuth tests are disabled in dev profile")
+	class OAuthEnabledTests {
+
+		private String createdUserGUID;
+
+		@BeforeEach
+		void setup() {
+			CreateUserRequest createUserRequest = testHelper.createInstructorRequestStub();
+			CreateUserResponse createUserResponse = helper.createUser(createUserRequest);
+			assertNotNull(createUserResponse);
+			assertTrue(StringUtils.isNotBlank(createUserResponse.getUserGUID()));
+			assertEquals(createUserRequest.getEmail(), createUserResponse.getUserGUID());
+			assertEquals(createUserRequest.getName(), createUserResponse.getName());
+			assertEquals(createUserRequest.getRole(), createUserResponse.getRole());
+			assertEquals(createUserRequest.getGender(), createUserResponse.getGender());
+			assertEquals(createUserRequest.getBirthday(), createUserResponse.getBirthday());
+			assertEquals(UserStatus.CREATED, createUserResponse.getStatus());
+			createdUserGUID = createUserResponse.getUserGUID();
+		}
+
+		@Test
+		void placeholder() {
+			assertTrue(true);
+		}
+
+		@AfterEach
+		void tearDown() {
+			if (StringUtils.isNotBlank(createdUserGUID)) {
+				helper.deleteUser(createdUserGUID);
+			}
+		}
 	}
 
 	private void checkInstructorDetails(GetUserResponse instructor) {

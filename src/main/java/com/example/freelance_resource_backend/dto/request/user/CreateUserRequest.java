@@ -15,7 +15,6 @@ public class CreateUserRequest {
 	private String email;
 	private String password;
 	private UserRole role;
-	private UserStatus status;
 	private String name;
 	private LocalDate birthday;
 	private Gender gender;

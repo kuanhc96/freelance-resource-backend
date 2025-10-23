@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import com.example.freelance_resource_backend.enums.Gender;
+import com.example.freelance_resource_backend.enums.UserRole;
 import com.example.freelance_resource_backend.enums.UserStatus;
 
 @Data
@@ -18,4 +19,5 @@ public class CreateUserResponse {
 	private Gender gender;
 	private String description;
 	private UserStatus status;
+	private UserRole role;
 }

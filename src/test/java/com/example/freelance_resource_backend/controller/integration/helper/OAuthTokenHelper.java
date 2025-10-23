@@ -67,4 +67,11 @@ public class OAuthTokenHelper {
 
 		return headers;
 	}
+
+	public HttpHeaders getHeadersWithoutAccessToken() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return headers;
+	}
 }

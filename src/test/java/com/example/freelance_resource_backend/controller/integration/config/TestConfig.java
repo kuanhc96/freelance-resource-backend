@@ -1,5 +1,6 @@
 package com.example.freelance_resource_backend.controller.integration.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,13 @@ public class TestConfig {
 	@Bean
 	public APIHelper apiHelper(RestTemplate restTemplate, OAuthTokenHelper oAuthTokenHelper) {
 		HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(oAuthTokenHelper.getHeadersWithAccessToken());
+		return new APIHelper(restTemplate, httpEntity, resourceUrl);
+	}
+
+	@Bean
+	@Qualifier("apiHelperWithoutAccessToken")
+	public APIHelper apiHelperWithoutAccessToken(RestTemplate restTemplate, OAuthTokenHelper oAuthTokenHelper) {
+		HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(oAuthTokenHelper.getHeadersWithoutAccessToken());
 		return new APIHelper(restTemplate, httpEntity, resourceUrl);
 	}
 }

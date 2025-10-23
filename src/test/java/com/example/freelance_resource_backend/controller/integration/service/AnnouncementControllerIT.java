@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.test.context.TestPropertySource;
@@ -39,6 +40,7 @@ import com.example.freelance_resource_backend.enums.AnnouncementStatus;
 @TestPropertySource("/test-test.properties")
 public class AnnouncementControllerIT {
 	@Autowired
+	@Qualifier("apiHelper")
 	private APIHelper helper;
 
 	private String announcementGUID;

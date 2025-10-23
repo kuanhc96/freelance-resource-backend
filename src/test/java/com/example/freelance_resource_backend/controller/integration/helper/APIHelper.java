@@ -14,10 +14,12 @@ import com.example.freelance_resource_backend.dto.request.announcement.CreateAnn
 import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementContentRequest;
 import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementStatusRequest;
 import com.example.freelance_resource_backend.dto.request.announcement.UpdateAnnouncementTitleRequest;
+import com.example.freelance_resource_backend.dto.request.user.CreateUserRequest;
 import com.example.freelance_resource_backend.dto.request.user.GetUserRequest;
 import com.example.freelance_resource_backend.dto.response.announcement.CreateAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.announcement.GetAnnouncementResponse;
 import com.example.freelance_resource_backend.dto.response.announcement.UpdateAnnouncementResponse;
+import com.example.freelance_resource_backend.dto.response.user.CreateUserResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.enums.AnnouncementStatus;
 import com.example.freelance_resource_backend.enums.UserRole;
@@ -36,6 +38,24 @@ public class APIHelper {
 				String.class
 		).getBody();
 
+	}
+
+	public CreateUserResponse createUser(CreateUserRequest createUserRequest) {
+		return restTemplate.exchange(
+				resourceUrl + "/user/create",
+				HttpMethod.POST,
+				new HttpEntity<>(createUserRequest, httpEntity.getHeaders()),
+				CreateUserResponse.class
+		).getBody();
+	}
+
+	public void deleteUser(String userGUID) {
+		restTemplate.exchange(
+				resourceUrl + "/user/delete/%s".formatted(userGUID),
+				HttpMethod.DELETE,
+				httpEntity,
+				Void.class
+		);
 	}
 
 	public GetUserResponse getUserByUserGUID(String userGUID) {
