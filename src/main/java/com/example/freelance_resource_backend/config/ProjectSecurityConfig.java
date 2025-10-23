@@ -78,7 +78,9 @@ public class ProjectSecurityConfig {
 								"/apiLogout",
 								"/user/createUser",
 								"/forgetPassword",
-								"/error"
+								"/error",
+								"/appInfo/*",
+								"/actuator/*"
 						)
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				)
@@ -87,7 +89,7 @@ public class ProjectSecurityConfig {
 						"/testLogin",
 						"/subscription",
 						"/subscription/*",
-						"/announcement/*",
+						"/announcements/*",
 						"/subscription/unsubscribed/*",
 						"/subjects/*",
 						"/packages/*",
