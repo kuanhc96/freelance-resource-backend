@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.freelance_resource_backend.config.OAuth2FeignConfig;
 import com.example.freelance_resource_backend.dto.request.user.CreateUserRequest;
 import com.example.freelance_resource_backend.dto.response.user.CreateUserResponse;
 import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 
-@FeignClient("freelance-user-management-server")
+@FeignClient(name="freelance-user-management-server", configuration = OAuth2FeignConfig.class)
 public interface UserManagementServerClient {
 
 	@PostMapping(value = "/user/create", consumes = "application/json")
