@@ -1,6 +1,5 @@
 package com.example.freelance_resource_backend.controller;
 
-import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR;
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.INSTRUCTOR_OR_STUDENT;
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.INTEGRATION_TEST;
 import static com.example.freelance_resource_backend.constants.ApplicationConstants.STUDENT;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.freelance_resource_backend.client.AuthServerFeignClient;
+import com.example.freelance_resource_backend.client.UserManagementServerClient;
 import com.example.freelance_resource_backend.dto.request.user.CreateUserRequest;
 import com.example.freelance_resource_backend.dto.request.user.GetUserRequest;
 import com.example.freelance_resource_backend.dto.response.user.CreateUserResponse;
@@ -32,12 +31,12 @@ import com.example.freelance_resource_backend.repository.UserRepository;
 @RequiredArgsConstructor
 public class UserController {
 	private final UserRepository userRepository;
-	private final AuthServerFeignClient authServerFeignClient;
+	private final UserManagementServerClient userManagementServerClient;
 
 	@PostMapping("/create")
 	@PreAuthorize(INTEGRATION_TEST)
 	public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest request){
-		return authServerFeignClient.createUser(request);
+		return userManagementServerClient.createUser(request);
 	}
 
 	@GetMapping("/test")
@@ -71,24 +70,7 @@ public class UserController {
 
 	@GetMapping
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
-	public ResponseEntity<GetUserResponse> getUserByUserEmailAndRole(@RequestBody GetUserRequest request) throws ResourceNotFoundException {
-		Optional<UserEntity> optionalUserEntity = userRepository.getUserByEmailAndRole(request.getEmail(), request.getRole());
-		if (optionalUserEntity.isPresent()) {
-			UserEntity userEntity = optionalUserEntity.get();
-			return ResponseEntity.ok(
-					GetUserResponse.builder()
-							.userGUID(userEntity.getUserGUID())
-							.email(userEntity.getEmail())
-							.role(userEntity.getRole())
-							.name(userEntity.getName())
-							.birthday(userEntity.getBirthday())
-							.description(userEntity.getDescription())
-							.gender(userEntity.getGender())
-							.profilePicture(userEntity.getProfilePicture())
-							.build()
-			);
-		} else {
-			throw new ResourceNotFoundException("User with email " + request.getEmail() + " and role " + request.getRole() + " not found.");
-		}
+	public ResponseEntity<GetUserResponse> getUserByUserEmailAndRole(@RequestBody GetUserRequest request)  {
+		return userManagementServerClient.getUserByEmailAndRole(request.getEmail(), request.getRole().name());
 	}
 }
