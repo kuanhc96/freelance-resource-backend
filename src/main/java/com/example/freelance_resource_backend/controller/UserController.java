@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.freelance_resource_backend.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.client.UserManagementServerClient;
@@ -70,7 +72,7 @@ public class UserController {
 
 	@GetMapping
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
-	public ResponseEntity<GetUserResponse> getUserByUserEmailAndRole(@RequestBody GetUserRequest request)  {
-		return userManagementServerClient.getUserByEmailAndRole(request.getEmail(), request.getRole().name());
+	public ResponseEntity<GetUserResponse> getUserByUserEmailAndRole(@RequestParam String email, @RequestParam UserRole role)  {
+		return userManagementServerClient.getUserByEmailAndRole(email, role.getValue());
 	}
 }
