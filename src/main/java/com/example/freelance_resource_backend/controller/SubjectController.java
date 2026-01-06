@@ -29,12 +29,12 @@ import com.example.freelance_resource_backend.exceptions.ResourceNotFoundExcepti
 import com.example.freelance_resource_backend.service.SubjectService;
 
 @RestController
-@RequestMapping("/subjects")
+@RequestMapping("/api/subjects")
 @RequiredArgsConstructor
 public class SubjectController {
 	private final SubjectService subjectService;
 
-	@PostMapping("/createSubject")
+	@PostMapping
 	@PreAuthorize(INSTRUCTOR)
 	public CreateSubjectResponse createSubject(@RequestBody CreateSubjectRequest request) {
 		SubjectEntity subjectEntity = subjectService.createSubject(
@@ -63,7 +63,7 @@ public class SubjectController {
 
 	}
 
-	@PutMapping("/updateSubjectName")
+	@PutMapping("/name")
 	@PreAuthorize(INSTRUCTOR)
 	public UpdateSubjectNameResponse updateSubjectName(@RequestBody UpdateSubjectNameRequest updateSubjectRequest) throws ResourceNotFoundException {
 		subjectService.updateSubjectName(updateSubjectRequest.getSubjectName(), updateSubjectRequest.getInstructorGUID(), updateSubjectRequest.getNewSubjectName());
@@ -73,7 +73,7 @@ public class SubjectController {
 				.build();
 	}
 
-	@PutMapping("/updateSubjectPrice")
+	@PutMapping("/price")
 	@PreAuthorize(INSTRUCTOR)
 	public UpdateSubjectPriceResponse updateSubjectPrice(@RequestBody UpdateSubjectPriceRequest updateSubjectRequest) throws ResourceNotFoundException {
 		subjectService.updateSubjectPrice(updateSubjectRequest.getSubjectName(), updateSubjectRequest.getInstructorGUID(), updateSubjectRequest.getPrice());

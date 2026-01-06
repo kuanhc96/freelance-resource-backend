@@ -27,12 +27,12 @@ import com.example.freelance_resource_backend.translator.TransactionTranslator;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/transactions")
+@RequestMapping("/api/transactions")
 public class TransactionController {
 
 	private final TransactionService transactionService;
 
-	@PostMapping("/createTransaction")
+	@PostMapping
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<CreateTransactionResponse> createTransaction(@RequestBody CreateTransactionRequest request) {
 		String studentGUID = request.getStudentGUID();
@@ -50,7 +50,7 @@ public class TransactionController {
 				.build());
 	}
 
-	@GetMapping("/student/{studentGUID}")
+	@GetMapping("/students/{studentGUID}")
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<List<GetTransactionResponse>> getTransactionByStudent(@PathVariable String studentGUID) {
 		List<TransactionEntity> transactionEntities = transactionService.getTransactionsByStudentGUID(studentGUID);
@@ -58,7 +58,7 @@ public class TransactionController {
 		return ResponseEntity.ok(responses);
 	}
 
-	@GetMapping("/instructor/{instructorGUID}")
+	@GetMapping("/instructors/{instructorGUID}")
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<List<GetTransactionResponse>> getTransactionByInstructor(@PathVariable String instructorGUID) {
 		List<TransactionEntity> transactionEntities = transactionService.getTransactionsByInstructorGUID(instructorGUID);

@@ -24,7 +24,7 @@ import com.example.freelance_resource_backend.exceptions.ResourceNotFoundExcepti
 import com.example.freelance_resource_backend.service.PackageService;
 
 @RestController
-@RequestMapping("/packages")
+@RequestMapping("/api/packages")
 @RequiredArgsConstructor
 public class PackageController {
 	private final PackageService packageService;
@@ -42,7 +42,7 @@ public class PackageController {
 				.build());
 	}
 
-	@GetMapping("/subject/{subjectGUID}/{discountCode}")
+	@GetMapping("/subjects/{subjectGUID}/{discountCode}")
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<GetPackageResponse> getPackage(@PathVariable String subjectGUID, @PathVariable String discountCode) throws ResourceNotFoundException {
 		PackageEntity packageEntity = packageService.getPackageByDiscountCodeAndSubjectGUID(discountCode, subjectGUID);
@@ -55,7 +55,7 @@ public class PackageController {
 				.build());
 	}
 
-	@GetMapping("/subject/{subjectGUID}")
+	@GetMapping("/subjects/{subjectGUID}")
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<List<GetPackageResponse>> getPackageBySubject(@PathVariable String subjectGUID) throws ResourceNotFoundException {
 		List<GetPackageResponse> packages = packageService.getPackagesBySubjectGUID(subjectGUID)
@@ -72,7 +72,7 @@ public class PackageController {
 		return ResponseEntity.ok(packages);
 	}
 
-	@PostMapping("/createPackage")
+	@PostMapping
 	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<CreatePackageResponse> createPackage(@RequestBody CreatePackageRequest request) {
 		PackageEntity packageEntity = packageService.createPackage(request.getSubjectGUID(), request.getDiscountCode(), request.getNumberOfLessons(), request.getDiscountRate());

@@ -29,13 +29,13 @@ import com.example.freelance_resource_backend.exceptions.ResourceNotFoundExcepti
 import com.example.freelance_resource_backend.repository.UserRepository;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 	private final UserRepository userRepository;
 	private final UserManagementServerClient userManagementServerClient;
 
-	@PostMapping("/create")
+	@PostMapping
 	@PreAuthorize(INTEGRATION_TEST)
 	public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest request){
 		return userManagementServerClient.createUser(request);
