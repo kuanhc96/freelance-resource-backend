@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.TestAccountInfoDto;
 
 @RestController
-@RequestMapping("/appInfo")
+@RequestMapping("/api/appInfo")
 @RequiredArgsConstructor
 public class AppInfoController {
 	@Value("${app.version}")
