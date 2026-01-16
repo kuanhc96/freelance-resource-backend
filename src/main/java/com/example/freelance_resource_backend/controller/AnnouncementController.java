@@ -33,12 +33,12 @@ import com.example.freelance_resource_backend.service.AnnouncementService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/announcements")
+@RequestMapping("/api/announcements")
 public class AnnouncementController {
 	private final AnnouncementService announcementService;
 	private final UserRepository userRepository;
 
-	@PostMapping("/createAnnouncement")
+	@PostMapping
 	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<CreateAnnouncementResponse> createAnnouncement(@RequestBody CreateAnnouncementRequest request) throws ResourceNotFoundException {
 		AnnouncementEntity announcementEntity = announcementService.createAnnouncement(request.getInstructorGUID(), request.getTitle(), request.getAnnouncement());
@@ -79,7 +79,7 @@ public class AnnouncementController {
 		}
 	}
 
-	@PutMapping("/update")
+	@PutMapping
 	@PreAuthorize(INSTRUCTOR)
 	public ResponseEntity<Void> updateAnnouncement(@RequestBody UpdateAnnouncementRequest updateAnnouncementRequest) throws ResourceNotFoundException {
 		announcementService.updateAnnouncement(updateAnnouncementRequest);

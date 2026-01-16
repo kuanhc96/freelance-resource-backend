@@ -23,7 +23,7 @@ import com.example.freelance_resource_backend.dto.response.user.GetUserResponse;
 import com.example.freelance_resource_backend.service.SubscriptionService;
 
 @RestController
-@RequestMapping("/subscription")
+@RequestMapping("/api/subscription")
 @RequiredArgsConstructor
 public class SubscriptionController {
 

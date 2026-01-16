@@ -22,12 +22,12 @@ import com.example.freelance_resource_backend.exceptions.ResourceNotFoundExcepti
 import com.example.freelance_resource_backend.service.LocationService;
 
 @RestController
-@RequestMapping("/locations")
+@RequestMapping("/api/locations")
 @RequiredArgsConstructor
 public class LocationController {
 	private final LocationService locationService;
 
-	@PostMapping("/createLocation")
+	@PostMapping
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public CreateLocationResponse createLocation(@RequestBody CreateLocationRequest request) throws ResourceNotFoundException {
 		LocationEntity locationEntity = locationService.createLocation(

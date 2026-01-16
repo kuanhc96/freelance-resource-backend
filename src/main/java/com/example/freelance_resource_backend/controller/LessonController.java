@@ -30,11 +30,11 @@ import com.example.freelance_resource_backend.translator.LessonTranslator;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lessons")
+@RequestMapping("/api/lessons")
 public class LessonController {
 	private final LessonService lessonService;
 
-	@PostMapping("/precreateLessons")
+	@PostMapping("/draft")
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<List<GetLessonResponse>> precreateLessons(@RequestBody PrecreateLessonsRequest request) throws ResourceNotFoundException {
 		String subjectGUID = request.getSubjectGUID();
@@ -49,7 +49,7 @@ public class LessonController {
 		return ResponseEntity.ok(lessonEntities.stream().map(LessonTranslator::toDto).toList());
 	}
 
-	@PostMapping("/createLessons")
+	@PostMapping
 	@PreAuthorize(INSTRUCTOR_OR_STUDENT)
 	public ResponseEntity<CreateLessonsResponse> createLessons(@RequestBody CreateLessonsRequest request) throws ResourceNotFoundException {
 		String subjectGUID = request.getSubjectGUID();

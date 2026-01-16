@@ -1,6 +1,5 @@
 package com.example.freelance_resource_backend.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import com.example.freelance_resource_backend.dto.TestAccountInfoDto;
 
 @RestController
-@RequestMapping("/appInfo")
+@RequestMapping("/api/appInfo")
 @RequiredArgsConstructor
 public class AppInfoController {
 	@Value("${app.version}")
