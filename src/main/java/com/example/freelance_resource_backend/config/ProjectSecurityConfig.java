@@ -25,7 +25,6 @@ import javax.sql.DataSource;
 
 import com.example.freelance_resource_backend.authorization.AuthServerRoleConverter;
 import com.example.freelance_resource_backend.entryPoint.CustomBasicAuthenticationEntryPoint;
-import com.example.freelance_resource_backend.filter.CsrfCookieFilter;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationFailureHandler;
 import com.example.freelance_resource_backend.handler.CustomAuthenticationSuccessHandler;
 
@@ -59,19 +58,7 @@ public class ProjectSecurityConfig {
 				.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
 				.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 				.cors(corsConfig -> corsConfig.disable())
-				.csrf(csrfConfig -> csrfConfig
-						.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-						.ignoringRequestMatchers(
-								"/checkLogin",
-								"/apiLogin",
-								"/apiLogout",
-								"/user/createUser",
-								"/forgetPassword",
-								"/error",
-								"/api/appInfo/*",
-								"/actuator/*"
-						)
-						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				.csrf(csrfConfig -> csrfConfig.disable()
 				)
 				.authorizeHttpRequests((requests) -> requests
 				.requestMatchers(
@@ -109,7 +96,6 @@ public class ProjectSecurityConfig {
 				.deleteCookies("JSESSIONID")
 		);
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
-		http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
 		http.oauth2ResourceServer(
 				rsc ->
 						rsc.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter))
