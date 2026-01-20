@@ -56,7 +56,7 @@ public class ProjectSecurityConfig {
 		CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
 		http
 				.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
-				.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+				.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.cors(corsConfig -> corsConfig.disable())
 				.csrf(csrfConfig -> csrfConfig.disable()
 				)
