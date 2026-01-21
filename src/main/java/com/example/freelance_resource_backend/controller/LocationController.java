@@ -22,7 +22,7 @@ import com.example.freelance_resource_backend.exceptions.ResourceNotFoundExcepti
 import com.example.freelance_resource_backend.service.LocationService;
 
 @RestController
-@RequestMapping("/api/locations")
+@RequestMapping("/api/location")
 @RequiredArgsConstructor
 public class LocationController {
 	private final LocationService locationService;

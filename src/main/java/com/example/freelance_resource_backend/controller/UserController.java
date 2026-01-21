@@ -29,7 +29,7 @@ import com.example.freelance_resource_backend.exceptions.ResourceNotFoundExcepti
 import com.example.freelance_resource_backend.repository.UserRepository;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 	private final UserRepository userRepository;

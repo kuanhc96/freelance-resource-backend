@@ -33,7 +33,7 @@ import com.example.freelance_resource_backend.service.AnnouncementService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/announcements")
+@RequestMapping("/api/announcement")
 public class AnnouncementController {
 	private final AnnouncementService announcementService;
 	private final UserRepository userRepository;

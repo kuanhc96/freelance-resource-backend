@@ -30,7 +30,7 @@ import com.example.freelance_resource_backend.translator.LessonTranslator;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/lessons")
+@RequestMapping("/api/lesson")
 public class LessonController {
 	private final LessonService lessonService;
 

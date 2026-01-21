@@ -29,7 +29,7 @@ import com.example.freelance_resource_backend.exceptions.ResourceNotFoundExcepti
 import com.example.freelance_resource_backend.service.SubjectService;
 
 @RestController
-@RequestMapping("/api/subjects")
+@RequestMapping("/api/subject")
 @RequiredArgsConstructor
 public class SubjectController {
 	private final SubjectService subjectService;
