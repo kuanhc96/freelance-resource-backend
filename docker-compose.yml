@@ -76,13 +76,24 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: user
-  freelance-authserver:
-    image: "kuanskchen344/auth-test:garmin"
-    container_name: "freelance-authserver"
+  redis:
+    image: "redis:7.4.2"
+    container_name: redis
     ports:
-      - "9000:9000"
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    networks:
+      - backend
+  freelance-user-management-server:
+    image: "kuanskchen344/userstest:garmin"
+    container_name: "freelance-user-management-server"
+    ports:
+      - "8082:8082"
     healthcheck:
-      test: "curl --fail --silent localhost:9000/actuator/health | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8082/actuator/health | grep UP || exit 1"
       interval: 10s
       timeout: 5s
       retries: 10
@@ -101,6 +112,35 @@ services:
     networks:
       - backend
     environment:
+      DATABASE_HOST: db
+      SPRING_APPLICATION_NAME: "freelance-user-management-server"
+      SPRING_PROFILES_ACTIVE: "qa"
+
+  freelance-authserver:
+    image: "kuanskchen344/auth-test:garmin"
+    container_name: "freelance-authserver"
+    ports:
+      - "9000:9000"
+    healthcheck:
+      test: "curl --fail --silent localhost:9000/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+      freelance-user-management-server:
+        condition: service_healthy
+    networks:
+      - backend
+    environment:
       SPRING_PROFILES_ACTIVE: "qa"
       SPRING_APPLICATION_NAME: "freelance-authserver"
   freelance-resource-backend:
@@ -108,6 +148,12 @@ services:
     container_name: "freelance-resource-backend"
     ports:
       - "8081:8081"
+    healthcheck:
+      test: "curl --fail --silent localhost:8081/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     deploy:
       resources:
         limits:
@@ -127,6 +173,61 @@ services:
       DATABASE_HOST: db
       SPRING_APPLICATION_NAME: "freelance-resource-backend"
       SPRING_PROFILES_ACTIVE: "qa"
+  gatewayserver:
+    image: "kuanskchen344/gatewaytest:garmin"
+    container_name: "freelance-gateway"
+    ports:
+      - "8072:8072"
+    healthcheck:
+      test: "curl --fail --silent localhost:8072/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    depends_on:
+      redis:
+        condition: service_started
+      freelance-resource-backend:
+        condition: service_healthy
+      freelance-authserver:
+        condition: service_healthy
+    networks:
+      - backend
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_PROFILES_ACTIVE: "qa"
+  backend-for-frontend:
+    image: "kuanskchen344/bfftest:garmin"
+    container_name: "backend-for-frontend"
+    ports:
+      - "8083:8083"
+    healthcheck:
+      test: "curl --fail --silent localhost:8083/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    depends_on:
+      redis:
+        condition: service_started
+      freelance-resource-backend:
+        condition: service_healthy
+      freelance-authserver:
+        condition: service_healthy
+    networks:
+      - backend
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_PROFILES_ACTIVE: "qa"
+
 networks:
   backend:
     driver: "bridge"
