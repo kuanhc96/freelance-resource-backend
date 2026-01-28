@@ -225,7 +225,7 @@ services:
     networks:
       - backend
     environment:
-      SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_APPLICATION_NAME: "backend-for-frontend"
       SPRING_PROFILES_ACTIVE: "qa"
 
 networks:
