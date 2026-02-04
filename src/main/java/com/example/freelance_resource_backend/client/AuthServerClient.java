@@ -11,7 +11,7 @@ import com.example.freelance_resource_backend.config.AuthServerClientConfig;
 import com.example.freelance_resource_backend.dto.request.oauth2.GetAccessTokenRequest;
 import com.example.freelance_resource_backend.dto.request.user.CreateUserRequest;
 
-@FeignClient(name = "freelance-authserver", configuration = AuthServerClientConfig.class)
+@FeignClient(name = "authserver-client", url="${authserver.location}", configuration = AuthServerClientConfig.class)
 public interface AuthServerClient {
 
 	@PostMapping(value = "/oauth2/token", consumes="application/x-www-form-urlencoded")
