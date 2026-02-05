@@ -116,6 +116,20 @@ services:
       SPRING_APPLICATION_NAME: "freelance-user-management-server"
       SPRING_PROFILES_ACTIVE: "qa"
 
+  auth-db:
+    image: "kuanskchen344/mysql-auth-test:garmin"
+    container_name: auth-mysql
+    ports:
+      - "3307:3306"
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    networks:
+      - backend
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: user
   freelance-authserver:
     image: "kuanskchen344/auth-test:garmin"
     container_name: "freelance-authserver"
@@ -134,10 +148,8 @@ services:
     depends_on:
       configserver:
         condition: service_healthy
-      eurekaserver:
-        condition: service_healthy
-      freelance-user-management-server:
-        condition: service_healthy
+      auth-db:
+        condition: service_started
     networks:
       - backend
     environment:
