@@ -63,7 +63,7 @@ services:
       SPRING_APPLICATION_NAME: "eurekaserver"
       SPRING_PROFILES_ACTIVE: "qa"
   db:
-    image: "kuanskchen344/mysql-test:garmin"
+    image: "mysql:8"
     container_name: mysql
     ports:
       - "3306:3306"
@@ -76,6 +76,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: user
+    volumes:
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
   redis:
     image: "redis:7.4.2"
     container_name: redis
@@ -117,7 +119,7 @@ services:
       SPRING_PROFILES_ACTIVE: "qa"
 
   auth-db:
-    image: "kuanskchen344/mysql-auth-test:garmin"
+    image: "mysql:8"
     container_name: auth-mysql
     ports:
       - "3307:3307"
@@ -133,6 +135,8 @@ services:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_TCP_PORT: 3307
       MYSQL_DATABASE: freelance-auth
+    volumes:
+      - ./dump-auth.sql:/docker-entrypoint-initdb.d/dump-auth.sql
   freelance-authserver:
     image: "kuanskchen344/auth-test:garmin"
     container_name: "freelance-authserver"
