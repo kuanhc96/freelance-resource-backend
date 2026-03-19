@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.ws.rs.QueryParam;
 import lombok.RequiredArgsConstructor;
 
 import com.example.freelance_resource_backend.dto.request.subscription.SubscribeRequest;
@@ -39,9 +40,12 @@ public class SubscriptionController {
 
 	@DeleteMapping
 	@PreAuthorize(STUDENT)
-	public ResponseEntity<Boolean> unsubscribe(@RequestBody SubscribeRequest unsubscribeRequest) {
+	public ResponseEntity<Boolean> unsubscribe(
+			@QueryParam("studentGUID") String studentGUID,
+		    @QueryParam("instructorGUID") String instructorGUID
+	) {
 		// Logic for subscription
-		boolean result = subscriptionService.unsubscribe(unsubscribeRequest.getStudentGUID(), unsubscribeRequest.getInstructorGUID());
+		boolean result = subscriptionService.unsubscribe(studentGUID, instructorGUID);
 		return ResponseEntity.ok(result);
 	}
 
