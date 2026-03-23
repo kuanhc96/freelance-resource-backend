@@ -111,6 +111,7 @@ public class LessonService {
 
 			for (LessonEntity newLessonEntity : lessonEntities) {
 				newLessonEntity.setSubjectGUID(subjectGUID);
+				newLessonEntity.setTransactionGUID(transactionGUID);
 				lessonRepository.insertLesson(newLessonEntity);
 			}
 			return transactionGUID;
