@@ -30,7 +30,22 @@ spring:
       mode: always
       encoding: UTF-8
       platform: h2
-      schema-locations: classpath:dump.sql
+      schema-locations: file:./dump.sql
+  security:
+    oauth2:
+      client:
+        registration:
+          freelance-resource-backend:
+            client-id: "${CLIENT_ID}"
+            client-secret: "${CLIENT_SECRET}"
+            scope: USER_MANAGEMENT_SERVER
+            authorization-grant-type: client_credentials
+        provider:
+          freelance-resource-backend:
+            token-uri: "${TOKEN_URI}"
+      resourceserver:
+        jwt:
+          jwt-set-uri: "${JWK_SET_URI}"
 server:
   port: 8081
 
