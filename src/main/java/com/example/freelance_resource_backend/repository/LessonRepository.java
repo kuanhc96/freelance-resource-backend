@@ -89,6 +89,7 @@ public class LessonRepository {
 		params.addValue(LessonMapper.STUDENT_GUID, lesson.getStudentGUID());
 		params.addValue(LessonMapper.INSTRUCTOR_GUID, lesson.getInstructorGUID());
 		params.addValue(LessonMapper.START_DATE, lesson.getStartDate());
+		params.addValue(LessonMapper.END_DATE, lesson.getEndDate());
 		params.addValue(LessonMapper.LOCATION_GUID, lesson.getLocationGUID());
 		params.addValue(LessonMapper.TOPIC, lesson.getTopic());
 		params.addValue(LessonMapper.INSTRUCTOR_COMMENTS, lesson.getInstructorComments());
